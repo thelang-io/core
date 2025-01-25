@@ -25,17 +25,21 @@ int main (void) {
     unsigned char c1 = 0;
     d4_str_t __THE_1 = d4_str_empty_val;
     d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
-    d4_str_t __THE_3 = d4_str_empty_val;
-    d4_any_t __THE_4 = {-1, NULL, NULL, NULL, NULL, NULL};
-    d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"1 start")), d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    void *__THE_3;
+    d4_str_t __THE_4 = d4_str_empty_val;
+    d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+    void *__THE_6;
+    d4_print.func(d4_print.ctx, __THE_3 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"1 start")), d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
     if (i_0 == 5) {
       c1 = 1;
       if (c1 == 1) goto L1;
     }
-    d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(2, __THE_4 = d4_any_str_alloc(__THE_3 = d4_str_alloc(L"1 end")), d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
-    d4_any_free(__THE_4);
-    d4_str_free(__THE_3);
+    d4_print.func(d4_print.ctx, __THE_6 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"1 end")), d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_6);
+    d4_any_free(__THE_5);
+    d4_str_free(__THE_4);
 L1:
+    d4_safe_free(__THE_3);
     d4_any_free(__THE_2);
     d4_str_free(__THE_1);
   }

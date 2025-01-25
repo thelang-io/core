@@ -7,7 +7,7 @@ main {
   b := d()
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=example return=int)
+FunctionDeclaration(asynchronous=false name=example return=int context:selfType=() -> int)
   ReturnStatement()
     IntegerLiteral(initial=int value=1)
 MainDeclaration()

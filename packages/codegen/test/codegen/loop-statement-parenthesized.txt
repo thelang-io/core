@@ -110,7 +110,9 @@ int main (void) {
     }
   }
   for (int32_t i_0 = 0; i_0 < 10; i_0++) {
-    d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    void *__THE_1;
+    d4_print.func(d4_print.ctx, __THE_1 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_1);
   }
 }
 ===== output =====

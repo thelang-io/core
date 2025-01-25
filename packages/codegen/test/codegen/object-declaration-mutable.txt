@@ -91,6 +91,9 @@ int main (void) {
   d4_str_t __THE_7 = d4_str_empty_val;
   d4_obj_Animal_t __THE_8 = d4_obj_Animal_alloc(d4_str_empty_val, 0);
   d4_obj_Human_t person3_0;
+  void *__THE_9;
+  void *__THE_10;
+  void *__THE_11;
   d4_obj_Human_t person1_0 = d4_obj_Human_alloc(__THE_1 = d4_str_alloc(L"Peter"), d4_arr_obj_Animal_alloc(0));
   d4_obj_Human_t person2_0 = d4_obj_Human_alloc(__THE_2 = d4_str_alloc(L"Brian"), d4_arr_obj_Animal_alloc(0));
   d4_arr_obj_Animal_push(&person1_0.pets, d4_arr_obj_Animal_alloc(1, __THE_4 = d4_obj_Animal_alloc(__THE_3 = d4_str_alloc(L"Cleo"), 1)));
@@ -100,9 +103,12 @@ int main (void) {
   person3_0 = d4_obj_Human_copy(person1_0);
   person1_0 = d4_obj_Human_realloc(person1_0, person2_0);
   person2_0 = d4_obj_Human_realloc(person2_0, person3_0);
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person1_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person2_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person3_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_9 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person1_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person2_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_11 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person3_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_safe_free(__THE_11);
+  d4_safe_free(__THE_10);
+  d4_safe_free(__THE_9);
   d4_obj_Human_free(person3_0);
   d4_obj_Animal_free(__THE_8);
   d4_str_free(__THE_7);

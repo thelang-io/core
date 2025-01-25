@@ -1,0 +1,123 @@
+fn test1 (items: str[]) {
+  print("test1: ", terminator: "")
+
+  if items.len > 1 {
+    name := items.slice(2)
+    print("return 1")
+    return
+  } elif items.len > 0 {
+    name := items.slice(1)
+    print("return 2")
+    return
+  }
+
+  print("return 3")
+}
+
+fn test2 (items: str[]) {
+  print("test2: ", terminator: "")
+
+  loop i := 1; i < items.len; i++ {
+    item := items[i]
+    print("loop" + i.str() + ": ", terminator: "")
+
+    if item.len > 1 {
+      name := item.slice(2)
+      print("return 1")
+      return
+    } elif item.len > 0 {
+      name := item.slice(1)
+      print("return 2")
+      return
+    }
+
+    value := ""
+    print("continue, ", terminator: "")
+  }
+
+  print("return 3")
+}
+
+fn test3 (items: str[]) {
+  print("test3: ", terminator: "")
+
+  if items.len > 1 {
+    name := items.slice(2)
+    print("return 1")
+    return;
+    print("return 5")
+  } elif items.len > 0 {
+    name := items.slice(1)
+    print("return 2")
+    return;
+    print("return 6")
+  }
+
+  print("return 4")
+  return;
+  print("return 3")
+}
+
+fn test4 (items: str[]) {
+  print("test4: ", terminator: "")
+
+  loop i := 1; i < items.len; i++ {
+    item := items[i]
+    print("loop" + i.str() + ": ", terminator: "")
+
+    if item.len > 1 {
+      name := item.slice(2)
+      print("return 1")
+      return;
+      print("return 5")
+    } elif item.len > 0 {
+      name := item.slice(1)
+      print("return 2")
+      return;
+      print("return 6")
+    }
+
+    value := ""
+    print("continue, ", terminator: "")
+  }
+
+  print("return 4")
+  return;
+  print("return 3")
+}
+
+main {
+  test1([])
+  test1(["1"])
+  test1(["10"])
+  test1(["1", "2"])
+  test1(["10", "20"])
+  test1(["1", "2", "3"])
+  test1(["10", "20", "30"])
+
+  test2([])
+  test2(["1"])
+  test2(["10"])
+  test2(["1", "2"])
+  test2(["10", "20"])
+  test2(["1", "2", "3"])
+  test2(["10", "20", "30"])
+
+  test3([])
+  test3(["1"])
+  test3(["10"])
+  test3(["1", "2"])
+  test3(["10", "20"])
+  test3(["1", "2", "3"])
+  test3(["10", "20", "30"])
+
+  test4([])
+  test4(["1"])
+  test4(["10"])
+  test4(["1", "2"])
+  test4(["10", "20"])
+  test4(["1", "2", "3"])
+  test4(["10", "20", "30"])
+}
+===== code =====
+===== output =====

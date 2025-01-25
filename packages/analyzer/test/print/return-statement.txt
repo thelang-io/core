@@ -5,8 +5,8 @@ fn test2 () int {
   return 10
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=test return=void)
+FunctionDeclaration(asynchronous=false name=test return=void context:selfType=() -> void)
   ReturnStatement()
-FunctionDeclaration(asynchronous=false name=test2 return=int)
+FunctionDeclaration(asynchronous=false name=test2 return=int context:selfType=() -> int)
   ReturnStatement()
     IntegerLiteral(initial=int value=10)

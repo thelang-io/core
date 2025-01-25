@@ -1,0 +1,11 @@
+fn test1 () { return }
+fn test2 () void { return }
+fn test3 () int { return 1 }
+
+main {
+  test1()
+  test2()
+  test3()
+}
+===== code =====
+===== output =====

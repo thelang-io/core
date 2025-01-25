@@ -6,7 +6,7 @@ const d := test(1, 2)
 const e := test(1, i: 2)
 const f := test(i: 1, j: 2)
 ===== out =====
-FunctionDeclaration(asynchronous=false name=test return=int)
+FunctionDeclaration(asynchronous=false name=test return=int context:selfType=(a: int..., i: int, j: int, o: int) -> int)
   FunctionParameter(name=a type=int mutable=false variadic=true)
   FunctionParameter(name=i mutable=false variadic=false)
     IntegerLiteral(initial=int value=10)

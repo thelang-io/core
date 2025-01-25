@@ -3,7 +3,7 @@ main {
   a := await test()
 }
 ===== out =====
-FunctionDeclaration(asynchronous=true name=test return=int)
+FunctionDeclaration(asynchronous=true name=test return=int context:selfType=async () -> int)
   ReturnStatement()
     IntegerLiteral(initial=int value=10)
 MainDeclaration()

@@ -1,0 +1,9 @@
+/*!
+ * Copyright (c) Aaron Delasy
+ * Licensed under the MIT License
+ */
+
+export fn numberPad (num: int) str {
+  numStr := "0" + num.str()
+  return numStr.slice(-2)
+}

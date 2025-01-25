@@ -43,21 +43,29 @@ export type CStatementBody =
 
 export obj CType {
   mut constant: bool
+  mut reference: bool
   mut value: str
 
   fn stringify (self: ref Self, declaration := false, definition := false) str {
     if !declaration && !definition {
-      throw error_NewError("Unable to stringify specified type")
+      throw error_NewError("You need to specify either declaration or definition")
     }
 
-    prefix := self.constant ? "const " : ""
+    mut result := (self.constant ? "const " : "") + self.value
+
+    if self.reference {
+      lastChar := result.slice(-1)
+      result += lastChar == " " || lastChar == "*" ? "*" : " *"
+    }
 
     if declaration {
-      lastChar := self.value.slice(-1)
-      return prefix + self.value + (lastChar == " " || lastChar == "*" ? "" : " ")
+      lastChar := result.slice(-1)
+      result += lastChar == " " || lastChar == "*" ? "" : " "
     } else {
-      return prefix + self.value.trimEnd()
+      result = result.trimEnd()
     }
+
+    return result
   }
 }
 
@@ -874,6 +882,6 @@ export fn createStatement (body: CStatementBody, terminated := true) CStatement 
   return CStatement{body: body, terminated: terminated}
 }
 
-export fn createType (value: str, constant := false) CType {
-  return CType{constant: constant, value: value}
+export fn createType (value: str, constant := false, reference := false) CType {
+  return CType{constant: constant, reference: reference, value: value}
 }

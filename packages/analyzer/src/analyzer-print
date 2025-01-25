@@ -118,11 +118,18 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
   } elif statement.isFunctionDeclaration() {
     functionDeclaration := statement.asFunctionDeclaration()
 
-    attributes := analyzerPrintFunctionAttributes(
+    mut attributes := analyzerPrintFunctionAttributes(
       functionDeclaration.name,
       functionDeclaration.returnType,
       functionDeclaration.asynchronous,
     )
+
+    statementContext := statement.context
+
+    if statement.context is Context.FunctionDeclarationContext {
+      context := statementContext as Context.FunctionDeclarationContext
+      attributes += " context:selfType=" + context.selfType.toString()
+    }
 
     result += ' '.repeat(indent) + "FunctionDeclaration(" + attributes + ")\n"
 

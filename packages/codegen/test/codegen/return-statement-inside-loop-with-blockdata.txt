@@ -1,0 +1,212 @@
+fn test1 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == 5 {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test2 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    print("2 start", i)
+    if i == 5 {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test3 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    v2 := "test1"
+    print("3 start", i)
+    if i == 5 { return }
+    print("3 end", i)
+  }
+}
+
+fn test4 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    print("4 start", i)
+    if i == 5 { return }
+    print("4 end", i)
+  }
+}
+
+fn test5 () {
+  loop i := 0; i < 10; i++ {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == 5 {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test6 () {
+  loop i := 0; i < 10; i++ {
+    print("2 start", i)
+    if i == 5 {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test7 () {
+  loop i := 0; i < 10; i++ {
+    v2 := "test1"
+    print("3 start", i)
+    if i == 5 { return }
+    print("3 end", i)
+  }
+}
+
+fn test8 () {
+  loop i := 0; i < 10; i++ {
+    print("4 start", i)
+    if i == 5 { return }
+    print("4 end", i)
+  }
+}
+
+fn test9 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == "11111" {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test10 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("2 start", i)
+    if i == "11111" {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test11 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test1"
+    print("3 start", i)
+    if i == "11111" { return }
+    print("3 end", i)
+  }
+}
+
+fn test12 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("4 start", i)
+    if i == "11111" { return }
+    print("4 end", i)
+  }
+}
+
+fn test13 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == "11111" {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test14 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("2 start", i)
+    if i == "11111" {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test15 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test1"
+    print("3 start", i)
+    if i == "11111" { return }
+    print("3 end", i)
+  }
+}
+
+fn test16 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("4 start", i)
+    if i == "11111" { return }
+    print("4 end", i)
+  }
+}
+
+main {
+  test1()
+  test2()
+  test3()
+  test4()
+  test5()
+  test6()
+  test7()
+  test8()
+  test9()
+  test10()
+  test11()
+  test12()
+  test13()
+  test14()
+  test15()
+  test16()
+}
+===== code =====
+===== output =====

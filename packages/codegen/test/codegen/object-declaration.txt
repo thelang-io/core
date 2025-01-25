@@ -40,8 +40,10 @@ D4_OBJECT_DEFINE(Person, Person, {
 D4_ANY_DEFINE(TYPE_obj_Person, obj_Person, d4_obj_Person_t, d4_obj_Person_copy(val), d4_obj_Person_eq(lhs_val, rhs_val), d4_obj_Person_free(val), d4_obj_Person_str(val))
 int main (void) {
   d4_str_t __THE_1 = d4_str_empty_val;
+  void *__THE_2;
   d4_obj_Person_t person_0 = d4_obj_Person_alloc(__THE_1 = d4_str_alloc(L"Lauren"), 61);
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Person_alloc(person_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_2 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Person_alloc(person_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_safe_free(__THE_2);
   d4_obj_Person_free(person_0);
   d4_str_free(__THE_1);
 }

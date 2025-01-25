@@ -242,9 +242,7 @@ D4_OBJECT_DEFINE(Test7, Test7, {
   result.a = self.a;
 }, {
   return self.a == rhs.a;
-}, {
-  (void) self;
-}, {
+}, {}, {
   result = d4_obj_str_append(result, d4_str_alloc(L"a"), d4_int_str(*self.a));
 }, const d4_ref_int_t a)
 D4_OPTIONAL_DEFINE(obj_Test8, d4_obj_Test8_t, d4_obj_Test8_copy(val), d4_obj_Test8_eq(lhs_val, rhs_val), d4_obj_Test8_free(val), d4_obj_Test8_str(val))

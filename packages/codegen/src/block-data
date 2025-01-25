@@ -41,8 +41,20 @@ export obj BlockDataContext {
     return "c" + self.continueVariableId.str()
   }
 
+  fn returnVariable (self: ref Self) str {
+    return "r"
+  }
+
+  fn valueVariable (self: ref Self) str {
+    return "v"
+  }
+
   fn empty (self: ref Self) bool {
     return self.setup.empty && self.teardown.empty
+  }
+
+  fn hasTeardown (self: ref Self) bool {
+    return !self.teardown.empty
   }
 
   fn merge (mut self: ref Self, setup: AST.CStatement[], teardown: AST.CStatement[]) {
@@ -69,6 +81,10 @@ export obj BlockData {
 
   fn currentEmpty (self: ref Self) bool {
     return self.blocks.empty ? true : self.blocks.last.empty()
+  }
+
+  fn currentHasTeardown (self: ref Self) bool {
+    return self.blocks.empty ? true : self.blocks.last.hasTeardown()
   }
 
   fn currentMerge (mut self: ref Self, setup: AST.CStatement[], teardown: AST.CStatement[]) {
@@ -123,7 +139,7 @@ export obj BlockData {
       block.usedReturnVariable = true
     })
 
-    return "r"
+    return self.blocks.last.returnVariable()
   }
 
   fn getValueVariable (mut self: ref Self) str {
@@ -131,7 +147,7 @@ export obj BlockData {
       block.usedValueVariable = true
     })
 
-    return "v"
+    return self.blocks.last.valueVariable()
   }
 
   fn getVariable (mut self: ref Self, name: str) str {
@@ -155,6 +171,22 @@ export obj BlockData {
       block := self.blocks[i]
 
       if !block.empty() {
+        return true
+      }
+
+      if block.t == t {
+        break
+      }
+    }
+
+    return false
+  }
+
+  fn hasTeardownUntil (self: ref Self, t := BlockDataType.Block) bool {
+    loop i := self.blocks.len - 1; i >= 0; i-- {
+      block := self.blocks[i]
+
+      if block.hasTeardown() {
         return true
       }
 
@@ -229,5 +261,13 @@ export obj BlockData {
 
   fn usedContinueVariable (self: ref Self) bool {
     return self.blocks.last.usedContinueVariable
+  }
+
+  fn usedReturnVariable (self: ref Self) bool {
+    return self.blocks.last.usedReturnVariable
+  }
+
+  fn usedValueVariable (self: ref Self) bool {
+    return self.blocks.last.usedValueVariable
   }
 }

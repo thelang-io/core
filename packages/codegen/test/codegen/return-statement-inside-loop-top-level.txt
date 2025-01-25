@@ -1,0 +1,21 @@
+main {
+  loop i := 0; i < 10; i++ {
+    print("1 start", i)
+    if i == 5 { return }
+    print("1 end", i)
+  }
+
+  loop j := 0; j < 10; j++ {
+    print("2 start", j)
+    if j == 5 { return }
+    print("2 end", j)
+  }
+
+  loop k := 0; k < 10; k++ {
+    print("3 start", k)
+    if k == 5 { return }
+    print("3 end", k)
+  }
+}
+===== code =====
+===== output =====

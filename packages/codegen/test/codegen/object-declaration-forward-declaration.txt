@@ -33,9 +33,7 @@ D4_OBJECT_DEFINE(Test2, Test2, {
   result.a = self.a;
 }, {
   return self.a == rhs.a;
-}, {
-  (void) self;
-}, {
+}, {}, {
   result = d4_obj_str_append(result, d4_str_alloc(L"a"), d4_int_str(self.a));
 }, const int32_t a)
 D4_OBJECT_DEFINE(Test4, Test4, {

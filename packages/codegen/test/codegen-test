@@ -69,7 +69,19 @@ export fn TEST_Codegen () {
 
     mut generator := Codegen{analyzer: ref analyzer}
     generator.init()
-    generator.generate()
+
+    mut generationError := ""
+
+    try {
+      generator.generate()
+    } catch err: error_Error {
+      generationError = err.message
+    }
+
+    if !generationError.empty {
+      TEST_EXPECT_EQ(name, generationError, "")
+      continue
+    }
 
     generatedCode := generator.stringify()
 

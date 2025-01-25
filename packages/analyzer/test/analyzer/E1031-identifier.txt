@@ -1,0 +1,10 @@
+main {
+  a := 1
+  a()
+}
+===== err =====
+E1031-identifier.txt:3:3: AnalyzeError: E1031 - Type `int` has no call signature
+2 |   a := 1
+3 |   a()
+  |   ^
+4 | }
