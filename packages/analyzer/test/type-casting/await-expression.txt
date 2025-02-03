@@ -7,7 +7,7 @@ main {
   b := await cond(a = 10) ? a : 20
 }
 ===== out =====
-FunctionDeclaration(asynchronous=true name=cond return=bool)
+FunctionDeclaration(asynchronous=true name=cond return=bool context:selfType=async (n: int) -> bool)
   FunctionParameter(name=n type=int mutable=false variadic=false)
   ReturnStatement()
     BinaryExpression(initial=bool operator=>)

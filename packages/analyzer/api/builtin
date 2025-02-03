@@ -215,6 +215,13 @@ export obj str {
   fn contains (self: ref Self, search: Self) bool
 
   /**
+   * Checks whether string ends with provided substring.
+   *
+   * @param search - Substring to search for.
+   */
+  fn endsWith (self: ref Self, search: Self) bool
+
+  /**
    * Searches for substring and returns its position, otherwise `-1` is returned.
    *
    * @param search - Substring to search for.
@@ -259,6 +266,13 @@ export obj str {
    * @param delimiter - Delimiter to split with.
    */
   fn split (self: ref Self, delimiter := "") Self[]
+
+  /**
+   * Checks whether string starts with provided substring.
+   *
+   * @param search - Substring to search for.
+   */
+  fn startsWith (self: ref Self, search: Self) bool
 
   /* Converts a string to `float` representation. */
   fn toFloat (self: ref Self) float

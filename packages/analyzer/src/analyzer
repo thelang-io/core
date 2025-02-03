@@ -2298,6 +2298,7 @@ export obj AnalyzerFile {
     mut statement := it.asFunctionDeclaration()
     initialStateReturnType := self.state.returnType
     var := self.vm.get(statement.name.name)
+    it.context = Context.FunctionDeclarationContext{selfType: var.t}
 
     if !var.t.isFunction() {
       return true
@@ -2476,10 +2477,7 @@ export obj AnalyzerFile {
     initialTmSelf := self.tm.getSelf()
     initialStateSelf := self.state.selfType
     t := self.tm.get(statement.name.name)
-
-    it.context = Context.ObjectDeclarationContext{
-      selfType: t,
-    }
+    it.context = Context.ObjectDeclarationContext{selfType: t}
 
     self.state.selfType = Type.opt(t)
     self.tm.setSelf(Type.opt(t))

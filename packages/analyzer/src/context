@@ -32,6 +32,10 @@ export obj ElementAccessExpressionContextExtra {
   mut selfType: ref Type.Type
 }
 
+export obj FunctionDeclarationContext {
+  mut selfType: ref Type.Type
+}
+
 export obj IsExpressionContextExtra {
   mut t: ref Type.Type
 }

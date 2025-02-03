@@ -6,12 +6,13 @@ main {
 #include <d4/array.h>
 #include <d4/number.h>
 #include <d4/string.h>
+#include <stddef.h>
 #include <stdint.h>
 D4_ARRAY_DECLARE(int, int32_t)
 D4_ARRAY_DEFINE(int, int32_t, int32_t, element, lhs_element == rhs_element, (void) element, d4_int_str(element))
 int main (void) {
-  d4_arr_int_t var1_0 = d4_arr_int_alloc(0);
-  d4_arr_str_t var2_0 = d4_arr_str_alloc(0);
+  d4_arr_int_t var1_0 = (d4_arr_int_t) {NULL, 0};
+  d4_arr_str_t var2_0 = (d4_arr_str_t) {NULL, 0};
   d4_arr_str_free(var2_0);
   d4_arr_int_free(var1_0);
 }

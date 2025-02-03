@@ -1,0 +1,32 @@
+main {
+  loop i := 0; i < 10; i++ {
+    print("1 start", i)
+    if i == 5 { return }
+    print("1 end", i)
+  }
+
+  loop j := 0; j < 10; j++ {
+    print("2 start", j)
+    if j == 5 { return }
+    print("2 end", j)
+  }
+
+  loop k := 0; k < 10; k++ {
+    print("3 start", k)
+    if k == 5 { return }
+    print("3 end", k)
+  }
+}
+===== code =====
+===== output =====
+1 start 0
+1 end 0
+1 start 1
+1 end 1
+1 start 2
+1 end 2
+1 start 3
+1 end 3
+1 start 4
+1 end 4
+1 start 5

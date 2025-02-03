@@ -29,5 +29,6 @@ jobs:
       - run: (cd packages/analyzer && the install && the test test)
       - run: (cd packages/c && the install && the test test)
       - run: (cd packages/codegen && the install && the test test)
+      - run: (cd packages/date && && the install && the test test)
       - run: (cd packages/html && the install && the test test)
       - run: (cd packages/parser && the install && the test test)

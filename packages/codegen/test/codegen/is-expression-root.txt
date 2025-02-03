@@ -72,9 +72,7 @@ D4_UNION_DEFINE(floatUSint, {
 }, {
   if (self.type == TYPE_int) return self.data.v1 == rhs.data.v1;
   if (self.type == TYPE_float) return self.data.v2 == rhs.data.v2;
-}, {
-  (void) self;
-}, {
+}, {}, {
   if (self.type == TYPE_int) return d4_int_str(self.data.v1);
   if (self.type == TYPE_float) return d4_float_str(self.data.v2);
 })

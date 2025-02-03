@@ -33,9 +33,7 @@ D4_OBJECT_DEFINE(Test2, Test2, {
   result.a = self.a;
 }, {
   return self.a == rhs.a;
-}, {
-  (void) self;
-}, {
+}, {}, {
   result = d4_obj_str_append(result, d4_str_alloc(L"a"), d4_int_str(self.a));
 }, const int32_t a)
 D4_OBJECT_DEFINE(Test4, Test4, {
@@ -72,9 +70,9 @@ D4_OBJECT_DEFINE(Test1, Test1, {
   result = d4_obj_str_append(result, d4_str_alloc(L"t3"), d4_obj_Test3_str(self.t3));
 }, const d4_obj_Test3_t t3)
 int main (void) {
-  d4_obj_Test2_t __THE_1 = d4_obj_Test2_alloc(0);
-  d4_obj_Test4_t __THE_2 = d4_obj_Test4_alloc(d4_obj_Test2_alloc(0));
-  d4_obj_Test3_t __THE_3 = d4_obj_Test3_alloc(d4_obj_Test4_alloc(d4_obj_Test2_alloc(0)));
+  d4_obj_Test2_t __THE_1 = (d4_obj_Test2_t) {0};
+  d4_obj_Test4_t __THE_2 = (d4_obj_Test4_t) {(d4_obj_Test2_t) {0}};
+  d4_obj_Test3_t __THE_3 = (d4_obj_Test3_t) {(d4_obj_Test4_t) {(d4_obj_Test2_t) {0}}};
   d4_obj_Test1_t t_0 = d4_obj_Test1_alloc(__THE_3 = d4_obj_Test3_alloc(__THE_2 = d4_obj_Test4_alloc(__THE_1 = d4_obj_Test2_alloc(1))));
   d4_obj_Test1_free(t_0);
   d4_obj_Test3_free(__THE_3);
