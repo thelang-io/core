@@ -1,15 +1,9 @@
-async fn test () void
-fn test (a: int) void
-fn test (b: int = 2, mut c := 3, d: int...) int
 async fn test () {}
 fn test (a: int) {}
 fn test (b: int = 2, mut c := 3, d: int...) int {
   return b
 }
 main {
-  async fn test () void
-  fn test (a: int) void
-  fn test (b: int = 2, mut c := 3, d: int...) int
   async fn test () {}
   fn test (a: int) {}
   fn test (b: int = 2, mut c := 3, d: int...) int {

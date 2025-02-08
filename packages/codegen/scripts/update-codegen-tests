@@ -17,7 +17,7 @@ main {
 
   loop i := 0; i < files.len; i++ {
     name := files[i].slice(0, -4)
-    print("updating:", name)
+    print("updating:", name, to: "stderr")
 
     filePath := TESTS_DIR + "/" + name + ".txt"
     fileSections := retrieveFileSections(filePath)
@@ -57,5 +57,5 @@ main {
     fs_writeFileSync(filePath, newContent.toBuffer())
   }
 
-  print("run successful")
+  print("run successful", to: "stderr")
 }

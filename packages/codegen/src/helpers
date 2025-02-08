@@ -119,7 +119,12 @@ export fn expressionResolve (item: ref Parser.Expression, up := false, down := f
   return item
 }
 
-export fn expressionShouldBeAllocated (item: ref Parser.Expression) bool {
+export fn expressionShouldBeAllocatedAfter (item: ref Parser.Expression) bool {
+  itUp := expressionResolve(item, up: true)
+  return itUp.hasParent()
+}
+
+export fn expressionShouldBeAllocatedBefore (item: ref Parser.Expression) bool {
   itDown := expressionResolve(item, down: true)
 
   return !(
@@ -159,13 +164,26 @@ export fn expressionShouldBeFreed (item: ref Parser.Expression) bool {
   )
 }
 
-export fn statementHasPrecedingNonVarDecl (item: ref Parser.Statement) bool {
+export fn normalizeBlock (statement: ref Parser.Statement) Parser.Statement[] {
+  mut result: Parser.Statement[]
+
+  if statement.isBlock() {
+    block := statement.asBlock()
+    result.merge(block.body)
+  } else {
+    result.push(statement)
+  }
+
+  return result
+}
+
+export fn statementHasPrecedingNonDeclaration (item: ref Parser.Statement) bool {
   mut it := item
 
   loop it.hasPrev() {
     it = it.prev()
 
-    if !it.isVariableDeclaration() {
+    if !it.isDeclaration() && !it.isVariableDeclaration() {
       return true
     }
   }
@@ -184,7 +202,8 @@ export fn statementIsMacroInvocationDeclare (item: ref AST.CStatement) bool {
 }
 
 export fn statementIsMacroInvocationForwardDeclare (item: ref AST.CStatement) bool {
-  return statementMacroInvocationCallee(item).find("FORWARD_DECLARE") != -1
+  callee := statementMacroInvocationCallee(item)
+  return callee.find("FORWARD_DECLARE") != -1
 }
 
 export fn statementMacroInvocationCallee (item: ref AST.CStatement) str {

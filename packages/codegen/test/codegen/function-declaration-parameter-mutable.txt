@@ -1,0 +1,22 @@
+fn test1 (mut a: int) int {
+  a = 2
+  return a
+}
+
+fn test2 (mut a: int, mut b := 2) int {
+  a = b
+  return a + b
+}
+
+fn test3 (mut a: int, mut b := 2, mut c: float = 3) float {
+  c = b
+  return a + b + c
+}
+
+main {
+  test1(1)
+  test2(2, 3)
+  test3(4, 5, 6)
+}
+===== code =====
+===== output =====

@@ -67,9 +67,9 @@ int main (void) {
     while (1) {
       unsigned char b1 = 0;
       d4_str_t __THE_1 = d4_str_empty_val;
-      d4_union_intUSstrUE_t __THE_2 = d4_union_intUSstrUE_alloc(-1);
+      d4_union_intUSstrUE_t __THE_2 = (d4_union_intUSstrUE_t) {-1, {0}};
       d4_str_t __THE_3 = d4_str_empty_val;
-      d4_union_intUSstrUE_t __THE_4 = d4_union_intUSstrUE_alloc(-1);
+      d4_union_intUSstrUE_t __THE_4 = (d4_union_intUSstrUE_t) {-1, {0}};
       if (!(!d4_union_intUSstrUE_eq(i_0, __THE_2 = d4_union_intUSstrUE_alloc(TYPE_str, __THE_1 = d4_str_alloc(L"test"))))) {
         b1 = 1;
         goto L1;
@@ -88,9 +88,9 @@ L1:
   while (1) {
     unsigned char b1 = 0;
     d4_str_t __THE_5 = d4_str_empty_val;
-    d4_union_intUSstrUE_t __THE_6 = d4_union_intUSstrUE_alloc(-1);
+    d4_union_intUSstrUE_t __THE_6 = (d4_union_intUSstrUE_t) {-1, {0}};
     d4_str_t __THE_7 = d4_str_empty_val;
-    d4_union_intUSstrUE_t __THE_8 = d4_union_intUSstrUE_alloc(-1);
+    d4_union_intUSstrUE_t __THE_8 = (d4_union_intUSstrUE_t) {-1, {0}};
     if (!(!d4_union_intUSstrUE_eq(__THE_6 = d4_union_intUSstrUE_alloc(TYPE_str, __THE_5 = d4_str_alloc(L"test")), a_0))) {
       b1 = 1;
       goto L2;
@@ -107,9 +107,9 @@ L2:
   while (1) {
     unsigned char b1 = 0;
     d4_str_t __THE_9 = d4_str_empty_val;
-    d4_union_intUSstrUE_t __THE_10 = d4_union_intUSstrUE_alloc(-1);
+    d4_union_intUSstrUE_t __THE_10 = (d4_union_intUSstrUE_t) {-1, {0}};
     d4_str_t __THE_11 = d4_str_empty_val;
-    d4_union_intUSstrUE_t __THE_12 = d4_union_intUSstrUE_alloc(-1);
+    d4_union_intUSstrUE_t __THE_12 = (d4_union_intUSstrUE_t) {-1, {0}};
     if (!(!d4_union_intUSstrUE_eq(b_0, __THE_10 = d4_union_intUSstrUE_alloc(TYPE_str, __THE_9 = d4_str_alloc(L"test"))))) {
       b1 = 1;
       goto L3;
@@ -126,9 +126,9 @@ L3:
   while (1) {
     unsigned char b1 = 0;
     d4_str_t __THE_13 = d4_str_empty_val;
-    d4_union_intUSstrUE_t __THE_14 = d4_union_intUSstrUE_alloc(-1);
+    d4_union_intUSstrUE_t __THE_14 = (d4_union_intUSstrUE_t) {-1, {0}};
     d4_str_t __THE_15 = d4_str_empty_val;
-    d4_union_intUSstrUE_t __THE_16 = d4_union_intUSstrUE_alloc(-1);
+    d4_union_intUSstrUE_t __THE_16 = (d4_union_intUSstrUE_t) {-1, {0}};
     if (d4_union_intUSstrUE_eq(c_0, __THE_14 = d4_union_intUSstrUE_alloc(TYPE_str, __THE_13 = d4_str_alloc(L"test")))) {
       b1 = 1;
       if (b1 == 1) goto L4;
@@ -146,9 +146,9 @@ L4:
     while (1) {
       unsigned char b1 = 0;
       d4_str_t __THE_17 = d4_str_empty_val;
-      d4_union_intUSstrUE_t __THE_18 = d4_union_intUSstrUE_alloc(-1);
+      d4_union_intUSstrUE_t __THE_18 = (d4_union_intUSstrUE_t) {-1, {0}};
       d4_str_t __THE_19 = d4_str_empty_val;
-      d4_union_intUSstrUE_t __THE_20 = d4_union_intUSstrUE_alloc(-1);
+      d4_union_intUSstrUE_t __THE_20 = (d4_union_intUSstrUE_t) {-1, {0}};
       if (!(!d4_union_intUSstrUE_eq(d_0, __THE_18 = d4_union_intUSstrUE_alloc(TYPE_str, __THE_17 = d4_str_alloc(L"test"))))) {
         b1 = 1;
         goto L5;
@@ -168,9 +168,9 @@ L5:
     while (1) {
       unsigned char b1 = 0;
       d4_str_t __THE_21 = d4_str_empty_val;
-      d4_union_intUSstrUE_t __THE_22 = d4_union_intUSstrUE_alloc(-1);
+      d4_union_intUSstrUE_t __THE_22 = (d4_union_intUSstrUE_t) {-1, {0}};
       d4_str_t __THE_23 = d4_str_empty_val;
-      d4_union_intUSstrUE_t __THE_24 = d4_union_intUSstrUE_alloc(-1);
+      d4_union_intUSstrUE_t __THE_24 = (d4_union_intUSstrUE_t) {-1, {0}};
       if (d4_union_intUSstrUE_eq(e_0, __THE_24 = d4_union_intUSstrUE_alloc(TYPE_str, __THE_23 = d4_str_alloc(L"test")))) {
         b1 = 1;
         if (b1 == 1) goto L6;

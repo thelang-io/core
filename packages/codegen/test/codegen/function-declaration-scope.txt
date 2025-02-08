@@ -1,0 +1,11 @@
+main {
+  if 1 > 2 {
+    fn x (a: int) {}
+    x(1)
+  } else {
+    fn x (b: str) {}
+    x("test")
+  }
+}
+===== code =====
+===== output =====

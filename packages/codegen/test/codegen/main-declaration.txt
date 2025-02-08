@@ -1,0 +1,16 @@
+const A := "1"
+main {
+  b := A + "2"
+}
+===== code =====
+#include <d4/macro.h>
+#include <d4/string.h>
+int main (void) {
+  d4_str_t __THE_1 = d4_str_empty_val;
+  d4_str_t A_0 = d4_str_alloc(L"1");
+  d4_str_t b_0 = d4_str_concat(A_0, __THE_1 = d4_str_alloc(L"2"));
+  d4_str_free(b_0);
+  d4_str_free(__THE_1);
+  d4_str_free(A_0);
+}
+===== output =====

@@ -1,0 +1,40 @@
+fn test1 (a: int...) {
+  print(a)
+}
+
+fn test2 (a: int, b: int...) {
+  print(a, b)
+}
+
+fn test3 (a: int, b: int..., c := 0) {
+  print(a, b, c)
+}
+
+main {
+  test1()
+  test1(1)
+  test1(1, 2)
+  test2(0)
+  test2(1, 2)
+  test2(2, 3, 4)
+  test3(3)
+  test3(4, 5)
+  test3(6, 7, 8)
+  test3(7, c: 8)
+  test3(9, 10, c: 11)
+  test3(12, 13, 14, c: 15)
+}
+===== code =====
+===== output =====
+[]
+[1]
+[1, 2]
+0 []
+1 [2]
+2 [3, 4]
+3 [] 0
+4 [5] 0
+6 [7, 8] 0
+7 [] 8
+9 [10] 11
+12 [13, 14] 15

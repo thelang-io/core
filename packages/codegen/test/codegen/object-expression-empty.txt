@@ -53,9 +53,7 @@ D4_OBJECT_DEFINE(Point, Point, {
   result.y = self.y;
 }, {
   return self.x == rhs.x && self.y == rhs.y;
-}, {
-  (void) self;
-}, {
+}, {}, {
   result = d4_obj_str_append(result, d4_str_alloc(L"x"), d4_float_str(self.x));
   result = d4_obj_str_append(result, d4_str_alloc(L"y"), d4_float_str(self.y));
 }, const double x, const double y)
@@ -65,9 +63,7 @@ D4_OBJECT_DEFINE(Test, Test, {
   result.a = self.a;
 }, {
   return self.a == rhs.a;
-}, {
-  (void) self;
-}, {
+}, {}, {
   result = d4_obj_str_append(result, d4_str_alloc(L"a"), d4_int_str(self.a));
 }, const int32_t a)
 D4_OBJECT_DEFINE(Human, Human, {
@@ -89,14 +85,8 @@ D4_OBJECT_DEFINE(Empty, Empty, {
 }, {
   result._ = self._;
 }, {
-  (void) self;
-  (void) rhs;
   return true;
-}, {
-  (void) self;
-}, {
-  (void) self;
-}, void)
+}, {}, {}, void)
 int main (void) {
   d4_obj_Point_t point_0 = d4_obj_Point_alloc(0, 0);
   d4_obj_Test_t test_0 = d4_obj_Test_alloc(0);

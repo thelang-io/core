@@ -1,0 +1,63 @@
+/*!
+ * Copyright (c) Aaron Delasy
+ * Licensed under the MIT License
+ */
+
+import numberPad from "./utils"
+
+const DAYS_OF_MONTH := [
+  31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+]
+
+const LEAP_YEAR_DAYS_OF_MONTH := [
+  31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+]
+
+export fn format (datetime: u64) str {
+  mut daysTillNow := datetime / (24 * 60 * 60)
+  mut extraTime := datetime % (24 * 60 * 60)
+  mut year := 1970
+
+  loop daysTillNow >= 365 {
+    if year % 400 == 0 || (year % 4 == 0 && year % 100 != 0) {
+      if daysTillNow <= 365 {
+        break
+      }
+
+      daysTillNow -= 366
+    } else {
+      daysTillNow -= 365
+    }
+
+    year++
+  }
+
+  isLeapYear := year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)
+  daysOfMonth := isLeapYear ? LEAP_YEAR_DAYS_OF_MONTH : DAYS_OF_MONTH
+
+  mut extraDays := daysTillNow + 1
+  mut monthIndex := 0
+  mut month := 0
+
+  loop {
+    if extraDays <= daysOfMonth[monthIndex] {
+      break
+    }
+
+    month++
+    extraDays -= daysOfMonth[monthIndex]
+    monthIndex++
+  }
+
+  month += 1
+  day := extraDays
+
+  hours := extraTime / 3600
+  minutes := (extraTime % 3600) / 60
+  seconds := (extraTime % 3600) % 60
+
+  dateString := year.str() + "-" + numberPad(month) + "-" + numberPad(day)
+  timeString := numberPad(hours) + ":" + numberPad(minutes) + ":" + numberPad(seconds)
+
+  return dateString + " " + timeString
+}

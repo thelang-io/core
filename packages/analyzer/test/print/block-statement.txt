@@ -5,7 +5,7 @@ main {
   b := 20
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=test)
+FunctionDeclaration(asynchronous=false name=test context:selfType=() -> void)
 MainDeclaration()
   VariableDeclaration(name=a mutable=false constant=false context:varType=int)
     IntegerLiteral(initial=int value=10)

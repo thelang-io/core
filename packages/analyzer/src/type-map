@@ -108,7 +108,7 @@ export obj TypeMap {
     u64Type.properties.push(Type.TypeProperty{name: "str", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("u64"))), mutable: false, builtin: true})
     usizeType.properties.push(Type.TypeProperty{name: "str", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("usize"))), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "empty", t: self.get("bool"), mutable: false, builtin: true})
-    strType.properties.push(Type.TypeProperty{name: "len", t: self.get("int"), mutable: false, builtin: true})
+    strType.properties.push(Type.TypeProperty{name: "len", t: self.get("usize"), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "lower", t: self.get("str"), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "lowerFirst", t: self.get("str"), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "upper", t: self.get("str"), mutable: false, builtin: true})
@@ -129,8 +129,8 @@ export obj TypeMap {
       Type.TypeParameter{name: "count", t: self.get("int"), mutable: false, required: false, variadic: false}
     ], self.get("str"), true, false, "self", self.createReference(self.get("str"))), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "slice", t: self.createMethod(false, [
-      Type.TypeParameter{name: "start", t: self.get("int"), mutable: false, required: false, variadic: false}
-      Type.TypeParameter{name: "end", t: self.get("int"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "start", t: self.get("usize"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "end", t: self.get("usize"), mutable: false, required: false, variadic: false}
     ], self.get("str"), true, false, "self", self.createReference(self.get("str"))), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "split", t: self.createMethod(false, [
       Type.TypeParameter{name: "delimiter", t: self.get("str"), mutable: false, required: false, variadic: false}
@@ -185,7 +185,7 @@ export obj TypeMap {
     result.properties.push(Type.TypeProperty{name: "empty", t: self.get("bool"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "first", t: elementTypeRef, mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "last", t: elementTypeRef, mutable: false, builtin: true})
-    result.properties.push(Type.TypeProperty{name: "len", t: self.get("int"), mutable: false, builtin: true})
+    result.properties.push(Type.TypeProperty{name: "len", t: self.get("usize"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "clear", t: self.createMethod(false, [], resultRef, true, true, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "concat", t: self.createMethod(false, [
       Type.TypeParameter{name: "other", t: result, mutable: false, required: true, variadic: false}
@@ -219,8 +219,8 @@ export obj TypeMap {
     ], resultRef, true, true, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "reverse", t: self.createMethod(false, [], result, true, false, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "slice", t: self.createMethod(false, [
-      Type.TypeParameter{name: "start", t: self.get("int"), mutable: false, required: false, variadic: false}
-      Type.TypeParameter{name: "end", t: self.get("int"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "start", t: self.get("usize"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "end", t: self.get("usize"), mutable: false, required: false, variadic: false}
     ], result, true, false, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "sort", t: self.createMethod(false, [
       Type.TypeParameter{name: "comparator", t: self.createFunction(false, [
@@ -271,7 +271,7 @@ export obj TypeMap {
     result.properties.push(Type.TypeProperty{name: "empty", t: self.get("bool"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "cap", t: self.get("int"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "keys", t: self.createArray(keyType), mutable: false, builtin: true})
-    result.properties.push(Type.TypeProperty{name: "len", t: self.get("int"), mutable: false, builtin: true})
+    result.properties.push(Type.TypeProperty{name: "len", t: self.get("usize"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "values", t: self.createArray(valueType), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "clear", t: self.createMethod(false, [], resultRef, true, true, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "get", t: self.createMethod(false, [

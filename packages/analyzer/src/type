@@ -262,6 +262,30 @@ export obj Type {
     }
   }
 
+  fn getParameters (mut self: ref Self) TypeParameter[] {
+    if self.isFunction() {
+      t := self.asFunction()
+      return t.parameters
+    } elif self.isMethod() {
+      t := self.asMethod()
+      return t.parameters
+    }
+
+    throw error_NewError("Tried to get parameters of non-function type")
+  }
+
+  fn getReturnType (mut self: ref Self) ref Type {
+    if self.isFunction() {
+      t := self.asFunction()
+      return unwrap(t.returnType, withReference: false)
+    } elif self.isMethod() {
+      t := self.asMethod()
+      return unwrap(t.returnType, withReference: false)
+    }
+
+    throw error_NewError("Tried to get return type of non-function type")
+  }
+
   fn has (self: ref Self, nameOrIndex: int | str) bool {
     t := unwrap(self)
     propertiesLen := t.properties.len
@@ -297,6 +321,18 @@ export obj Type {
     if self.isMethod() {
       t := self.asMethod()
       return t.withSelf
+    }
+
+    return false
+  }
+
+  fn hasParameters (self: ref Self) bool {
+    if self.isFunction() {
+      t := self.asFunction()
+      return !t.parameters.empty
+    } elif self.isMethod() {
+      t := self.asMethod()
+      return !t.parameters.empty
     }
 
     return false

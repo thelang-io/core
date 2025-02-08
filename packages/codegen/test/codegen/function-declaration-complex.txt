@@ -1,0 +1,66 @@
+fn test1 () int {
+  if "a" == "b" {
+    return 2
+  }
+
+  mut a := "a"
+  a2 := "a2"
+  a3 := "a3"
+
+  if a == "a" {
+    mut b := "b"
+
+    if b == "c" {
+      return 1
+    }
+
+    b = "b2"
+  }
+
+  mut c := "c"
+  c2 := "c2"
+  c3 := "c3"
+
+  if c == "a" {
+    mut d := "d"
+
+    if d == "e" {
+      return 2
+    }
+
+    d = "b2"
+  }
+
+  a = "a2"
+  return 3
+}
+
+fn test2 () int {
+  a := "a"
+
+  if a == "b" {
+    return 1
+  }
+
+  b := "a"
+  return a == b ? 2 : 0
+}
+
+fn test3 () int {
+  a := 1
+
+  if a == 2 {
+    return a
+  }
+
+  b := 2
+  return a == b ? 2 : 0
+}
+
+main {
+  test1()
+  test2()
+  test3()
+}
+===== code =====
+===== output =====

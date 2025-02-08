@@ -483,6 +483,50 @@ property1 := type.get("name")
 property2 := type.get(1)
 ```
 
+### `Type.getParameters () TypeParameter[]`
+Returns parameters of a function or method type. Should only be used on function or method types.
+
+**Parameters**
+
+none
+
+**Return value**
+
+Array of type parameters from the function or method type.
+
+**Exceptions**
+
+- `Error` - thrown when called on a non-function/method type
+
+**Examples**
+
+```the
+result := functionType.getParameters()
+result := methodType.getParameters()
+```
+
+### `Type.getReturnType () ref Type`
+Returns return type of a function or method type. Should only be used on function or method types.
+
+**Parameters**
+
+none
+
+**Return value**
+
+Return type of the function or method.
+
+**Exceptions**
+
+- `Error` - thrown when called on a non-function/method type
+
+**Examples**
+
+```the
+result := functionType.getReturnType()
+result := methodType.getReturnType()
+```
+
 ### `Type.has (nameOrIndex: int | str) bool`
 Checks whether type has property with specified name or index.
 
@@ -516,6 +560,24 @@ Whether enum type has enumerator with specified name.
 
 ```the
 result := type.hasEnumerator("Color")
+```
+
+### `Type.hasParameters () bool`
+Checks whether current type is a function or method type and has any parameters.
+
+**Parameters**
+
+none
+
+**Return value**
+
+Whether current type is a function or method type and has any parameters.
+
+**Examples**
+
+```the
+result := functionType.hasParameters()
+result := methodType.hasParameters()
 ```
 
 ### `Type.hasSelfParam () bool`

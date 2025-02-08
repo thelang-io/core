@@ -1,7 +1,0 @@
-fn test1 () void
-fn test2 () int
-fn test3 (a: int) void
-fn test4 (a: int, b: str) void
-fn test5 (a: int, b: str, c: int...) void
-fn test6 (a := 10, b: int = 20) void
-fn test7 (a: int, b: str, c: int..., d := 5) void

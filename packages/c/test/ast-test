@@ -11,6 +11,10 @@ export fn TEST_AST_type () {
   type3 := AST.createType("int[]")
   type5 := AST.createType("int", constant: true)
   type6 := AST.createType("int *", constant: true)
+  type7 := AST.createType("int", reference: true)
+  type8 := AST.createType("int *", reference: true)
+  type9 := AST.createType("int", constant: true, reference: true)
+  type10 := AST.createType("int *", constant: true, reference: true)
 
   EXPECT_EQ(type1.stringify(declaration: true), "int ")
   EXPECT_EQ(type1.stringify(definition: true), "int")
@@ -18,15 +22,26 @@ export fn TEST_AST_type () {
   EXPECT_EQ(type2.stringify(definition: true), "int *")
   EXPECT_EQ(type3.stringify(declaration: true), "int[] ")
   EXPECT_EQ(type3.stringify(definition: true), "int[]")
+
   EXPECT_EQ(type5.stringify(declaration: true), "const int ")
   EXPECT_EQ(type5.stringify(definition: true), "const int")
   EXPECT_EQ(type6.stringify(declaration: true), "const int *")
   EXPECT_EQ(type6.stringify(definition: true), "const int *")
 
+  EXPECT_EQ(type7.stringify(declaration: true), "int *")
+  EXPECT_EQ(type7.stringify(definition: true), "int *")
+  EXPECT_EQ(type8.stringify(declaration: true), "int **")
+  EXPECT_EQ(type8.stringify(definition: true), "int **")
+
+  EXPECT_EQ(type9.stringify(declaration: true), "const int *")
+  EXPECT_EQ(type9.stringify(definition: true), "const int *")
+  EXPECT_EQ(type10.stringify(declaration: true), "const int **")
+  EXPECT_EQ(type10.stringify(definition: true), "const int **")
+
   EXPECT_THROW_WITH_MESSAGE(() -> void {
     type4 := AST.createType("int")
     type4.stringify()
-  }, "Unable to stringify specified type")
+  }, "You need to specify either declaration or definition")
 }
 
 export fn TEST_AST_expressionStatementMethod () {

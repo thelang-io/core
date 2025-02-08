@@ -2298,6 +2298,7 @@ export obj AnalyzerFile {
     mut statement := it.asFunctionDeclaration()
     initialStateReturnType := self.state.returnType
     var := self.vm.get(statement.name.name)
+    it.context = Context.FunctionDeclarationContext{selfType: var.t}
 
     if !var.t.isFunction() {
       return true
@@ -2310,19 +2311,16 @@ export obj AnalyzerFile {
     self.functionParameters(ref statement.parameters)
     self.state.returnType = Type.opt(t.returnType)
 
-    if statement.body != nil {
-      if (
-        !Type.match(t.returnType, self.tm.get("void")) &&
-        !statement.body.isDeadEnd() &&
-        statement.returnType != nil
-      ) {
-        returnType := statement.returnType
-        self.raise(errors.E1061(), returnType.start, returnType.end)
-      }
-
-      self.statement(ref statement.body)
+    if (
+      !Type.match(t.returnType, self.tm.get("void")) &&
+      !statement.body.isDeadEnd() &&
+      statement.returnType != nil
+    ) {
+      returnType := statement.returnType
+      self.raise(errors.E1061(), returnType.start, returnType.end)
     }
 
+    self.statement(ref statement.body)
     self.state.returnType = initialStateReturnType
     self.vm.decrease()
     self.tm.decrease()
@@ -2476,10 +2474,7 @@ export obj AnalyzerFile {
     initialTmSelf := self.tm.getSelf()
     initialStateSelf := self.state.selfType
     t := self.tm.get(statement.name.name)
-
-    it.context = Context.ObjectDeclarationContext{
-      selfType: t,
-    }
+    it.context = Context.ObjectDeclarationContext{selfType: t}
 
     self.state.selfType = Type.opt(t)
     self.tm.setSelf(Type.opt(t))
@@ -2511,18 +2506,15 @@ export obj AnalyzerFile {
     self.functionParameters(ref statement.parameters)
     self.state.returnType = Type.opt(t.returnType)
 
-    if statement.body != nil {
-      if (
-        !Type.match(t.returnType, self.tm.get("void")) &&
-        !statement.body.isDeadEnd() &&
-        statement.returnType != nil
-      ) {
-        self.raise(errors.E1061(), statement.returnType.start, statement.returnType.end)
-      }
-
-      self.statement(ref statement.body)
+    if (
+      !Type.match(t.returnType, self.tm.get("void")) &&
+      !statement.body.isDeadEnd() &&
+      statement.returnType != nil
+    ) {
+      self.raise(errors.E1061(), statement.returnType.start, statement.returnType.end)
     }
 
+    self.statement(ref statement.body)
     self.state.returnType = initialStateReturnType
     self.vm.decrease()
     self.tm.decrease()

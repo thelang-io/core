@@ -200,9 +200,7 @@ export fn statement (self: t.Statement, indent := 0) str {
     result += (body.asynchronous ? "async " : "") + "fn " + body.name.name
     result += " (" + parameters.join(", ") + ")"
     result += body.returnType != nil ? " " + typeT(body.returnType) : ""
-    if body.body != nil {
-      result += " " + statement(body.body, indent: indent).trimStart()
-    }
+    result += " " + statement(body.body, indent: indent).trimStart()
     return result
   } elif self.isIf() {
     body := self.asIf()
@@ -298,9 +296,7 @@ export fn statement (self: t.Statement, indent := 0) str {
     result += (body.asynchronous ? "async " : "") + "fn " + body.name.name
     result += " (" + parameters.join(", ") + ")"
     result += body.returnType != nil ? " " + typeT(body.returnType) : ""
-    if body.body != nil {
-      result += " " + statement(body.body, indent: indent).trimStart()
-    }
+    result += " " + statement(body.body, indent: indent).trimStart()
     return result
   } elif self.isObjectDeclarationProperty() {
     body := self.asObjectDeclarationProperty()

@@ -17,7 +17,7 @@ export fn analyzerPrint(statements: ref Parser.Statement[]) str {
   return result
 }
 
-export fn analyzerPrintFunction(parameters: Parser.FunctionParameter[], body: Parser.Statement?, indent: int) str {
+export fn analyzerPrintFunction(parameters: Parser.FunctionParameter[], body: ref Parser.Statement, indent: int) str {
   mut result := ""
 
   loop i := 0; i < parameters.len; i++ {
@@ -41,11 +41,7 @@ export fn analyzerPrintFunction(parameters: Parser.FunctionParameter[], body: Pa
     }
   }
 
-  if body != nil {
-    definiteBody := body
-    result += analyzerPrintStatement(ref definiteBody, indent)
-  }
-
+  result += analyzerPrintStatement(ref body, indent)
   return result
 }
 
@@ -118,17 +114,24 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
   } elif statement.isFunctionDeclaration() {
     functionDeclaration := statement.asFunctionDeclaration()
 
-    attributes := analyzerPrintFunctionAttributes(
+    mut attributes := analyzerPrintFunctionAttributes(
       functionDeclaration.name,
       functionDeclaration.returnType,
       functionDeclaration.asynchronous,
     )
 
+    statementContext := statement.context
+
+    if statement.context is Context.FunctionDeclarationContext {
+      context := statementContext as Context.FunctionDeclarationContext
+      attributes += " context:selfType=" + context.selfType.toString()
+    }
+
     result += ' '.repeat(indent) + "FunctionDeclaration(" + attributes + ")\n"
 
     result += analyzerPrintFunction(
       functionDeclaration.parameters,
-      functionDeclaration.body,
+      ref functionDeclaration.body,
       indent + 2,
     )
   } elif statement.isIf() {
@@ -215,7 +218,7 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
 
     result += analyzerPrintFunction(
       objectDeclarationMethod.parameters,
-      objectDeclarationMethod.body,
+      ref objectDeclarationMethod.body,
       indent + 2,
     )
   } elif statement.isObjectDeclarationProperty() {
@@ -405,7 +408,7 @@ export fn analyzerPrintExpression(expression: ref Parser.Expression, indent: int
     closure := expression.asClosure()
     name = "ClosureExpression"
     attributes += " " + analyzerPrintFunctionAttributes(nil, closure.returnType, closure.asynchronous)
-    result += analyzerPrintFunction(closure.parameters, closure.body, indent + 2)
+    result += analyzerPrintFunction(closure.parameters, ref closure.body, indent + 2)
   } elif expression.isConditional() {
     conditional := expression.asConditional()
     name = "ConditionalExpression"

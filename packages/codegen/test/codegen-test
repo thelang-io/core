@@ -6,13 +6,17 @@
 import * as Analyzer from "the/analyzer"
 import * as Parser from "the/parser"
 import Codegen from "../src/codegen"
-import applyRegexTemplate, matchRegex, retrieveFileSections from "./utils"
+import
+  applyRegexTemplate,
+  matchRegex,
+  retrieveFileSections
+from "./utils"
 
-fn TEST_EXPECT_EQ (test: str, a: str, b: str) {
+fn Codegen_EXPECT_EQ (test: str, a: str, b: str) {
   EXPECT_EQ(test + os_EOL + a, test + os_EOL + b)
 }
 
-fn TEST_EXPECT_REGEX (test: str, a: str, b: str) {
+fn Codegen_EXPECT_REGEX (test: str, a: str, b: str) {
   EXPECT_EQ(test + os_EOL + a, test + os_EOL + applyRegexTemplate(b, a))
 }
 
@@ -44,7 +48,7 @@ export fn TEST_Codegen () {
     fileSections := retrieveFileSections("./test/codegen/" + name + ".txt")
     executablePath := "./build/" + name + ".out"
     codePath := "./build/" + name + ".c"
-    print(name)
+    print(name, to: "stderr")
 
     mut analyzer := Analyzer.Analyzer{}
 
@@ -61,18 +65,30 @@ export fn TEST_Codegen () {
     file.analyze(ref file.f.program.body)
 
     if !analyzer.errors.empty {
-      TEST_EXPECT_EQ(name, analyzer.errors.join(os_EOL), "")
+      Codegen_EXPECT_EQ(name, analyzer.errors.join(os_EOL), "")
       continue
     }
 
-    mut generator := Codegen{analyzer: ref analyzer}
+    mut generator := Codegen{analyzer: ref analyzer, sanitize: true}
     generator.init()
-    generator.generate()
+
+    mut generationError := ""
+
+    try {
+      generator.generate()
+    } catch err: error_Error {
+      generationError = err.message
+    }
+
+    if !generationError.empty {
+      Codegen_EXPECT_EQ(name, generationError, "")
+      continue
+    }
 
     generatedCode := generator.stringify()
 
     if fileSections.code != generatedCode {
-      TEST_EXPECT_EQ(name, fileSections.code, generatedCode)
+      Codegen_EXPECT_EQ(name, fileSections.code, generatedCode)
       continue
     }
 
@@ -88,22 +104,33 @@ export fn TEST_Codegen () {
     fs_rmSync(codePath)
 
     if !errorMessage.empty {
-      TEST_EXPECT_EQ(name, errorMessage, "")
+      Codegen_EXPECT_EQ(name, errorMessage, "")
       continue
     }
 
     mut actualOutput := ""
+    mut failed := false
 
     try {
-      actualOutput = process_runSync(executablePath).str()
+      addressSanitizerFlags := generator.getAddressSanitizerFlags()
+      leakSanitizerFlags := generator.getLeakSanitizerFlags()
+
+      sanitizeEnv := os_NAME == "Windows"
+        ? "set ASAN_OPTIONS=" + addressSanitizerFlags + " && set LSAN_OPTIONS=" + leakSanitizerFlags + " &&"
+        : "ASAN_OPTIONS=" + addressSanitizerFlags + " LSAN_OPTIONS=" + leakSanitizerFlags
+
+      actualOutput = process_runSync(sanitizeEnv + " " + executablePath).str()
     } catch err: error_Error {
       actualOutput = err.message
+      failed = true
     }
 
     fs_rmSync(executablePath)
 
-    if actualOutput != fileSections.output {
-      TEST_EXPECT_REGEX(name, actualOutput, fileSections.output)
+    if failed {
+      Codegen_EXPECT_EQ(name, actualOutput, "")
+    } elif actualOutput != fileSections.output {
+      Codegen_EXPECT_REGEX(name, actualOutput, fileSections.output)
     }
   }
 }
