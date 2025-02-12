@@ -1,0 +1,84 @@
+fn test1 (mut a: int) int {
+  a = 2
+  return a
+}
+
+fn test2 (mut a: int, mut b := 2) int {
+  a = b
+  return a + b
+}
+
+fn test3 (mut a: int, mut b := 2, mut c: float = 3) float {
+  c = b
+  return a + b + c
+}
+
+main {
+  test1(1)
+  test2(2, 3)
+  test3(4, 5, 6)
+}
+===== code =====
+#include <d4/fn.h>
+#include <d4/safe.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, int, int32_t, FP5int, {
+  int32_t n0;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, int, int32_t, FP5intFP2int, {
+  int32_t n0;
+  unsigned char o1;
+  int32_t n1;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, float, double, FP5intFP2intFP2float, {
+  int32_t n0;
+  unsigned char o1;
+  int32_t n1;
+  unsigned char o2;
+  double n2;
+})
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, int, int32_t, FP5int)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, int, int32_t, FP5intFP2int)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, float, double, FP5intFP2intFP2float)
+d4_fn_sFP5intFRintFE_t test1_0;
+d4_fn_sFP5intFP2intFRintFE_t test2_0;
+d4_fn_sFP5intFP2intFP2floatFRfloatFE_t test3_0;
+int32_t test1_0_func (void *ctx, d4_fn_sFP5intFRintFE_params_t *params) {
+  int32_t a_0 = params->n0;
+  a_0 = 2;
+  return a_0;
+}
+int32_t test2_0_func (void *ctx, d4_fn_sFP5intFP2intFRintFE_params_t *params) {
+  int32_t a_0 = params->n0;
+  int32_t b_0 = params->o1 == 1 ? params->n1 : 2;
+  a_0 = b_0;
+  return a_0 + b_0;
+}
+double test3_0_func (void *ctx, d4_fn_sFP5intFP2intFP2floatFRfloatFE_params_t *params) {
+  int32_t a_0 = params->n0;
+  int32_t b_0 = params->o1 == 1 ? params->n1 : 2;
+  double c_0 = params->o2 == 1 ? params->n2 : 3;
+  c_0 = (double) b_0;
+  return (double) a_0 + b_0 + c_0;
+}
+int main (void) {
+  void *__THE_1 = NULL;
+  void *__THE_2 = NULL;
+  void *__THE_3 = NULL;
+  test1_0 = d4_fn_sFP5intFRintFE_alloc((d4_str_t) {L"test1", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test1_0_func);
+  test2_0 = d4_fn_sFP5intFP2intFRintFE_alloc((d4_str_t) {L"test2", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test2_0_func);
+  test3_0 = d4_fn_sFP5intFP2intFP2floatFRfloatFE_alloc((d4_str_t) {L"test3", 5, true}, NULL, NULL, NULL, (double (*) (void *, void *)) test3_0_func);
+  test1_0.func(test1_0.ctx, __THE_1 = d4_safe_calloc(&(d4_fn_sFP5intFRintFE_params_t) {1}, sizeof(d4_fn_sFP5intFRintFE_params_t)));
+  test2_0.func(test2_0.ctx, __THE_2 = d4_safe_calloc(&(d4_fn_sFP5intFP2intFRintFE_params_t) {2, 1, 3}, sizeof(d4_fn_sFP5intFP2intFRintFE_params_t)));
+  test3_0.func(test3_0.ctx, __THE_3 = d4_safe_calloc(&(d4_fn_sFP5intFP2intFP2floatFRfloatFE_params_t) {4, 1, 5, 1, 6}, sizeof(d4_fn_sFP5intFP2intFP2floatFRfloatFE_params_t)));
+  d4_safe_free(__THE_3);
+  d4_safe_free(__THE_2);
+  d4_safe_free(__THE_1);
+  d4_fn_sFP5intFP2intFP2floatFRfloatFE_free(test3_0);
+  d4_fn_sFP5intFP2intFRintFE_free(test2_0);
+  d4_fn_sFP5intFRintFE_free(test1_0);
+}
+===== output =====

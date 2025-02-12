@@ -4,8 +4,8 @@ main {
 }
 ===== out =====
 MainDeclaration()
-  VariableDeclaration(name=a mutable=true constant=false type=bool | int context:varType=bool | int)
-  VariableDeclaration(name=b mutable=false constant=false context:varType=bool)
+  VariableDeclaration(name=a mutable=true constant=false type=bool | int context:var:name=a context:var:type=bool | int context:var:mutable=true context:var:referenced=false)
+  VariableDeclaration(name=b mutable=false constant=false context:var:name=b context:var:type=bool context:var:mutable=false context:var:referenced=false)
     ConditionalExpression(initial=bool)
       ParenthesizedExpression(initial=bool)
         AssignmentExpression(initial=bool operator==)

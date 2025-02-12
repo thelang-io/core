@@ -3,39 +3,100 @@
  * Licensed under the MIT License
  */
 
-import * as Type, Var from "./type"
+import * as Type from "./type"
 import * as TypeMap from "./type-map"
 
-export obj VarMap {
-  mut items: Var[]
+export obj VarMapContext {
   mut scope: int
+  mut variables: (ref Type.Var)[]
+}
 
-  fn add (mut self: ref Self, name: str, t: ref Type.Type, mutable: bool) {
-    self.items.push(Var{
+export obj VarMap {
+  mut contexts: VarMapContext[]
+  // TODO: remove after reference problem fixed in v1
+  mut items: any[]
+  mut scope: int
+  mut variables: (ref Type.Var)[]
+
+  fn add (mut self: ref Self, name: str, t: ref Type.Type, mutable: bool) ref Type.Var {
+    self.items.push(Type.Var{
       name: name,
       t: t,
       mutable: mutable,
-      scope: self.scope
+      scope: self.scope,
     })
+
+    var := self.at(self.items.len - 1)
+    self.variables.push(var)
+
+    return var
+  }
+
+  fn at (mut self: ref Self, index: int) ref Type.Var {
+    return ref ((self.items[index] as any) as Type.Var)
+  }
+
+  fn collect (mut self: ref Self, mut var: ref Type.Var) {
+    if self.contexts.empty {
+      return
+    }
+
+    context := self.contexts.last
+
+    if var.scope >= context.scope {
+      return
+    }
+
+    loop i := context.variables.len - 1; i >= 0; i-- {
+      contextVar := context.variables[i]
+
+      if contextVar.name == var.name {
+        return
+      }
+    }
+
+    context.variables.push(var)
+    var.referenced = true
+  }
+
+  fn endCollection (mut self: ref Self) (ref Type.Var)[] {
+    context := self.contexts.pop()
+
+    if !self.contexts.empty {
+      mut lastContext := self.contexts.last
+
+      loop i := 0; i < context.variables.len; i++ {
+        contextVariable := context.variables[i]
+
+        if contextVariable.scope < lastContext.scope {
+          lastContext.variables.push(contextVariable)
+        }
+      }
+    }
+
+    return context.variables
   }
 
   fn decrease (mut self: ref Self) {
-    len := self.items.len
+    len := self.variables.len
 
     loop i := len - 1; i >= 0; i-- {
-      if self.items[i].scope == self.scope {
-        self.items.remove(i)
+      item := self.variables[i]
+
+      if item.scope == self.scope {
+        self.variables.remove(i)
       }
     }
 
     self.scope--
   }
 
-  fn get (mut self: ref Self, name: str) Var {
-    loop i := self.items.len - 1; i >= 0; i-- {
-      item := self.items[i]
+  fn get (mut self: ref Self, name: str) ref Type.Var {
+    loop i := self.variables.len - 1; i >= 0; i-- {
+      mut item := self.variables[i]
 
       if item.name == name {
+        self.collect(item)
         return item
       }
     }
@@ -44,8 +105,8 @@ export obj VarMap {
   }
 
   fn has (mut self: ref Self, name: str, global := true) bool {
-    loop i := self.items.len - 1; i >= 0; i-- {
-      item := self.items[i]
+    loop i := self.variables.len - 1; i >= 0; i-- {
+      item := self.variables[i]
 
       if item.name == name && (global || (!global && item.scope == self.scope)) {
         return true
@@ -57,5 +118,9 @@ export obj VarMap {
 
   fn increase (mut self: ref Self) {
     self.scope++
+  }
+
+  fn startCollection (mut self: ref Self) {
+    self.contexts.push(VarMapContext{scope: self.scope})
   }
 }

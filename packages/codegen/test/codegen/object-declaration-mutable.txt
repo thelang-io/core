@@ -36,6 +36,7 @@ main {
 #include <d4/safe.h>
 #include <d4/string.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #define TYPE_obj_Human 1
 D4_OBJECT_FORWARD_DECLARE(Animal)
@@ -85,29 +86,53 @@ int main (void) {
   d4_str_t __THE_1 = d4_str_empty_val;
   d4_str_t __THE_2 = d4_str_empty_val;
   d4_str_t __THE_3 = d4_str_empty_val;
-  d4_obj_Animal_t __THE_4 = d4_obj_Animal_alloc(d4_str_empty_val, 0);
-  d4_str_t __THE_5 = d4_str_empty_val;
-  d4_obj_Animal_t __THE_6 = d4_obj_Animal_alloc(d4_str_empty_val, 0);
-  d4_str_t __THE_7 = d4_str_empty_val;
-  d4_obj_Animal_t __THE_8 = d4_obj_Animal_alloc(d4_str_empty_val, 0);
+  d4_obj_Animal_t __THE_4 = (d4_obj_Animal_t) {d4_str_empty_val, 0};
+  d4_arr_obj_Animal_t __THE_5 = (d4_arr_obj_Animal_t) {NULL, 0};
+  d4_str_t __THE_6 = d4_str_empty_val;
+  d4_obj_Animal_t __THE_7 = (d4_obj_Animal_t) {d4_str_empty_val, 0};
+  d4_arr_obj_Animal_t __THE_8 = (d4_arr_obj_Animal_t) {NULL, 0};
+  d4_str_t __THE_9 = d4_str_empty_val;
+  d4_obj_Animal_t __THE_10 = (d4_obj_Animal_t) {d4_str_empty_val, 0};
+  d4_arr_obj_Animal_t __THE_11 = (d4_arr_obj_Animal_t) {NULL, 0};
   d4_obj_Human_t person3_0;
-  d4_obj_Human_t person1_0 = d4_obj_Human_alloc(__THE_1 = d4_str_alloc(L"Peter"), d4_arr_obj_Animal_alloc(0));
-  d4_obj_Human_t person2_0 = d4_obj_Human_alloc(__THE_2 = d4_str_alloc(L"Brian"), d4_arr_obj_Animal_alloc(0));
-  d4_arr_obj_Animal_push(&person1_0.pets, d4_arr_obj_Animal_alloc(1, __THE_4 = d4_obj_Animal_alloc(__THE_3 = d4_str_alloc(L"Cleo"), 1)));
-  d4_arr_obj_Animal_push(&person1_0.pets, d4_arr_obj_Animal_alloc(1, __THE_6 = d4_obj_Animal_alloc(__THE_5 = d4_str_alloc(L"Bella"), 1)));
+  d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+  d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+  void *__THE_14 = NULL;
+  d4_any_t __THE_15 = {-1, NULL, NULL, NULL, NULL, NULL};
+  d4_arr_any_t __THE_16 = (d4_arr_any_t) {NULL, 0};
+  void *__THE_17 = NULL;
+  d4_any_t __THE_18 = {-1, NULL, NULL, NULL, NULL, NULL};
+  d4_arr_any_t __THE_19 = (d4_arr_any_t) {NULL, 0};
+  void *__THE_20 = NULL;
+  d4_obj_Human_t person1_0 = d4_obj_Human_alloc(__THE_1 = d4_str_alloc(L"Peter"), (d4_arr_obj_Animal_t) {NULL, 0});
+  d4_obj_Human_t person2_0 = d4_obj_Human_alloc(__THE_2 = d4_str_alloc(L"Brian"), (d4_arr_obj_Animal_t) {NULL, 0});
+  d4_arr_obj_Animal_push(&person1_0.pets, __THE_5 = d4_arr_obj_Animal_alloc(1, __THE_4 = d4_obj_Animal_alloc(__THE_3 = d4_str_alloc(L"Cleo"), 1)));
+  d4_arr_obj_Animal_push(&person1_0.pets, __THE_8 = d4_arr_obj_Animal_alloc(1, __THE_7 = d4_obj_Animal_alloc(__THE_6 = d4_str_alloc(L"Bella"), 1)));
   (*d4_arr_obj_Animal_at(&d4_err_state, 16, 3, person1_0.pets, 0)).age++;
-  d4_arr_obj_Animal_push(&person2_0.pets, d4_arr_obj_Animal_alloc(1, __THE_8 = d4_obj_Animal_alloc(__THE_7 = d4_str_alloc(L"Luxor"), 10)));
+  d4_arr_obj_Animal_push(&person2_0.pets, __THE_11 = d4_arr_obj_Animal_alloc(1, __THE_10 = d4_obj_Animal_alloc(__THE_9 = d4_str_alloc(L"Luxor"), 10)));
   person3_0 = d4_obj_Human_copy(person1_0);
   person1_0 = d4_obj_Human_realloc(person1_0, person2_0);
   person2_0 = d4_obj_Human_realloc(person2_0, person3_0);
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person1_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person2_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
-  d4_print.func(d4_print.ctx, d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {d4_arr_any_alloc(1, d4_any_obj_Human_alloc(person3_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(1, __THE_12 = d4_any_obj_Human_alloc(person1_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_17 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_16 = d4_arr_any_alloc(1, __THE_15 = d4_any_obj_Human_alloc(person2_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_print.func(d4_print.ctx, __THE_20 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_19 = d4_arr_any_alloc(1, __THE_18 = d4_any_obj_Human_alloc(person3_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+  d4_safe_free(__THE_20);
+  d4_arr_any_free(__THE_19);
+  d4_any_free(__THE_18);
+  d4_safe_free(__THE_17);
+  d4_arr_any_free(__THE_16);
+  d4_any_free(__THE_15);
+  d4_safe_free(__THE_14);
+  d4_arr_any_free(__THE_13);
+  d4_any_free(__THE_12);
   d4_obj_Human_free(person3_0);
-  d4_obj_Animal_free(__THE_8);
-  d4_str_free(__THE_7);
-  d4_obj_Animal_free(__THE_6);
-  d4_str_free(__THE_5);
+  d4_arr_obj_Animal_free(__THE_11);
+  d4_obj_Animal_free(__THE_10);
+  d4_str_free(__THE_9);
+  d4_arr_obj_Animal_free(__THE_8);
+  d4_obj_Animal_free(__THE_7);
+  d4_str_free(__THE_6);
+  d4_arr_obj_Animal_free(__THE_5);
   d4_obj_Animal_free(__THE_4);
   d4_str_free(__THE_3);
   d4_obj_Human_free(person2_0);

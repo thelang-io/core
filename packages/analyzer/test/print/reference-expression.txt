@@ -1,8 +1,8 @@
 const a := 10
 const b := ref a
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=int)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
   IntegerLiteral(initial=int value=10)
-VariableDeclaration(name=b mutable=false constant=true context:varType=ref int)
+VariableDeclaration(name=b mutable=false constant=true context:var:name=b context:var:type=ref int context:var:mutable=false context:var:referenced=false)
   ReferenceExpression(initial=ref int)
     Identifier(initial=int name=a)

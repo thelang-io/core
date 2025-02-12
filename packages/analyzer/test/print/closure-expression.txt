@@ -5,14 +5,14 @@ const c := async (mut i: int, o := 10, p: u8 = 20, j: int...) -> int {
   return k
 }
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=() -> void)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=() -> void context:var:mutable=false context:var:referenced=false)
   ClosureExpression(initial=() -> void asynchronous=false return=void)
-VariableDeclaration(name=b mutable=false constant=true context:varType=(i: int) -> int)
+VariableDeclaration(name=b mutable=false constant=true context:var:name=b context:var:type=(i: int) -> int context:var:mutable=false context:var:referenced=false)
   ClosureExpression(initial=(i: int) -> int asynchronous=false return=int)
     FunctionParameter(name=i type=int mutable=false variadic=false)
     ReturnStatement()
       Identifier(initial=int name=i)
-VariableDeclaration(name=c mutable=false constant=true context:varType=async (mut i: int, o: int, p: u8, j: int...) -> int)
+VariableDeclaration(name=c mutable=false constant=true context:var:name=c context:var:type=async (mut i: int, o: int, p: u8, j: int...) -> int context:var:mutable=false context:var:referenced=false)
   ClosureExpression(initial=async (mut i: int, o: int, p: u8, j: int...) -> int asynchronous=true return=int)
     FunctionParameter(name=i type=int mutable=true variadic=false)
     FunctionParameter(name=o mutable=false variadic=false)
@@ -20,7 +20,7 @@ VariableDeclaration(name=c mutable=false constant=true context:varType=async (mu
     FunctionParameter(name=p type=u8 mutable=false variadic=false)
       IntegerLiteral(initial=int target=u8 value=20)
     FunctionParameter(name=j type=int mutable=false variadic=true)
-    VariableDeclaration(name=k mutable=false constant=false context:varType=int)
+    VariableDeclaration(name=k mutable=false constant=false context:var:name=k context:var:type=int context:var:mutable=false context:var:referenced=false)
       BinaryExpression(initial=int operator=-)
         Identifier(initial=int name=i)
         ElementAccessExpression(initial=ref int target=int extra:selfType=int[])

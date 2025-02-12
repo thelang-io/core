@@ -483,6 +483,50 @@ property1 := type.get("name")
 property2 := type.get(1)
 ```
 
+### `Type.getParameters () TypeParameter[]`
+Returns parameters of a function or method type. Should only be used on function or method types.
+
+**Parameters**
+
+none
+
+**Return value**
+
+Array of type parameters from the function or method type.
+
+**Exceptions**
+
+- `Error` - thrown when called on a non-function/method type
+
+**Examples**
+
+```the
+result := functionType.getParameters()
+result := methodType.getParameters()
+```
+
+### `Type.getReturnType () ref Type`
+Returns return type of a function or method type. Should only be used on function or method types.
+
+**Parameters**
+
+none
+
+**Return value**
+
+Return type of the function or method.
+
+**Exceptions**
+
+- `Error` - thrown when called on a non-function/method type
+
+**Examples**
+
+```the
+result := functionType.getReturnType()
+result := methodType.getReturnType()
+```
+
 ### `Type.has (nameOrIndex: int | str) bool`
 Checks whether type has property with specified name or index.
 
@@ -516,6 +560,24 @@ Whether enum type has enumerator with specified name.
 
 ```the
 result := type.hasEnumerator("Color")
+```
+
+### `Type.hasParameters () bool`
+Checks whether current type is a function or method type and has any parameters.
+
+**Parameters**
+
+none
+
+**Return value**
+
+Whether current type is a function or method type and has any parameters.
+
+**Examples**
+
+```the
+result := functionType.hasParameters()
+result := methodType.hasParameters()
 ```
 
 ### `Type.hasSelfParam () bool`
@@ -695,6 +757,34 @@ none
 ```the
 mut tm := TypeMap{}
 tm.init()
+```
+
+### `TypeMap.add (name: str?, body: TypeBody, properties: TypeProperty[] = [], scope := 0) ref Type`
+Creates and registers a new type using specified information and returns a reference to it.
+
+**Parameters**
+
+- `name` - optional name for the type. Use `nil` for anonymous types
+- `body` - type body specification
+- `properties` - optional array of type properties. Defaults to empty array
+- `scope` - optional scope level for the type. Defaults to 0 (global scope)
+
+**Return value**
+
+Reference to the newly created type.
+
+**Examples**
+
+```the
+mut tm := TypeMap{}
+
+type1 := tm.add(nil, ReferenceType{t: tm.get("int)})
+
+type2 := tm.add("Object", ObjectType{}, properties: [
+  TypeProperty{name: "a", t: tm.get("int)}
+])
+
+type3 := tm.add("Alias", AliasType{t: tm.get("int")}, scope: 2)
 ```
 
 ### `TypeMap.createAlias (name: str, t: ref Type) ref Type`
@@ -1107,8 +1197,8 @@ c := tm.unionSub(a, tm.get("i32"))
 d := tm.unionSub(c, tm.get("i16"))
 ```
 
-### `VarMap.add (name: str, t: ref Type, mutable: bool) void`
-Creates variable and inserts it into underlying items of var map.
+### `VarMap.add (name: str, t: ref Type, mutable: bool) ref Var`
+Creates variable and inserts it into underlying items of var map returning reference to newly created variable.
 
 **Parameters**
 
@@ -1118,13 +1208,47 @@ Creates variable and inserts it into underlying items of var map.
 
 **Return value**
 
-none
+Reference to the newly created variable.
 
 **Examples**
 
 ```the
 mut tm := TypeMap{}
-varMap.add("age", tm.get("int"), mutable: false)
+var := varMap.add("age", tm.get("int"), mutable: false)
+```
+
+### `VarMap.at (index: int) ref Var`
+Returns reference to variable at specified index in internal items array.
+
+**Parameters**
+
+- `index` - index of variable to return
+
+**Return value**
+
+Reference to variable at specified index.
+
+**Examples**
+
+```the
+var := varMap.at(0)
+```
+
+### `VarMap.collect (mut var: ref Var) void`
+Collects variable usage within current collection scope if variable is from outer scope.
+
+**Parameters**
+
+- `var` - variable to collect usage of
+
+**Return value**
+
+none
+
+**Examples**
+
+```the
+varMap.collect(ref variable)
 ```
 
 ### `VarMap.decrease () void`
@@ -1140,6 +1264,19 @@ none
 varMap.decrease()
 ```
 
+### `VarMap.endCollection () (ref Var)[]`
+Ends current collection scope and returns collected variables.
+
+**Return value**
+
+Array of collected variables from outer scope.
+
+**Examples**
+
+```the
+variables := varMap.endCollection()
+```
+
 ### `VarMap.increase () void`
 Increases inner scope.
 
@@ -1153,8 +1290,8 @@ none
 varMap.increase()
 ```
 
-### `VarMap.get (name: str) Var`
-Searches for variable by name and returns it.
+### `VarMap.get (name: str) ref Var`
+Searches for variable by name and returns reference to it. Collects referenced variables usage.
 
 **Parameters**
 
@@ -1162,7 +1299,7 @@ Searches for variable by name and returns it.
 
 **Return value**
 
-Found variable.
+Reference to found variable.
 
 **Exceptions**
 
@@ -1190,4 +1327,17 @@ Whether variable with specified name exists.
 
 ```the
 varMap.has("int")
+```
+
+### `VarMap.startCollection () void`
+Start collection of referenced variables within current scope.
+
+**Return value**
+
+none
+
+**Examples**
+
+```the
+varMap.startCollection()
 ```

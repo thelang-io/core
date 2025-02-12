@@ -1,0 +1,130 @@
+fn test1 (job: () -> void) {
+  job()
+}
+
+fn test2 (job: (int) -> int) int {
+  return job(1)
+}
+
+fn test3 (job: (int, int) -> int) int {
+  return job(2, 3)
+}
+
+fn job1 () {
+}
+
+fn job2 (a: int) int {
+  return a + 2
+}
+
+fn job3 (a: int, b: int) int {
+  return a * b
+}
+
+main {
+  test1(job1)
+  test2(job2)
+  test3(job3)
+}
+===== code =====
+#include <d4/fn.h>
+#include <d4/safe.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+D4_FUNCTION_DECLARE(s, void, void)
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, void, void, FP3fn_sFRvoidFE, {
+  d4_fn_sFRvoidFE_t n0;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, int, int32_t, FP3int, {
+  int32_t n0;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, int, int32_t, FP3fn_sFP3intFRintFE, {
+  d4_fn_sFP3intFRintFE_t n0;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, int, int32_t, FP3intFP3int, {
+  int32_t n0;
+  int32_t n1;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, int, int32_t, FP3fn_sFP3intFP3intFRintFE, {
+  d4_fn_sFP3intFP3intFRintFE_t n0;
+})
+D4_FUNCTION_DEFINE(s, void, void)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, void, void, FP3fn_sFRvoidFE)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, int, int32_t, FP3int)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, int, int32_t, FP3fn_sFP3intFRintFE)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, int, int32_t, FP3intFP3int)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, int, int32_t, FP3fn_sFP3intFP3intFRintFE)
+d4_fn_sFP3fn_sFRvoidFEFRvoidFE_t test1_0;
+d4_fn_sFP3fn_sFP3intFRintFEFRintFE_t test2_0;
+d4_fn_sFP3fn_sFP3intFP3intFRintFEFRintFE_t test3_0;
+d4_fn_sFRvoidFE_t job1_0;
+d4_fn_sFP3intFRintFE_t job2_0;
+d4_fn_sFP3intFP3intFRintFE_t job3_0;
+void test1_0_func (void *ctx, d4_fn_sFP3fn_sFRvoidFEFRvoidFE_params_t *params) {
+  d4_fn_sFRvoidFE_t job_0 = params->n0;
+  job_0.func(job_0.ctx, NULL);
+}
+int32_t test2_0_func (void *ctx, d4_fn_sFP3fn_sFP3intFRintFEFRintFE_params_t *params) {
+  d4_fn_sFP3intFRintFE_t job_0 = params->n0;
+  void *__THE_1 = NULL;
+  int32_t v;
+  unsigned char r = 0;
+  {
+    r = 1;
+    v = job_0.func(job_0.ctx, __THE_1 = d4_safe_calloc(&(d4_fn_sFP3intFRintFE_params_t) {1}, sizeof(d4_fn_sFP3intFRintFE_params_t)));
+    goto L1;
+  }
+L1:
+  d4_safe_free(__THE_1);
+  return v;
+}
+int32_t test3_0_func (void *ctx, d4_fn_sFP3fn_sFP3intFP3intFRintFEFRintFE_params_t *params) {
+  d4_fn_sFP3intFP3intFRintFE_t job_0 = params->n0;
+  void *__THE_1 = NULL;
+  int32_t v;
+  unsigned char r = 0;
+  {
+    r = 1;
+    v = job_0.func(job_0.ctx, __THE_1 = d4_safe_calloc(&(d4_fn_sFP3intFP3intFRintFE_params_t) {2, 3}, sizeof(d4_fn_sFP3intFP3intFRintFE_params_t)));
+    goto L2;
+  }
+L2:
+  d4_safe_free(__THE_1);
+  return v;
+}
+void job1_0_func (void *ctx, void *params) {}
+int32_t job2_0_func (void *ctx, d4_fn_sFP3intFRintFE_params_t *params) {
+  int32_t a_0 = params->n0;
+  return a_0 + 2;
+}
+int32_t job3_0_func (void *ctx, d4_fn_sFP3intFP3intFRintFE_params_t *params) {
+  int32_t a_0 = params->n0;
+  int32_t b_0 = params->n1;
+  return a_0 * b_0;
+}
+int main (void) {
+  void *__THE_1 = NULL;
+  void *__THE_2 = NULL;
+  void *__THE_3 = NULL;
+  test1_0 = d4_fn_sFP3fn_sFRvoidFEFRvoidFE_alloc((d4_str_t) {L"test1", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test1_0_func);
+  test2_0 = d4_fn_sFP3fn_sFP3intFRintFEFRintFE_alloc((d4_str_t) {L"test2", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test2_0_func);
+  test3_0 = d4_fn_sFP3fn_sFP3intFP3intFRintFEFRintFE_alloc((d4_str_t) {L"test3", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test3_0_func);
+  job1_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"job1", 4, true}, NULL, NULL, NULL, (void (*) (void *, void *)) job1_0_func);
+  job2_0 = d4_fn_sFP3intFRintFE_alloc((d4_str_t) {L"job2", 4, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) job2_0_func);
+  job3_0 = d4_fn_sFP3intFP3intFRintFE_alloc((d4_str_t) {L"job3", 4, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) job3_0_func);
+  test1_0.func(test1_0.ctx, __THE_1 = d4_safe_calloc(&(d4_fn_sFP3fn_sFRvoidFEFRvoidFE_params_t) {job1_0}, sizeof(d4_fn_sFP3fn_sFRvoidFEFRvoidFE_params_t)));
+  test2_0.func(test2_0.ctx, __THE_2 = d4_safe_calloc(&(d4_fn_sFP3fn_sFP3intFRintFEFRintFE_params_t) {job2_0}, sizeof(d4_fn_sFP3fn_sFP3intFRintFEFRintFE_params_t)));
+  test3_0.func(test3_0.ctx, __THE_3 = d4_safe_calloc(&(d4_fn_sFP3fn_sFP3intFP3intFRintFEFRintFE_params_t) {job3_0}, sizeof(d4_fn_sFP3fn_sFP3intFP3intFRintFEFRintFE_params_t)));
+  d4_safe_free(__THE_3);
+  d4_safe_free(__THE_2);
+  d4_safe_free(__THE_1);
+  d4_fn_sFP3intFP3intFRintFE_free(job3_0);
+  d4_fn_sFP3intFRintFE_free(job2_0);
+  d4_fn_sFRvoidFE_free(job1_0);
+  d4_fn_sFP3fn_sFP3intFP3intFRintFEFRintFE_free(test3_0);
+  d4_fn_sFP3fn_sFP3intFRintFEFRintFE_free(test2_0);
+  d4_fn_sFP3fn_sFRvoidFEFRvoidFE_free(test1_0);
+}
+===== output =====

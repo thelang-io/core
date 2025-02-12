@@ -1,0 +1,29 @@
+fn test1 (a: int, b := 1, c := 2) int {
+  return a + b + c
+}
+
+main {
+  test1(1)
+  test1(1, 2)
+  test1(1, 2, 3)
+  test1(1, b: 2)
+  test1(1, c: 3)
+  test1(1, b: 2, c: 3)
+  test1(1, c: 3, b: 2)
+
+  mut a := 1
+
+  fn test2 (a2: int, b := 1, c := 2) {
+    a = a2 + b + c
+  }
+
+  test2(1)
+  test2(1, 2)
+  test2(1, 2, 3)
+  test2(1, b: 2)
+  test2(1, c: 3)
+  test2(1, b: 2, c: 3)
+  test2(1, c: 3, b: 2)
+}
+===== code =====
+===== output =====

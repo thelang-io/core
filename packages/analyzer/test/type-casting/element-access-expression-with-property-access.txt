@@ -9,7 +9,7 @@ main {
 ObjectDeclaration(name=Animal context:selfType=Animal)
   ObjectDeclarationProperty(name=age mutable=true constant=false type=int)
 MainDeclaration()
-  VariableDeclaration(name=pets mutable=true constant=false context:varType=Animal[])
+  VariableDeclaration(name=pets mutable=true constant=false context:var:name=pets context:var:type=Animal[] context:var:mutable=true context:var:referenced=false)
     ArrayExpression(initial=Animal[])
       ObjectExpression(initial=Animal id=Animal)
         ObjectExpressionProperty(name=age)

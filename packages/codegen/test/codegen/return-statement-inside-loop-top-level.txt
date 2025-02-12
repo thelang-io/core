@@ -1,0 +1,153 @@
+main {
+  loop i := 0; i < 10; i++ {
+    print("1 start", i)
+    if i == 5 { return }
+    print("1 end", i)
+  }
+
+  loop j := 0; j < 10; j++ {
+    print("2 start", j)
+    if j == 5 { return }
+    print("2 end", j)
+  }
+
+  loop k := 0; k < 10; k++ {
+    print("3 start", k)
+    if k == 5 { return }
+    print("3 end", k)
+  }
+}
+===== code =====
+#include <d4/any.h>
+#include <d4/globals.h>
+#include <d4/macro.h>
+#include <d4/number.h>
+#include <d4/safe.h>
+#include <d4/string.h>
+#include <stddef.h>
+#include <stdint.h>
+#define TYPE_str 1
+#define TYPE_int 2
+D4_ANY_DECLARE(str, d4_str_t)
+D4_ANY_DECLARE(int, int32_t)
+D4_ANY_DEFINE(TYPE_str, str, d4_str_t, d4_str_copy(val), d4_str_eq(lhs_val, rhs_val), d4_str_free(val), d4_str_copy(val))
+D4_ANY_DEFINE(TYPE_int, int, int32_t, val, lhs_val == rhs_val, (void) val, d4_int_str(val))
+int main (void) {
+  int v = 0;
+  unsigned char r = 0;
+  for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+    d4_str_t __THE_1 = d4_str_empty_val;
+    d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_5 = NULL;
+    d4_str_t __THE_6 = d4_str_empty_val;
+    d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_10 = NULL;
+    d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"1 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    if (i_0 == 5) {
+      {
+        r = 1;
+        goto L1;
+      }
+L1:
+      if (r == 1) goto L2;
+    }
+    d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"1 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_10);
+    d4_arr_any_free(__THE_9);
+    d4_any_free(__THE_8);
+    d4_any_free(__THE_7);
+    d4_str_free(__THE_6);
+L2:
+    d4_safe_free(__THE_5);
+    d4_arr_any_free(__THE_4);
+    d4_any_free(__THE_3);
+    d4_any_free(__THE_2);
+    d4_str_free(__THE_1);
+    if (r == 1) return v;
+  }
+  for (int32_t j_0 = 0; j_0 < 10; j_0++) {
+    d4_str_t __THE_11 = d4_str_empty_val;
+    d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_13 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_14 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_15 = NULL;
+    d4_str_t __THE_16 = d4_str_empty_val;
+    d4_any_t __THE_17 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_18 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_19 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_20 = NULL;
+    d4_print.func(d4_print.ctx, __THE_15 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_14 = d4_arr_any_alloc(2, __THE_12 = d4_any_str_alloc(__THE_11 = d4_str_alloc(L"2 start")), __THE_13 = d4_any_int_alloc(j_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    if (j_0 == 5) {
+      {
+        r = 1;
+        goto L3;
+      }
+L3:
+      if (r == 1) goto L4;
+    }
+    d4_print.func(d4_print.ctx, __THE_20 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_19 = d4_arr_any_alloc(2, __THE_17 = d4_any_str_alloc(__THE_16 = d4_str_alloc(L"2 end")), __THE_18 = d4_any_int_alloc(j_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_20);
+    d4_arr_any_free(__THE_19);
+    d4_any_free(__THE_18);
+    d4_any_free(__THE_17);
+    d4_str_free(__THE_16);
+L4:
+    d4_safe_free(__THE_15);
+    d4_arr_any_free(__THE_14);
+    d4_any_free(__THE_13);
+    d4_any_free(__THE_12);
+    d4_str_free(__THE_11);
+    if (r == 1) return v;
+  }
+  for (int32_t k_0 = 0; k_0 < 10; k_0++) {
+    d4_str_t __THE_21 = d4_str_empty_val;
+    d4_any_t __THE_22 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_23 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_24 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_25 = NULL;
+    d4_str_t __THE_26 = d4_str_empty_val;
+    d4_any_t __THE_27 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_28 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_29 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_30 = NULL;
+    d4_print.func(d4_print.ctx, __THE_25 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_24 = d4_arr_any_alloc(2, __THE_22 = d4_any_str_alloc(__THE_21 = d4_str_alloc(L"3 start")), __THE_23 = d4_any_int_alloc(k_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    if (k_0 == 5) {
+      {
+        r = 1;
+        goto L5;
+      }
+L5:
+      if (r == 1) goto L6;
+    }
+    d4_print.func(d4_print.ctx, __THE_30 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_29 = d4_arr_any_alloc(2, __THE_27 = d4_any_str_alloc(__THE_26 = d4_str_alloc(L"3 end")), __THE_28 = d4_any_int_alloc(k_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_30);
+    d4_arr_any_free(__THE_29);
+    d4_any_free(__THE_28);
+    d4_any_free(__THE_27);
+    d4_str_free(__THE_26);
+L6:
+    d4_safe_free(__THE_25);
+    d4_arr_any_free(__THE_24);
+    d4_any_free(__THE_23);
+    d4_any_free(__THE_22);
+    d4_str_free(__THE_21);
+    if (r == 1) return v;
+  }
+  return v;
+}
+===== output =====
+1 start 0
+1 end 0
+1 start 1
+1 end 1
+1 start 2
+1 end 2
+1 start 3
+1 end 3
+1 start 4
+1 end 4
+1 start 5

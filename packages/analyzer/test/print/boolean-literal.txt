@@ -1,5 +1,5 @@
 const a := true as u8
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=u8)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=u8 context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=u8 as=u8 extra:from=bool)
     BooleanLiteral(initial=bool value=true)

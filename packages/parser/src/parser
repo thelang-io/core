@@ -651,13 +651,11 @@ export obj Parser {
     }
 
     returnType := self.nextType()
-    mut body: t.Statement?
+    mut body := self.nextStatement(shouldWrap: false, withBlockStatement: true)
 
-    if self.tokenizer.lookahead(.OpLBrace, true) {
-      body = self.nextStatement(shouldWrap: false, withBlockStatement: true)
-    } elif returnType == nil {
-      self._raise(errors.E0169())
-      returnType = Type.dummy()
+    if body == nil {
+      self._raise(errors.E0168())
+      body = Statement.dummy()
     }
 
     if insideObjectDeclaration {
@@ -666,7 +664,7 @@ export obj Parser {
           name: name as t.Identifier,
           parameters: parameters,
           returnType: returnType,
-          body: body,
+          body: body as t.Statement,
           asynchronous: asynchronous
         },
         readerStartPos,
@@ -678,7 +676,7 @@ export obj Parser {
           name: name as t.Identifier,
           parameters: parameters,
           returnType: returnType,
-          body: body,
+          body: body as t.Statement,
           asynchronous: asynchronous
         },
         readerStartPos,
@@ -2323,9 +2321,7 @@ export fn interconnectStatement (mut statement: ref t.Statement, parent: (ref t.
     interconnectExpression(ref body.expression, statement, nil)
   } elif statement.isFunctionDeclaration() {
     mut body := statement.asFunctionDeclaration()
-    if body.body != nil {
-      interconnectStatement(ref body.body, statement2)
-    }
+    interconnectStatement(ref body.body, statement2)
     loop i := 0; i < body.parameters.len; i++ {
       mut parameter := body.parameters[i]
       if parameter.initializer != nil {
@@ -2369,9 +2365,7 @@ export fn interconnectStatement (mut statement: ref t.Statement, parent: (ref t.
     }
   } elif statement.isObjectDeclarationMethod() {
     mut body := statement.asObjectDeclarationMethod()
-    if body.body != nil {
-      interconnectStatement(ref body.body, statement2)
-    }
+    interconnectStatement(ref body.body, statement2)
   } elif statement.isObjectDeclarationProperty() {
     mut body := statement.asObjectDeclarationProperty()
     if body.initializer != nil {

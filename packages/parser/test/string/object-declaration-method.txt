@@ -4,9 +4,6 @@ obj Test {
   fn test (b: int = 2, c := 3, d: int...) int {
     return b
   }
-  async fn test () void
-  fn test (a: int) void
-  fn test (b: int = 2, c := 3, d: int...) int
 }
 main {
   obj Test {
@@ -15,8 +12,5 @@ main {
     fn test (b: int = 2, c := 3, d: int...) int {
       return b
     }
-    async fn test () void
-    fn test (a: int) void
-    fn test (b: int = 2, c := 3, d: int...) int
   }
 }

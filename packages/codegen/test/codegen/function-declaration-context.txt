@@ -1,0 +1,11 @@
+main {
+  mut a := 2
+
+  fn test (newA: int) {
+    a = newA
+  }
+
+  test(1)
+}
+===== code =====
+===== output =====

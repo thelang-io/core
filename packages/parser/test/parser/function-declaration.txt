@@ -1,8 +1,3 @@
-fn test () void
-async fn test () void
-fn test (a: int) int
-fn test (mut a: int = 2, b := 3, c: int...) int
-
 fn test () {}
 async fn test () {}
 fn test (a: int) int {}
@@ -12,130 +7,79 @@ fn test (mut a: int = 2, b := 3, c: int...) int {
 }
 ===== out =====
 Program
-  FunctionDeclaration(start=0, end=15)
+  FunctionDeclaration(start=0, end=13)
     name
       Identifier(start=3 end=7) test
-    returnType
-      IdentifierType(start=11 end=15)
-        Identifier(start=11 end=15) void
-  FunctionDeclaration(start=16, end=37 async)
+    body
+      BlockStatement(start=11, end=13)
+  FunctionDeclaration(start=14, end=33 async)
     name
-      Identifier(start=25 end=29) test
-    returnType
-      IdentifierType(start=33 end=37)
-        Identifier(start=33 end=37) void
-  FunctionDeclaration(start=38, end=58)
+      Identifier(start=23 end=27) test
+    body
+      BlockStatement(start=31, end=33)
+  FunctionDeclaration(start=34, end=57)
     name
-      Identifier(start=41 end=45) test
+      Identifier(start=37 end=41) test
     parameters
       FunctionParameter
         name
-          Identifier(start=47 end=48) a
+          Identifier(start=43 end=44) a
         type
-          IdentifierType(start=50 end=53)
-            Identifier(start=50 end=53) int
+          IdentifierType(start=46 end=49)
+            Identifier(start=46 end=49) int
     returnType
-      IdentifierType(start=55 end=58)
-        Identifier(start=55 end=58) int
-  FunctionDeclaration(start=59, end=106)
-    name
-      Identifier(start=62 end=66) test
-    parameters
-      FunctionParameter(mut)
-        name
-          Identifier(start=72 end=73) a
-        type
-          IdentifierType(start=75 end=78)
-            Identifier(start=75 end=78) int
-        initializer
-          IntegerLiteral(start=81, end=82 type=Decimal) 2
-      FunctionParameter
-        name
-          Identifier(start=84 end=85) b
-        initializer
-          IntegerLiteral(start=89, end=90 type=Decimal) 3
-      FunctionParameter(variadic)
-        name
-          Identifier(start=92 end=93) c
-        type
-          IdentifierType(start=95 end=98)
-            Identifier(start=95 end=98) int
-    returnType
-      IdentifierType(start=103 end=106)
-        Identifier(start=103 end=106) int
-  FunctionDeclaration(start=108, end=121)
-    name
-      Identifier(start=111 end=115) test
+      IdentifierType(start=51 end=54)
+        Identifier(start=51 end=54) int
     body
-      BlockStatement(start=119, end=121)
-  FunctionDeclaration(start=122, end=141 async)
+      BlockStatement(start=55, end=57)
+  FunctionDeclaration(start=58, end=136)
     name
-      Identifier(start=131 end=135) test
-    body
-      BlockStatement(start=139, end=141)
-  FunctionDeclaration(start=142, end=165)
-    name
-      Identifier(start=145 end=149) test
-    parameters
-      FunctionParameter
-        name
-          Identifier(start=151 end=152) a
-        type
-          IdentifierType(start=154 end=157)
-            Identifier(start=154 end=157) int
-    returnType
-      IdentifierType(start=159 end=162)
-        Identifier(start=159 end=162) int
-    body
-      BlockStatement(start=163, end=165)
-  FunctionDeclaration(start=166, end=244)
-    name
-      Identifier(start=169 end=173) test
+      Identifier(start=61 end=65) test
     parameters
       FunctionParameter(mut)
         name
-          Identifier(start=179 end=180) a
+          Identifier(start=71 end=72) a
         type
-          IdentifierType(start=182 end=185)
-            Identifier(start=182 end=185) int
+          IdentifierType(start=74 end=77)
+            Identifier(start=74 end=77) int
         initializer
-          IntegerLiteral(start=188, end=189 type=Decimal) 2
+          IntegerLiteral(start=80, end=81 type=Decimal) 2
       FunctionParameter
         name
-          Identifier(start=191 end=192) b
+          Identifier(start=83 end=84) b
         initializer
-          IntegerLiteral(start=196, end=197 type=Decimal) 3
+          IntegerLiteral(start=88, end=89 type=Decimal) 3
       FunctionParameter(variadic)
         name
-          Identifier(start=199 end=200) c
+          Identifier(start=91 end=92) c
         type
-          IdentifierType(start=202 end=205)
-            Identifier(start=202 end=205) int
+          IdentifierType(start=94 end=97)
+            Identifier(start=94 end=97) int
     returnType
-      IdentifierType(start=210 end=213)
-        Identifier(start=210 end=213) int
+      IdentifierType(start=102 end=105)
+        Identifier(start=102 end=105) int
     body
-      BlockStatement(start=214, end=244)
-        ExpressionStatement(start=218, end=227)
-          AssignmentExpression(start=218, end=227)
+      BlockStatement(start=106, end=136)
+        ExpressionStatement(start=110, end=119)
+          AssignmentExpression(start=110, end=119)
             left
-              Identifier(start=218 end=219) a
+              Identifier(start=110 end=111) a
             op
-              OpEq(start=220 end=221) =
+              OpEq(start=112 end=113) =
             right
-              BinaryExpression(start=222, end=227)
+              BinaryExpression(start=114, end=119)
                 left
-                  Identifier(start=222 end=223) b
+                  Identifier(start=114 end=115) b
                 op
-                  OpPlus(start=224 end=225) +
+                  OpPlus(start=116 end=117) +
                 right
-                  Identifier(start=226 end=227) c
-        ReturnStatement(start=230, end=242)
-          BinaryExpression(start=237, end=242)
+                  Identifier(start=118 end=119) c
+        ReturnStatement(start=122, end=134)
+          BinaryExpression(start=129, end=134)
             left
-              IntegerLiteral(start=237, end=238 type=Decimal) 1
+              IntegerLiteral(start=129, end=130 type=Decimal) 1
             op
-              OpPlus(start=239 end=240) +
+              OpPlus(start=131 end=132) +
             right
-              IntegerLiteral(start=241, end=242 type=Decimal) 2
-  EofStatement(start=244, end=244)
+              IntegerLiteral(start=133, end=134 type=Decimal) 2
+  EofStatement(start=136, end=136)

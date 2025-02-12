@@ -1,5 +1,5 @@
 const a := "test" as str?
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=str?)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=str? context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=str? as=str? extra:from=str)
     StringLiteral(initial=str value=test)

@@ -3,15 +3,15 @@ mut b := ~10
 const c := b++
 const d := ++b
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=bool)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=bool context:var:mutable=false context:var:referenced=false)
   UnaryExpression(initial=bool operator=! prefix=true)
     BooleanLiteral(initial=bool value=true)
-VariableDeclaration(name=b mutable=true constant=false context:varType=int)
+VariableDeclaration(name=b mutable=true constant=false context:var:name=b context:var:type=int context:var:mutable=true context:var:referenced=false)
   UnaryExpression(initial=int operator=~ prefix=true)
     IntegerLiteral(initial=int value=10)
-VariableDeclaration(name=c mutable=false constant=true context:varType=int)
+VariableDeclaration(name=c mutable=false constant=true context:var:name=c context:var:type=int context:var:mutable=false context:var:referenced=false)
   UnaryExpression(initial=int operator=++ prefix=false)
     Identifier(initial=int name=b)
-VariableDeclaration(name=d mutable=false constant=true context:varType=int)
+VariableDeclaration(name=d mutable=false constant=true context:var:name=d context:var:type=int context:var:mutable=false context:var:referenced=false)
   UnaryExpression(initial=int operator=++ prefix=true)
     Identifier(initial=int name=b)

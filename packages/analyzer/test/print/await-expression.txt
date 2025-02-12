@@ -3,11 +3,11 @@ main {
   a := await test()
 }
 ===== out =====
-FunctionDeclaration(asynchronous=true name=test return=int)
+FunctionDeclaration(asynchronous=true name=test return=int context:var:name=test context:var:type=async () -> int context:var:mutable=false context:var:referenced=false)
   ReturnStatement()
     IntegerLiteral(initial=int value=10)
 MainDeclaration()
-  VariableDeclaration(name=a mutable=false constant=false context:varType=int)
+  VariableDeclaration(name=a mutable=false constant=false context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
     AwaitExpression(initial=int)
       CallExpression(initial=async () -> int extra:asynchronous=true extra:returnType=int)
         Identifier(initial=async () -> int name=test)

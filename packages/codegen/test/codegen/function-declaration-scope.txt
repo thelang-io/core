@@ -1,0 +1,52 @@
+main {
+  if 1 > 2 {
+    fn x (a: int) {}
+    x(1)
+  } else {
+    fn x (b: str) {}
+    x("test")
+  }
+}
+===== code =====
+#include <d4/fn.h>
+#include <d4/macro.h>
+#include <d4/safe.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, void, void, FP3int, {
+  int32_t n0;
+})
+D4_FUNCTION_DECLARE_WITH_PARAMS(s, void, void, FP3str, {
+  d4_str_t n0;
+})
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, void, void, FP3int)
+D4_FUNCTION_DEFINE_WITH_PARAMS(s, void, void, FP3str)
+d4_fn_sFP3intFRvoidFE_t x_0;
+d4_fn_sFP3strFRvoidFE_t x_1;
+void x_0_func (void *ctx, d4_fn_sFP3intFRvoidFE_params_t *params) {
+  int32_t a_0 = params->n0;
+}
+void x_1_func (void *ctx, d4_fn_sFP3strFRvoidFE_params_t *params) {
+  d4_str_t b_0 = params->n0;
+}
+int main (void) {
+  if (1 > 2) {
+    void *__THE_1 = NULL;
+    x_0 = d4_fn_sFP3intFRvoidFE_alloc((d4_str_t) {L"x", 1, true}, NULL, NULL, NULL, (void (*) (void *, void *)) x_0_func);
+    x_0.func(x_0.ctx, __THE_1 = d4_safe_calloc(&(d4_fn_sFP3intFRvoidFE_params_t) {1}, sizeof(d4_fn_sFP3intFRvoidFE_params_t)));
+    d4_safe_free(__THE_1);
+    d4_fn_sFP3intFRvoidFE_free(x_0);
+  }
+  else {
+    d4_str_t __THE_2 = d4_str_empty_val;
+    void *__THE_3 = NULL;
+    x_1 = d4_fn_sFP3strFRvoidFE_alloc((d4_str_t) {L"x", 1, true}, NULL, NULL, NULL, (void (*) (void *, void *)) x_1_func);
+    x_1.func(x_1.ctx, __THE_3 = d4_safe_calloc(&(d4_fn_sFP3strFRvoidFE_params_t) {__THE_2 = d4_str_alloc(L"test")}, sizeof(d4_fn_sFP3strFRvoidFE_params_t)));
+    d4_safe_free(__THE_3);
+    d4_str_free(__THE_2);
+    d4_fn_sFP3strFRvoidFE_free(x_1);
+  }
+}
+===== output =====

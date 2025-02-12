@@ -1,0 +1,43 @@
+fn test1 () { return }
+fn test2 () void { return }
+fn test3 () int { return 1 }
+
+main {
+  test1()
+  test2()
+  test3()
+}
+===== code =====
+#include <d4/fn.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+D4_FUNCTION_DECLARE(s, void, void)
+D4_FUNCTION_DECLARE(s, int, int32_t)
+D4_FUNCTION_DEFINE(s, void, void)
+D4_FUNCTION_DEFINE(s, int, int32_t)
+d4_fn_sFRvoidFE_t test1_0;
+d4_fn_sFRvoidFE_t test2_0;
+d4_fn_sFRintFE_t test3_0;
+void test1_0_func (void *ctx, void *params) {
+  return;
+}
+void test2_0_func (void *ctx, void *params) {
+  return;
+}
+int32_t test3_0_func (void *ctx, void *params) {
+  return 1;
+}
+int main (void) {
+  test1_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test1", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test1_0_func);
+  test2_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test2", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test2_0_func);
+  test3_0 = d4_fn_sFRintFE_alloc((d4_str_t) {L"test3", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test3_0_func);
+  test1_0.func(test1_0.ctx, NULL);
+  test2_0.func(test2_0.ctx, NULL);
+  test3_0.func(test3_0.ctx, NULL);
+  d4_fn_sFRintFE_free(test3_0);
+  d4_fn_sFRvoidFE_free(test2_0);
+  d4_fn_sFRvoidFE_free(test1_0);
+}
+===== output =====

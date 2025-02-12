@@ -1,0 +1,26 @@
+#0 in malloc (libclang_rt.asan_osx_dynamic.dylib)
+#1 in _malloc_type_malloc_outlined (libsystem_malloc.dylib)
+#2 in _fetchInitializingClassList (libobjc.A.dylib)
+#3 in _setThisThreadIsInitializingClass (libobjc.A.dylib)
+#4 in initializeNonMetaClass (libobjc.A.dylib)
+#5 in initializeNonMetaClass (libobjc.A.dylib)
+#6 in initializeNonMetaClass (libobjc.A.dylib)
+#7 in initializeNonMetaClass (libobjc.A.dylib)
+#8 in initializeAndMaybeRelock (libobjc.A.dylib)
+#9 in lookUpImpOrForward (libobjc.A.dylib)
+#10 in _objc_msgSend_uncached (libobjc.A.dylib)
+#11 in _xpc_collect_images (libxpc.dylib)
+#12 in _libxpc_initializer (libxpc.dylib)
+#13 in libSystem_initializer (libSystem.B.dylib)
+
+leak:libSystem_initializer
+
+#0 in malloc (libclang_rt.asan_osx_dynamic.dylib)
+#1 in _malloc_type_malloc_outlined (libsystem_malloc.dylib)
+#2 in __Balloc_D2A (libsystem_c.dylib)
+#3 in __d2b_D2A (libsystem_c.dylib)
+#4 in __dtoa (libsystem_c.dylib)
+#5 in __vfwprintf (libsystem_c.dylib)
+#6 in vswprintf_l (libsystem_c.dylib)
+
+leak:vswprintf_l

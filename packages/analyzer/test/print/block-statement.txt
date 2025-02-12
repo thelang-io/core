@@ -5,9 +5,9 @@ main {
   b := 20
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=test)
+FunctionDeclaration(asynchronous=false name=test context:var:name=test context:var:type=() -> void context:var:mutable=false context:var:referenced=false)
 MainDeclaration()
-  VariableDeclaration(name=a mutable=false constant=false context:varType=int)
+  VariableDeclaration(name=a mutable=false constant=false context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
     IntegerLiteral(initial=int value=10)
-  VariableDeclaration(name=b mutable=false constant=false context:varType=int)
+  VariableDeclaration(name=b mutable=false constant=false context:var:name=b context:var:type=int context:var:mutable=false context:var:referenced=false)
     IntegerLiteral(initial=int value=20)

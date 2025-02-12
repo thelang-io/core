@@ -301,7 +301,7 @@ export fn TEST_types_statement () {
   })
 
   EXPECT_NO_THROW(() -> void {
-    statement := Statement.create(t.FunctionDeclaration{name: Expression.dummyIdentifier()}, 0, 0)
+    statement := Statement.create(t.FunctionDeclaration{name: Expression.dummyIdentifier(), body: Statement.dummy()}, 0, 0)
     statement.asFunctionDeclaration()
   })
 
@@ -331,7 +331,7 @@ export fn TEST_types_statement () {
   })
 
   EXPECT_NO_THROW(() -> void {
-    statement := Statement.create(t.ObjectDeclarationMethod{name: Expression.dummyIdentifier()}, 0, 0)
+    statement := Statement.create(t.ObjectDeclarationMethod{name: Expression.dummyIdentifier(), body: Statement.dummy()}, 0, 0)
     statement.asObjectDeclarationMethod()
   })
 
@@ -374,13 +374,13 @@ export fn TEST_types_statement () {
   statement7 := Statement.create(t.ExportDeclaration{statement: Statement.dummy()}, 0, 0)
   statement8 := Statement.create(t.ExportNamedDeclaration{expression: Expression.dummy()}, 0, 0)
   statement9 := Statement.create(t.ExpressionStatement{expression: Expression.dummy()}, 0, 0)
-  statement10 := Statement.create(t.FunctionDeclaration{name: Expression.dummyIdentifier()}, 0, 0)
+  statement10 := Statement.create(t.FunctionDeclaration{name: Expression.dummyIdentifier(), body: Statement.dummy()}, 0, 0)
   statement11 := Statement.create(t.IfStatement{condition: Expression.dummy(), consequent: Statement.dummy()}, 0, 0)
   statement12 := Statement.create(t.ImportDeclaration{source: Expression.dummy()}, 0, 0)
   statement13 := Statement.create(t.LoopStatement{body: Statement.dummy()}, 0, 0)
   statement14 := Statement.create(t.MainDeclaration{body: Statement.dummy()}, 0, 0)
   statement15 := Statement.create(t.ObjectDeclaration{name: Expression.dummyIdentifier()}, 0, 0)
-  statement16 := Statement.create(t.ObjectDeclarationMethod{name: Expression.dummyIdentifier()}, 0, 0)
+  statement16 := Statement.create(t.ObjectDeclarationMethod{name: Expression.dummyIdentifier(), body: Statement.dummy()}, 0, 0)
   statement17 := Statement.create(t.ObjectDeclarationProperty{name: Expression.dummyIdentifier()}, 0, 0)
   statement18 := Statement.create(t.ReturnStatement{}, 0, 0)
   statement19 := Statement.create(t.ThrowStatement{expression: Expression.dummy()}, 0, 0)

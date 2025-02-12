@@ -4,8 +4,8 @@ main {
 }
 ===== out =====
 MainDeclaration()
-  VariableDeclaration(name=a mutable=false constant=false type=byte context:varType=byte)
+  VariableDeclaration(name=a mutable=false constant=false type=byte context:var:name=a context:var:type=byte context:var:mutable=false context:var:referenced=false)
     IntegerLiteral(initial=int value=10)
-  VariableDeclaration(name=b mutable=false constant=false context:varType=i16)
+  VariableDeclaration(name=b mutable=false constant=false context:var:name=b context:var:type=i16 context:var:mutable=false context:var:referenced=false)
     AsExpression(initial=i16 as=i16 extra:from=byte)
       Identifier(initial=byte name=a)

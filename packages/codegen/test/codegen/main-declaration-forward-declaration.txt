@@ -1,0 +1,37 @@
+main {
+  b := example() + "2"
+}
+fn example () str { return "1" }
+===== code =====
+#include <d4/fn.h>
+#include <d4/macro.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+D4_FUNCTION_DECLARE(s, str, d4_str_t)
+D4_FUNCTION_DEFINE(s, str, d4_str_t)
+d4_fn_sFRstrFE_t example_0;
+d4_str_t example_0_func (void *ctx, void *params) {
+  d4_str_t __THE_1 = d4_str_empty_val;
+  d4_str_t v;
+  unsigned char r = 0;
+  {
+    r = 1;
+    v = d4_str_copy(__THE_1 = d4_str_alloc(L"1"));
+    goto L1;
+  }
+L1:
+  d4_str_free(__THE_1);
+  return v;
+}
+int main (void) {
+  d4_str_t __THE_1 = d4_str_empty_val;
+  d4_str_t __THE_2 = d4_str_empty_val;
+  example_0 = d4_fn_sFRstrFE_alloc((d4_str_t) {L"example", 7, true}, NULL, NULL, NULL, (d4_str_t (*) (void *, void *)) example_0_func);
+  d4_str_t b_0 = d4_str_concat(__THE_1 = example_0.func(example_0.ctx, NULL), __THE_2 = d4_str_alloc(L"2"));
+  d4_str_free(b_0);
+  d4_str_free(__THE_2);
+  d4_str_free(__THE_1);
+  d4_fn_sFRstrFE_free(example_0);
+}
+===== output =====

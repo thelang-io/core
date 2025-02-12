@@ -5,8 +5,9 @@
 
 import * as Parser from "the/parser"
 import * as Context from "./context"
+import * as Type from "./type"
 
-export fn analyzerPrint(statements: ref Parser.Statement[]) str {
+export fn analyzerPrint (statements: ref Parser.Statement[]) str {
   mut result := ""
 
   loop i := 0; i < statements.len; i++ {
@@ -17,7 +18,7 @@ export fn analyzerPrint(statements: ref Parser.Statement[]) str {
   return result
 }
 
-export fn analyzerPrintFunction(parameters: Parser.FunctionParameter[], body: Parser.Statement?, indent: int) str {
+export fn analyzerPrintFunction (parameters: Parser.FunctionParameter[], body: ref Parser.Statement, indent: int) str {
   mut result := ""
 
   loop i := 0; i < parameters.len; i++ {
@@ -41,15 +42,11 @@ export fn analyzerPrintFunction(parameters: Parser.FunctionParameter[], body: Pa
     }
   }
 
-  if body != nil {
-    definiteBody := body
-    result += analyzerPrintStatement(ref definiteBody, indent)
-  }
-
+  result += analyzerPrintStatement(ref body, indent)
   return result
 }
 
-export fn analyzerPrintFunctionAttributes(name: Parser.Identifier?, returnType: Parser.Type?, asynchronous: bool) str {
+export fn analyzerPrintFunctionAttributes (name: Parser.Identifier?, returnType: Parser.Type?, asynchronous: bool) str {
   mut result := "asynchronous=" + asynchronous.str()
 
   if name != nil {
@@ -63,7 +60,18 @@ export fn analyzerPrintFunctionAttributes(name: Parser.Identifier?, returnType: 
   return result.trim()
 }
 
-export fn analyzerVariableDeclarationAttributes(name: Parser.Identifier, t: Parser.Type?, mutable: bool, constant: bool) str {
+export fn analyzerPrintVariable (prefix: str, var: ref Type.Var) str {
+  mut result := ""
+
+  result += " " + prefix + "var:name=" + var.name
+  result += " " + prefix + "var:type=" + var.t.toString()
+  result += " " + prefix + "var:mutable=" + var.mutable.str()
+  result += " " + prefix + "var:referenced=" + var.referenced.str()
+
+  return result.trim()
+}
+
+export fn analyzerVariableDeclarationAttributes (name: Parser.Identifier, t: Parser.Type?, mutable: bool, constant: bool) str {
   mut result := "name=" + name.name
   result += " mutable=" + mutable.str()
   result += " constant=" + constant.str()
@@ -75,7 +83,7 @@ export fn analyzerVariableDeclarationAttributes(name: Parser.Identifier, t: Pars
   return result
 }
 
-export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) str {
+export fn analyzerPrintStatement (statement: ref Parser.Statement, indent: int) str {
   mut result := ""
 
   if statement.isBlock() {
@@ -118,17 +126,35 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
   } elif statement.isFunctionDeclaration() {
     functionDeclaration := statement.asFunctionDeclaration()
 
-    attributes := analyzerPrintFunctionAttributes(
+    mut attributes := analyzerPrintFunctionAttributes(
       functionDeclaration.name,
       functionDeclaration.returnType,
       functionDeclaration.asynchronous,
     )
 
+    statementContext := statement.context
+
+    if statement.context is Context.FunctionDeclarationContext {
+      context := statementContext as Context.FunctionDeclarationContext
+      attributes += " " + analyzerPrintVariable("context:", context.var)
+
+      mut contextVariables: str[]
+
+      loop i := 0; i < context.context.len; i++ {
+        variable := context.context[i]
+        contextVariables.push(variable.name)
+      }
+
+      if !contextVariables.empty {
+        attributes += " context:variables=[" + contextVariables.join(", ") + "]"
+      }
+    }
+
     result += ' '.repeat(indent) + "FunctionDeclaration(" + attributes + ")\n"
 
     result += analyzerPrintFunction(
       functionDeclaration.parameters,
-      functionDeclaration.body,
+      ref functionDeclaration.body,
       indent + 2,
     )
   } elif statement.isIf() {
@@ -215,7 +241,7 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
 
     result += analyzerPrintFunction(
       objectDeclarationMethod.parameters,
-      objectDeclarationMethod.body,
+      ref objectDeclarationMethod.body,
       indent + 2,
     )
   } elif statement.isObjectDeclarationProperty() {
@@ -280,7 +306,7 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
 
     if statement.context is Context.VariableDeclarationContext {
       context := statementContext as Context.VariableDeclarationContext
-      attributes += " context:varType=" + context.varType.toString()
+      attributes += " " + analyzerPrintVariable("context:", context.var)
     }
 
     result += ' '.repeat(indent) + "VariableDeclaration(" + attributes + ")\n"
@@ -294,7 +320,7 @@ export fn analyzerPrintStatement(statement: ref Parser.Statement, indent: int) s
   return result
 }
 
-export fn analyzerPrintExpression(expression: ref Parser.Expression, indent: int) str {
+export fn analyzerPrintExpression (expression: ref Parser.Expression, indent: int) str {
   mut name := ""
   mut attributes := ""
   mut result := ""
@@ -405,7 +431,7 @@ export fn analyzerPrintExpression(expression: ref Parser.Expression, indent: int
     closure := expression.asClosure()
     name = "ClosureExpression"
     attributes += " " + analyzerPrintFunctionAttributes(nil, closure.returnType, closure.asynchronous)
-    result += analyzerPrintFunction(closure.parameters, closure.body, indent + 2)
+    result += analyzerPrintFunction(closure.parameters, ref closure.body, indent + 2)
   } elif expression.isConditional() {
     conditional := expression.asConditional()
     name = "ConditionalExpression"

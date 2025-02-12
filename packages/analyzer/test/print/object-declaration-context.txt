@@ -1,0 +1,30 @@
+main {
+  a := 10
+
+  obj D {
+    fn c (b: int) int {
+      return a + b
+    }
+  }
+
+  d := D{}
+  d.c(20)
+}
+===== out =====
+MainDeclaration()
+  VariableDeclaration(name=a mutable=false constant=false context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=true)
+    IntegerLiteral(initial=int value=10)
+  ObjectDeclaration(name=D context:selfType=D)
+    ObjectDeclarationMethod(asynchronous=false name=c return=int)
+      FunctionParameter(name=b type=int mutable=false variadic=false)
+      ReturnStatement()
+        BinaryExpression(initial=int operator=+)
+          Identifier(initial=int name=a)
+          Identifier(initial=int name=b)
+  VariableDeclaration(name=d mutable=false constant=false context:var:name=d context:var:type=D context:var:mutable=false context:var:referenced=false)
+    ObjectExpression(initial=D id=D)
+  CallExpression(initial=int extra:asynchronous=false extra:returnType=int)
+    PropertyAccessExpression(initial=(b: int) -> int name=c extra:propertyName=c extra:propertyType=(b: int) -> int)
+      Identifier(initial=D name=d)
+    CallExpressionArgument(extra:parameterIdx=0)
+      IntegerLiteral(initial=int value=20)

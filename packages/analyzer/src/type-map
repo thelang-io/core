@@ -15,55 +15,34 @@ export obj TypeMap {
   mut items: TypeArray
   mut mode: TypeMapMode
   mut scope: int
+  mut types: (ref Type.Type)[]
   mut _self: (ref Type.Type)?
 
   fn init (mut self: ref Self) {
     self.mode = .Regular
 
-    self.items.push(Type.Type{name: "any", body: Type.ObjectType{}})
-    mut anyType := self.items.last()
-    self.items.push(Type.Type{name: "bool", body: Type.ObjectType{}})
-    mut boolType := self.items.last()
-    self.items.push(Type.Type{name: "byte", body: Type.ObjectType{}})
-    mut byteType := self.items.last()
-    self.items.push(Type.Type{name: "char", body: Type.ObjectType{}})
-    mut charType := self.items.last()
-    self.items.push(Type.Type{name: "f32", body: Type.ObjectType{}})
-    mut f32Type := self.items.last()
-    self.items.push(Type.Type{name: "f64", body: Type.ObjectType{}})
-    mut f64Type := self.items.last()
-    self.items.push(Type.Type{name: "float", body: Type.ObjectType{}})
-    mut floatType := self.items.last()
-    self.items.push(Type.Type{name: "i8", body: Type.ObjectType{}})
-    mut i8Type := self.items.last()
-    self.items.push(Type.Type{name: "i16", body: Type.ObjectType{}})
-    mut i16Type := self.items.last()
-    self.items.push(Type.Type{name: "i32", body: Type.ObjectType{}})
-    mut i32Type := self.items.last()
-    self.items.push(Type.Type{name: "i64", body: Type.ObjectType{}})
-    mut i64Type := self.items.last()
-    self.items.push(Type.Type{name: "int", body: Type.ObjectType{}})
-    mut intType := self.items.last()
-    self.items.push(Type.Type{name: "isize", body: Type.ObjectType{}})
-    mut isizeType := self.items.last()
-    self.items.push(Type.Type{name: "never", body: Type.ObjectType{}})
-    mut neverType := self.items.last()
-    self.items.push(Type.Type{name: "rune", body: Type.ObjectType{}})
-    mut runeType := self.items.last()
-    self.items.push(Type.Type{name: "u8", body: Type.ObjectType{}})
-    mut u8Type := self.items.last()
-    self.items.push(Type.Type{name: "u16", body: Type.ObjectType{}})
-    mut u16Type := self.items.last()
-    self.items.push(Type.Type{name: "u32", body: Type.ObjectType{}})
-    mut u32Type := self.items.last()
-    self.items.push(Type.Type{name: "u64", body: Type.ObjectType{}})
-    mut u64Type := self.items.last()
-    self.items.push(Type.Type{name: "usize", body: Type.ObjectType{}})
-    mut usizeType := self.items.last()
-    self.items.push(Type.Type{name: "str", body: Type.ObjectType{}})
-    mut strType := self.items.last()
-    self.items.push(Type.Type{name: "void", body: Type.ObjectType{}})
-    mut voidType := self.items.last()
+    mut anyType := self.add("any", Type.ObjectType{})
+    mut boolType := self.add("bool", Type.ObjectType{})
+    mut byteType := self.add("byte", Type.ObjectType{})
+    mut charType := self.add("char", Type.ObjectType{})
+    mut f32Type := self.add("f32", Type.ObjectType{})
+    mut f64Type := self.add("f64", Type.ObjectType{})
+    mut floatType := self.add("float", Type.ObjectType{})
+    mut i8Type := self.add("i8", Type.ObjectType{})
+    mut i16Type := self.add("i16", Type.ObjectType{})
+    mut i32Type := self.add("i32", Type.ObjectType{})
+    mut i64Type := self.add("i64", Type.ObjectType{})
+    mut intType := self.add("int", Type.ObjectType{})
+    mut isizeType := self.add("isize", Type.ObjectType{})
+    mut neverType := self.add("never", Type.ObjectType{})
+    mut runeType := self.add("rune", Type.ObjectType{})
+    mut u8Type := self.add("u8", Type.ObjectType{})
+    mut u16Type := self.add("u16", Type.ObjectType{})
+    mut u32Type := self.add("u32", Type.ObjectType{})
+    mut u64Type := self.add("u64", Type.ObjectType{})
+    mut usizeType := self.add("usize", Type.ObjectType{})
+    mut strType := self.add("str", Type.ObjectType{})
+    mut voidType := self.add("void", Type.ObjectType{})
 
     anyType.properties.push(Type.TypeProperty{name: "str", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("any"))), mutable: false, builtin: true})
     boolType.properties.push(Type.TypeProperty{name: "str", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("bool"))), mutable: false, builtin: true})
@@ -108,7 +87,7 @@ export obj TypeMap {
     u64Type.properties.push(Type.TypeProperty{name: "str", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("u64"))), mutable: false, builtin: true})
     usizeType.properties.push(Type.TypeProperty{name: "str", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("usize"))), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "empty", t: self.get("bool"), mutable: false, builtin: true})
-    strType.properties.push(Type.TypeProperty{name: "len", t: self.get("int"), mutable: false, builtin: true})
+    strType.properties.push(Type.TypeProperty{name: "len", t: self.get("usize"), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "lower", t: self.get("str"), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "lowerFirst", t: self.get("str"), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "upper", t: self.get("str"), mutable: false, builtin: true})
@@ -129,8 +108,8 @@ export obj TypeMap {
       Type.TypeParameter{name: "count", t: self.get("int"), mutable: false, required: false, variadic: false}
     ], self.get("str"), true, false, "self", self.createReference(self.get("str"))), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "slice", t: self.createMethod(false, [
-      Type.TypeParameter{name: "start", t: self.get("int"), mutable: false, required: false, variadic: false}
-      Type.TypeParameter{name: "end", t: self.get("int"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "start", t: self.get("usize"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "end", t: self.get("usize"), mutable: false, required: false, variadic: false}
     ], self.get("str"), true, false, "self", self.createReference(self.get("str"))), mutable: false, builtin: true})
     strType.properties.push(Type.TypeProperty{name: "split", t: self.createMethod(false, [
       Type.TypeParameter{name: "delimiter", t: self.get("str"), mutable: false, required: false, variadic: false}
@@ -170,14 +149,26 @@ export obj TypeMap {
     strType.properties.push(Type.TypeProperty{name: "trimStart", t: self.createMethod(false, [], self.get("str"), true, false, "self", self.createReference(self.get("str"))), mutable: false, builtin: true})
   }
 
+  fn add (mut self: ref Self, name: str?, body: Type.TypeBody, properties: Type.TypeProperty[] = [], scope := 0) ref Type.Type {
+    self.items.push(Type.Type{
+      name: name == nil ? "" : name,
+      body: body,
+      properties: properties,
+      scope: scope,
+    })
+
+    mut t := self.items.last()
+    self.types.push(t)
+
+    return t
+  }
+
   fn createAlias (mut self: ref Self, name: str, t: ref Type.Type) ref Type.Type {
-    self.items.push(Type.Type{name: name, body: Type.AliasType{t: t}, scope: self.scope})
-    return self.items.last()
+    return self.add(name, Type.AliasType{t: t}, scope: self.scope)
   }
 
   fn createArray (mut self: ref Self, elementType: ref Type.Type) ref Type.Type {
-    self.items.push(Type.Type{body: Type.ArrayType{elementType: elementType}})
-    result := self.items.last()
+    mut result := self.add(nil, Type.ArrayType{elementType: elementType})
     if self.mode == .Raw { return result }
     resultRef := self.createReference(result)
     elementTypeRef := self.createReference(elementType)
@@ -185,7 +176,7 @@ export obj TypeMap {
     result.properties.push(Type.TypeProperty{name: "empty", t: self.get("bool"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "first", t: elementTypeRef, mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "last", t: elementTypeRef, mutable: false, builtin: true})
-    result.properties.push(Type.TypeProperty{name: "len", t: self.get("int"), mutable: false, builtin: true})
+    result.properties.push(Type.TypeProperty{name: "len", t: self.get("usize"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "clear", t: self.createMethod(false, [], resultRef, true, true, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "concat", t: self.createMethod(false, [
       Type.TypeParameter{name: "other", t: result, mutable: false, required: true, variadic: false}
@@ -219,8 +210,8 @@ export obj TypeMap {
     ], resultRef, true, true, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "reverse", t: self.createMethod(false, [], result, true, false, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "slice", t: self.createMethod(false, [
-      Type.TypeParameter{name: "start", t: self.get("int"), mutable: false, required: false, variadic: false}
-      Type.TypeParameter{name: "end", t: self.get("int"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "start", t: self.get("usize"), mutable: false, required: false, variadic: false}
+      Type.TypeParameter{name: "end", t: self.get("usize"), mutable: false, required: false, variadic: false}
     ], result, true, false, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "sort", t: self.createMethod(false, [
       Type.TypeParameter{name: "comparator", t: self.createFunction(false, [
@@ -234,8 +225,7 @@ export obj TypeMap {
   }
 
   fn createEnum (mut self: ref Self, name: str, members: str[]) ref Type.Type {
-    self.items.push(Type.Type{name: name, body: Type.EnumType{members: members}, scope: self.scope})
-    result := self.items.last()
+    mut result := self.add(name, Type.EnumType{members: members}, scope: self.scope)
     if self.mode == .Raw { return result }
     resultRef := self.createReference(result)
 
@@ -246,15 +236,7 @@ export obj TypeMap {
   }
 
   fn createFunction (mut self: ref Self, asynchronous: bool, parameters: Type.TypeParameter[], returnType: ref Type.Type) ref Type.Type {
-    self.items.push(Type.Type{
-      body: Type.FunctionType{
-        asynchronous: asynchronous,
-        parameters: parameters,
-        returnType: returnType
-      }
-    })
-
-    result := self.items.last()
+    mut result := self.add(nil, Type.FunctionType{asynchronous: asynchronous, parameters: parameters, returnType: returnType})
     if self.mode == .Raw { return result }
 
     result.properties.push(Type.TypeProperty{name: "name", t: self.get("str"), mutable: false, builtin: true})
@@ -263,15 +245,14 @@ export obj TypeMap {
   }
 
   fn createMap (mut self: ref Self, keyType: ref Type.Type, valueType: ref Type.Type) ref Type.Type {
-    self.items.push(Type.Type{body: Type.MapType{keyType: keyType, valueType: valueType}})
-    result := self.items.last()
+    mut result := self.add(nil, Type.MapType{keyType: keyType, valueType: valueType})
     if self.mode == .Raw { return result }
     resultRef := self.createReference(result)
 
     result.properties.push(Type.TypeProperty{name: "empty", t: self.get("bool"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "cap", t: self.get("int"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "keys", t: self.createArray(keyType), mutable: false, builtin: true})
-    result.properties.push(Type.TypeProperty{name: "len", t: self.get("int"), mutable: false, builtin: true})
+    result.properties.push(Type.TypeProperty{name: "len", t: self.get("usize"), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "values", t: self.createArray(valueType), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "clear", t: self.createMethod(false, [], resultRef, true, true, "self", resultRef), mutable: false, builtin: true})
     result.properties.push(Type.TypeProperty{name: "get", t: self.createMethod(false, [
@@ -309,19 +290,16 @@ export obj TypeMap {
     selfName: str,
     selfType: ref Type.Type,
   ) ref Type.Type {
-    self.items.push(Type.Type{
-      body: Type.MethodType{
-        asynchronous: asynchronous,
-        parameters: parameters,
-        returnType: returnType,
-        withSelf: withSelf,
-        selfMutable: selfMutable,
-        selfName: selfName,
-        selfType: selfType
-      }
+    mut result := self.add(nil, Type.MethodType{
+      asynchronous: asynchronous,
+      parameters: parameters,
+      returnType: returnType,
+      withSelf: withSelf,
+      selfMutable: selfMutable,
+      selfName: selfName,
+      selfType: selfType,
     })
 
-    result := self.items.last()
     if self.mode == .Raw { return result }
 
     result.properties.push(Type.TypeProperty{name: "name", t: self.get("str"), mutable: false, builtin: true})
@@ -349,13 +327,11 @@ export obj TypeMap {
   }
 
   fn createNamespace (mut self: ref Self, name: str, members: Type.NamespaceMember[]) ref Type.Type {
-    self.items.push(Type.Type{name: name, body: Type.NamespaceType{members: members}, scope: self.scope})
-    return self.items.last()
+    return self.add(name, Type.NamespaceType{members: members}, scope: self.scope)
   }
 
   fn createObject (mut self: ref Self, name: str, properties: Type.TypeProperty[] = []) ref Type.Type {
-    self.items.push(Type.Type{name: name, properties: properties, body: Type.ObjectType{}, scope: self.scope})
-    result := self.items.last()
+    mut result := self.add(name, Type.ObjectType{}, properties: properties, scope: self.scope)
     if self.mode == .Raw { return result }
     resultRef := self.createReference(result)
 
@@ -365,8 +341,7 @@ export obj TypeMap {
   }
 
   fn createOptional (mut self: ref Self, t: ref Type.Type) ref Type.Type {
-    self.items.push(Type.Type{body: Type.OptionalType{t: t}})
-    result := self.items.last()
+    mut result := self.add(nil, Type.OptionalType{t: t})
     if self.mode == .Raw { return result }
     resultRef := self.createReference(result)
 
@@ -376,13 +351,11 @@ export obj TypeMap {
   }
 
   fn createReference (mut self: ref Self, t: ref Type.Type) ref Type.Type {
-    self.items.push(Type.Type{body: Type.ReferenceType{t: t}})
-    return self.items.last()
+    return self.add(nil, Type.ReferenceType{t: t})
   }
 
   fn createUnion (mut self: ref Self, types: (ref Type.Type)[]) ref Type.Type {
-    self.items.push(Type.Type{body: Type.UnionType{types: types}})
-    result := self.items.last()
+    mut result := self.add(nil, Type.UnionType{types: types})
     if self.mode == .Raw { return result }
     resultRef := self.createReference(result)
 
@@ -392,13 +365,13 @@ export obj TypeMap {
   }
 
   fn decrease (mut self: ref Self) {
-    len := self.items.len
+    len := self.types.len
 
     loop i := len - 1; i >= 0; i-- {
-      item := self.items.at(i)
+      item := self.types[i]
 
       if item.scope == self.scope {
-        self.items.remove(i)
+        self.types.remove(i)
       }
     }
 
@@ -410,8 +383,8 @@ export obj TypeMap {
       return self._self
     }
 
-    loop i := self.items.len - 1; i >= 0; i-- {
-      item := self.items.at(i)
+    loop i := self.types.len - 1; i >= 0; i-- {
+      item := self.types[i]
 
       if item.name == name {
         return item
@@ -430,7 +403,7 @@ export obj TypeMap {
   }
 
   fn insert (mut self: ref Self, t: ref Type.Type) {
-    self.items.push(t)
+    self.add(t.name, t.body, properties: t.properties, scope: self.scope)
   }
 
   fn has (mut self: ref Self, name: str, global := true) bool {
@@ -438,8 +411,8 @@ export obj TypeMap {
       return true
     }
 
-    loop i := self.items.len - 1; i >= 0; i-- {
-      item := self.items.at(i)
+    loop i := self.types.len - 1; i >= 0; i-- {
+      item := self.types[i]
 
       if item.name == name && (global || (!global && item.scope == self.scope)) {
         return true

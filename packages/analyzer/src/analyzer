@@ -8,7 +8,7 @@ import * as Parser from "the/parser"
 import * as API from "./api"
 import * as Context from "./context"
 import * as TC from "./type-cast"
-import * as Type, Var from "./type"
+import * as Type from "./type"
 import * as TypeMap from "./type-map"
 import * as VarMap from "./var-map"
 import * as errors from "./errors"
@@ -1622,6 +1622,7 @@ export obj AnalyzerFile {
 
     self.tm.increase()
     self.vm.increase()
+    self.vm.startCollection()
     parameters := self.functionParameters(ref expression.parameters)
     returnType := self.t(ref expression.returnType)
     self.state.returnType = returnType
@@ -1632,6 +1633,7 @@ export obj AnalyzerFile {
 
     self.statement(ref expression.body)
     self.state.returnType = initialStateReturnType
+    self.vm.endCollection()
     self.vm.decrease()
     self.tm.decrease()
 
@@ -1945,7 +1947,7 @@ export obj AnalyzerFile {
       return true
     } elif expressionType.isNamespace() {
       namespaceType := expressionType.asNamespace()
-      mut maybeExportVar: Type.Var?
+      mut maybeExportVar: (ref Type.Var)?
 
       if AnalyzerExport.has(ref namespaceType.members, expression.name.name) {
         member := AnalyzerExport.get(ref namespaceType.members, expression.name.name)
@@ -1967,7 +1969,7 @@ export obj AnalyzerFile {
         return true
       }
 
-      exportVar := maybeExportVar as Type.Var
+      exportVar := maybeExportVar as ref Type.Var
 
       if withMutable && !exportVar.mutable {
         self.raise(errors.E1011(expression.name.name), it.start, it.end)
@@ -2202,7 +2204,7 @@ export obj AnalyzerFile {
     }
 
     mut exportType: (ref Type.Type)?
-    mut exportVar: Var?
+    mut exportVar: (ref Type.Var)?
 
     if self.tm.has(exportIdentifier.name) {
       exportType = self.tm.get(exportIdentifier.name)
@@ -2249,7 +2251,7 @@ export obj AnalyzerFile {
     }
 
     mut exportType: (ref Type.Type)?
-    mut exportVar: Var?
+    mut exportVar: (ref Type.Var)?
 
     guardFailed := self.guard(() -> void {
       ref self.tc; // TODO: remove after v1
@@ -2307,25 +2309,28 @@ export obj AnalyzerFile {
 
     self.tm.increase()
     self.vm.increase()
+    self.vm.startCollection()
     self.functionParameters(ref statement.parameters)
     self.state.returnType = Type.opt(t.returnType)
 
-    if statement.body != nil {
-      if (
-        !Type.match(t.returnType, self.tm.get("void")) &&
-        !statement.body.isDeadEnd() &&
-        statement.returnType != nil
-      ) {
-        returnType := statement.returnType
-        self.raise(errors.E1061(), returnType.start, returnType.end)
-      }
-
-      self.statement(ref statement.body)
+    if (
+      !Type.match(t.returnType, self.tm.get("void")) &&
+      !statement.body.isDeadEnd() &&
+      statement.returnType != nil
+    ) {
+      returnType := statement.returnType
+      self.raise(errors.E1061(), returnType.start, returnType.end)
     }
 
+    self.statement(ref statement.body)
     self.state.returnType = initialStateReturnType
     self.vm.decrease()
     self.tm.decrease()
+
+    it.context = Context.FunctionDeclarationContext{
+      var: var,
+      context: self.vm.endCollection(),
+    }
 
     return true
   }
@@ -2476,10 +2481,7 @@ export obj AnalyzerFile {
     initialTmSelf := self.tm.getSelf()
     initialStateSelf := self.state.selfType
     t := self.tm.get(statement.name.name)
-
-    it.context = Context.ObjectDeclarationContext{
-      selfType: t,
-    }
+    it.context = Context.ObjectDeclarationContext{selfType: t}
 
     self.state.selfType = Type.opt(t)
     self.tm.setSelf(Type.opt(t))
@@ -2508,22 +2510,21 @@ export obj AnalyzerFile {
 
     self.tm.increase()
     self.vm.increase()
+    self.vm.startCollection()
     self.functionParameters(ref statement.parameters)
     self.state.returnType = Type.opt(t.returnType)
 
-    if statement.body != nil {
-      if (
-        !Type.match(t.returnType, self.tm.get("void")) &&
-        !statement.body.isDeadEnd() &&
-        statement.returnType != nil
-      ) {
-        self.raise(errors.E1061(), statement.returnType.start, statement.returnType.end)
-      }
-
-      self.statement(ref statement.body)
+    if (
+      !Type.match(t.returnType, self.tm.get("void")) &&
+      !statement.body.isDeadEnd() &&
+      statement.returnType != nil
+    ) {
+      self.raise(errors.E1061(), statement.returnType.start, statement.returnType.end)
     }
 
+    self.statement(ref statement.body)
     self.state.returnType = initialStateReturnType
+    self.vm.endCollection()
     self.vm.decrease()
     self.tm.decrease()
 
@@ -2669,10 +2670,6 @@ export obj AnalyzerFile {
       ? self.e(ref statement.initializer, withMutable: statement.mutable && !statement.initializer.isAccess())
       : self.t(ref statement.t)
 
-    it.context = Context.VariableDeclarationContext{
-      varType: varType,
-    }
-
     if Type.match(varType, self.tm.get("void")) {
       if statement.t == nil {
         initializer := statement.initializer as Parser.Expression
@@ -2708,7 +2705,8 @@ export obj AnalyzerFile {
       self.raise(errors.E1040(statement.name.name, varType.toString()), statement.name.start, statement.name.end)
     }
 
-    self.vm.add(statement.name.name, varType, statement.mutable || self.state.loopInit)
+    var := self.vm.add(statement.name.name, varType, statement.mutable || self.state.loopInit)
+    it.context = Context.VariableDeclarationContext{var: var}
 
     if statement.constant && it.hasParent() {
       parent := it.parent()

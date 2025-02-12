@@ -1,5 +1,5 @@
 fn test (a: int, b: str)
 ===== err =====
-anonymous:1:25: ParseError: E0169 - Expected function declaration return type
+anonymous:1:25: ParseError: E0168 - Expected function definition
 1 | fn test (a: int, b: str)
   |                         ^

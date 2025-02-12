@@ -12,11 +12,12 @@ import
   createASTPropertyAccess,
   declarationByDependency,
   expressionIsBuiltinMethod,
-  expressionResolve,
-  expressionShouldBeAllocated,
+  expressionShouldBeAllocatedAfter,
+  expressionShouldBeAllocatedBefore,
   expressionShouldBeCopied,
   expressionShouldBeFreed,
-  statementHasPrecedingNonVarDecl,
+  normalizeBlock,
+  statementHasPrecedingNonDeclaration,
   statementIsMacroInvocation,
   statementIsMacroInvocationDeclare,
   statementIsMacroInvocationForwardDeclare,
@@ -30,20 +31,14 @@ import
 from "./helpers"
 import sortStrAsc from "./utils"
 
-// TODO: implement FunctionDeclaration statement
-// TODO: implement ObjectDeclarationMethod statement
-// TODO: implement Return statement
-// TODO: implement closure expression
-// TODO: test Function type
-// TODO: test MainDeclaration statement
-// TODO: test call expression
-
 // TODO: implement EnumDeclaration statement
+// TODO: implement MemberAccess expression
 // TODO: implement TypeAliasDeclaration statement
 
 // TODO: test VariableDeclaration statement
 // TODO: test expressions with types other than primitive
 // TODO: test If statement
+// TODO: test Loop statement
 // TODO: add more tests for Loop statement with other types
 
 // TODO: implement Throw statement
@@ -53,7 +48,7 @@ import sortStrAsc from "./utils"
 // TODO: implement ImportDeclaration statement
 // TODO: implement ExportDeclaration statement
 // TODO: implement ExportNamedDeclaration statement
-// TODO: implement Member type
+// TODO: implement NamespaceMember type
 
 // TODO: implement async functions
 // TODO: implement await expression
@@ -93,10 +88,18 @@ export type GenerateReturnType = AST.CStatement | AST.CStatement[]
 
 export obj CodegenEntity {
   mut active: bool
+  mut activated: bool
   mut name: str
   mut codeName: str
   mut context: any
   mut generate: (mut self: ref Codegen, entity: ref CodegenEntity) -> GenerateReturnType
+  mut result: GenerateReturnType?
+}
+
+export obj CodegenFunctionContext {
+  parameters: Parser.FunctionParameter[]
+  body: Parser.Statement
+  t: ref Analyzer.Type
 }
 
 export obj Codegen {
@@ -105,12 +108,13 @@ export obj Codegen {
   mut blockData: BlockData
   mut entities: CodegenEntity[]
   mut flags: str[]
-  mut insideLoopHeader: bool
+  mut globalStatements: AST.CStatement[]
   mut lastTypeId: int
   mut lastVarId: int
   mut mainStatements: AST.CStatement[]
-  mut globalStatements: AST.CStatement[]
+  mut release: bool
   mut returnType: (ref Analyzer.Type)?
+  mut sanitize: bool
   mut statements: AST.CStatement[]
   mut typeDefs: int[str]
 
@@ -121,7 +125,9 @@ export obj Codegen {
   fn generate (mut self: ref Self) {
     mut file := self.analyzer.files.last()
     self.blockData.increase()
-    self.globalStatements = self._generateBlockBody(ref file.f.program.body)
+    statements := self._generateBlockBody(ref file.f.program.body)
+    statements.merge(self.mainStatements)
+    self.mainStatements = statements
     self._assemble()
   }
 
@@ -151,20 +157,48 @@ export obj Codegen {
       extraFlags.push("-ld4")
     }
 
+    if !self.release && self.sanitize && os_NAME == "Windows" {
+      extraFlags.push("/f" + "sanitize=address")
+    } elif !self.release && self.sanitize {
+      extraFlags.push("-f" + "sanitize=address")
+    }
+
+    if self.release {
+      extraFlags.push("-O3")
+    } else {
+      extraFlags.push("-O0 -g")
+    }
+
     result := [
-      "-O0",
       "-W" + "all",
       "-W" + "error",
       "-W" + "extra",
       "-pedantic-errors",
-      "-Wno-gnu-binary-literal",
+      "-Wno-parentheses-equality",
       "-Wno-strict-prototypes",
       "-Wno-unused-but-set-variable",
+      "-Wno-unused-parameter",
       "-Wno-unused-value",
       "-Wno-unused-variable",
     ].concat(extraFlags).join(" ")
 
     return result.empty ? "" : (" " + result)
+  }
+
+  fn getAddressSanitizerFlags () str {
+    return [
+      "abort_on_error=0",
+      "exitcode=255",
+      "detect_invalid_pointer_pairs=2",
+      "detect_leaks=1",
+      "detect_stack_use_after_return=1",
+      "print_suppressions=0",
+      "track_origins=1",
+    ].join(":")
+  }
+
+  fn getLeakSanitizerFlags () str {
+    return "suppressions=lsan.supp"
   }
 
   fn stringify (self: ref Self) str {
@@ -262,27 +296,29 @@ export obj Codegen {
   }
 
   fn _assemble (mut self: ref Self) {
-    mut prevActive := 0
-
     loop {
-      mut currentActive := 0
+      len := self.entities.len
+      mut activated := 0
 
-      loop i := 0; i < self.entities.len; i++ {
-        entity := self.entities[i]
+      loop i := 0; i < len; i++ {
+        // TODO: remove after v1
+        oldEntity := self.entities[i]
 
-        if !entity.active {
+        if !oldEntity.active || oldEntity.activated {
           continue
         }
 
-        entity.generate(self, entity)
-        currentActive++
+        result := oldEntity.generate(self, oldEntity)
+
+        mut entity := self.entities[i]
+        entity.result = result
+        entity.activated = true
+        activated++
       }
 
-      if prevActive == currentActive {
+      if activated == 0 {
         break
       }
-
-      prevActive = currentActive
     }
 
     mut defineStatements: AST.CStatement[]
@@ -294,11 +330,11 @@ export obj Codegen {
     loop i := 0; i < self.entities.len; i++ {
       entity := self.entities[i]
 
-      if !entity.active {
+      if !entity.active || entity.result == nil {
         continue
       }
 
-      result := entity.generate(self, entity)
+      result := entity.result as GenerateReturnType
       resultStatements := (result is AST.CStatement) ? [result] : result
 
       loop j := 0; j < resultStatements.len; j++ {
@@ -351,6 +387,7 @@ export obj Codegen {
     self.statements.merge(macroInvocationForwardDeclareStatements)
     self.statements.merge(macroInvocationDeclareStatements)
     self.statements.merge(macroInvocationDefineStatements)
+    self.statements.merge(self.globalStatements)
     self.statements.merge(statements)
 
     dataContextBlock := self.blockData.decrease()
@@ -371,7 +408,9 @@ export obj Codegen {
   }
 
   fn _declareStatement (mut self: ref Self, item: ref Parser.Statement) bool {
-    if item.isMainDeclaration() {
+    if item.isFunctionDeclaration() {
+      self._declareFunction(item)
+    } elif item.isMainDeclaration() {
       self._declareMain(item)
     } elif item.isObjectDeclaration() {
       self._declareObject(item)
@@ -381,11 +420,49 @@ export obj Codegen {
   fn _declareMain (mut self: ref Codegen, item: ref Parser.Statement) void {
     statement := item.asMainDeclaration()
     statementBody := statement.body.asBlock()
+    tm := self._tm()
 
     self.blockData.increase()
+    self.returnType = tm.get("int")
     self.mainStatements = self._generateBlockBody(ref statementBody.body)
+    self.returnType = nil
     dataContextBlock := self.blockData.decrease()
     self.blockData.currentMerge(dataContextBlock.setup, dataContextBlock.teardown)
+
+    if self.blockData.usedValueVariable() {
+      valueName := self.blockData.getValueVariable()
+      self.blockData.addSetup(AST.createVariableDeclaration(AST.createType("int"), valueName, AST.createLiteral("0")))
+    }
+
+    if self.blockData.usedReturnVariable() {
+      returnName := self.blockData.getReturnVariable()
+
+      self.blockData.addSetup(
+        AST.createVariableDeclaration(
+          AST.createType("unsigned char"),
+          returnName,
+          AST.createLiteral("0"),
+        ),
+      )
+    }
+
+    if dataContextBlock.usedValueVariable {
+      valueName := dataContextBlock.valueVariable()
+      self.mainStatements.push(AST.createReturnStatement(AST.createIdentifier(valueName)))
+    }
+  }
+
+  fn _declareFunction (mut self: ref Codegen, item: ref Parser.Statement) void {
+    statement := item.asFunctionDeclaration()
+
+    if !(item.context is Analyzer.FunctionDeclarationContext) {
+      throw error_NewError("Expected FunctionDeclaration context")
+    }
+
+    context := item.context as Analyzer.FunctionDeclarationContext
+    self._generateFunctionType(context.selfType)
+
+    self.blockData.setFunction(statement.name.name)
   }
 
   fn _declareObject (mut self: ref Codegen, item: ref Parser.Statement) void {
@@ -438,41 +515,220 @@ export obj Codegen {
       return AST.createLiteral("L'\\0'")
     } elif it.name == "str" {
       return AST.createIdentifier(self._("d4_str_empty_val"))
-    } elif it.isArray() || it.isMap() {
-      return AST.createCallExpression(AST.createIdentifier(self._type(it, "_alloc")), [
+    } elif it.isArray() {
+      return AST.createCastExpression(AST.createType(self._type(it)), AST.createInitializerListExpression([
+        AST.createIdentifier(self._("NULL")),
         AST.createLiteral("0"),
-      ])
+      ]))
     } elif it.isFunction() || it.isMethod() {
       // TODO: test
-      return AST.createCallExpression(AST.createIdentifier(self._type(it, "_alloc")), [
+      return AST.createCastExpression(AST.createType(self._type(it)), AST.createInitializerListExpression([
         AST.createIdentifier(self._("d4_str_empty_val")),
         AST.createIdentifier(self._("NULL")),
         AST.createIdentifier(self._("NULL")),
         AST.createIdentifier(self._("NULL")),
         AST.createIdentifier(self._("NULL")),
-      ])
+      ]))
+    } elif it.isMap() {
+      return AST.createCastExpression(AST.createType(self._type(it)), AST.createInitializerListExpression([
+        AST.createIdentifier(self._("NULL")),
+        AST.createLiteral("0"),
+        AST.createLiteral("0"),
+      ]))
     } elif it.isCustomObject() {
       // TODO: test
-      mut args: (AST.CExpression | AST.CType)[]
+      mut args: AST.CExpression[]
+
       loop i := 0; i < it.properties.len; i++ {
         property := it.properties[i]
+
         if property.builtin || property.t.isMethod() {
           continue
         }
+
         args.push(self._defaultInitializerDeclaration(property.t))
       }
-      return AST.createCallExpression(AST.createIdentifier(self._type(it, "_alloc")), args)
+
+      return AST.createCastExpression(AST.createType(self._type(it)), AST.createInitializerListExpression(args))
     } elif it.isOptional() || it.isReference() {
       return AST.createIdentifier(self._("NULL"))
     } elif it.isUnion() {
-      return AST.createCallExpression(AST.createIdentifier(self._type(it, "_alloc")), [
+      return AST.createCastExpression(AST.createType(self._type(it)), AST.createInitializerListExpression([
         AST.createLiteral("-1"),
-      ])
+        AST.createInitializerListExpression([
+          // TODO: test
+          AST.createLiteral("0"),
+        ]),
+      ]))
     } elif it.isNumber() {
       return AST.createLiteral("0")
     }
 
     throw error_NewError("Tried default initializer variable declaration on unknown type '" + it.toString() + "'")
+  }
+
+  fn _defineFunction (mut self: ref Codegen, name: Parser.Identifier, parameters: Parser.FunctionParameter[], body: Parser.Statement, t: ref Analyzer.Type) AST.CStatement {
+    variableName := self.blockData.getVariable(name.name)
+    cType := AST.createType(self._type(t))
+
+    self.globalStatements.push(AST.createVariableDeclaration(cType, variableName))
+
+    self.blockData.addTeardown(
+      AST.createExpressionStatement(
+        self._functionFree(t, AST.createIdentifier(variableName)),
+      ),
+    )
+
+    entityContext := CodegenFunctionContext{parameters: parameters, body: body, t: t}
+    functorTypeName := variableName + "_func"
+
+    self.entities.push(CodegenEntity{
+      name: functorTypeName,
+      codeName: functorTypeName,
+      context: entityContext,
+      generate: (mut self: ref Codegen, entity: ref CodegenEntity) -> GenerateReturnType {
+        ctx := entity.context as CodegenFunctionContext
+        // TODO: remove after v1
+        // Codegen entities are reallocated in the process, reference to entity becomes invalid
+        entityCodeName := entity.codeName
+        statementBody := ctx.body.asBlock()
+        returnType := ctx.t.getReturnType()
+
+        initialLastVarId := self.lastVarId
+        initialReturnType := self.returnType
+
+        self.blockData.increase(.Fn)
+
+        self.lastVarId = 0
+        self.returnType = returnType
+
+        cParameters := AST.createIdentifier("params")
+        mut parameters: AST.CFunctionParameter[]
+
+        parameters.push(AST.createFunctionParameter(AST.createType("void *"), "ctx"))
+
+        if ctx.t.hasParameters() || ctx.t.hasSelfParam() {
+          cParametersType := AST.createType(self._type(ctx.t, "_params_t"), reference: true)
+
+          parameters.push(
+            AST.createFunctionParameter(cParametersType, "params"),
+          )
+        } else {
+          parameters.push(AST.createFunctionParameter(AST.createType("void *"), "params"))
+        }
+
+        if ctx.t.hasSelfParam() {
+          methodType := ctx.t.asMethod()
+          selfCodeName := self.blockData.setVariable(methodType.selfName)
+
+          self.blockData.addSetup(
+            AST.createVariableDeclaration(
+              AST.createType(self._type(methodType.selfType)),
+              selfCodeName,
+              AST.createPropertyAccessExpression(cParameters, "self"),
+            ),
+          )
+        }
+
+        if ctx.t.hasParameters() {
+          typeParameters := ctx.t.getParameters()
+
+          loop i := 0; i < ctx.parameters.len; i++ {
+            parameter := ctx.parameters[i]
+            typeParameter := typeParameters[i]
+            parameterType := self._type(typeParameter.t)
+            parameterCodeName := self.blockData.setVariable(parameter.name.name)
+
+            mut initializer := AST.createPropertyAccessExpression(cParameters, "n" + i.str(), true)
+
+            if parameter.initializer != nil {
+              parameterInitializer := parameter.initializer
+
+              initializer = AST.createConditionalExpression(
+                AST.createBinaryExpression(
+                  AST.createPropertyAccessExpression(cParameters, "o" + i.str(), true),
+                  "==",
+                  AST.createLiteral("1"),
+                ),
+                initializer,
+                self._generateExpression(ref parameterInitializer),
+              )
+            }
+
+            self.blockData.addSetup(
+              AST.createVariableDeclaration(
+                AST.createType(parameterType),
+                parameterCodeName,
+                initializer,
+              ),
+            )
+          }
+        }
+
+        statements := self._generateBlockBody(ref statementBody.body)
+
+        if returnType.name != "void" && self.blockData.usedValueVariable() {
+          valueName := self.blockData.getValueVariable()
+          self.blockData.addSetup(AST.createVariableDeclaration(AST.createType(self._type(returnType)), valueName))
+        }
+
+        if self.blockData.usedReturnVariable() {
+          returnName := self.blockData.getReturnVariable()
+
+          self.blockData.addSetup(
+            AST.createVariableDeclaration(
+              AST.createType("unsigned char"),
+              returnName,
+              AST.createLiteral("0"),
+            ),
+          )
+        }
+
+        self.returnType = initialReturnType
+        self.lastVarId = initialLastVarId
+
+        mut cBody: AST.CStatement[]
+        cReturnType := AST.createType(self._type(returnType))
+        dataContextBlock := self.blockData.decrease()
+
+        cBody.merge(dataContextBlock.setup)
+        cBody.merge(statements)
+        cBody.merge(dataContextBlock.teardown)
+
+        if returnType.name != "void" && dataContextBlock.usedValueVariable {
+          valueName := dataContextBlock.valueVariable()
+          cBody.push(AST.createReturnStatement(AST.createIdentifier(valueName)))
+        }
+
+        return AST.createFunctionDeclaration(
+          cReturnType,
+          entityCodeName,
+          parameters,
+          AST.createCompoundStatement(cBody),
+        )
+      }
+    })
+
+    allocTypeName := self._type(t, "_alloc")
+    returnType := t.getReturnType()
+    cReturnType := AST.createType(self._type(returnType))
+
+    return AST.createExpressionStatement(
+      AST.createAssignmentExpression(
+        AST.createIdentifier(variableName),
+        "=",
+        AST.createCallExpression(AST.createIdentifier(allocTypeName), [
+          self._str(name.name),
+          AST.createIdentifier(self._("NULL")), // ctx
+          AST.createIdentifier(self._("NULL")), // ctx copy
+          AST.createIdentifier(self._("NULL")), // ctx free
+          AST.createCastExpression(
+            AST.createType(cReturnType.stringify(declaration: true) + "(*) (void *, void *)"),
+            AST.createIdentifier(self._(functorTypeName)),
+          ),
+        ]),
+      ),
+    )
   }
 
   fn _functionCopy (mut self: ref Self, it: ref Analyzer.Type, expression: AST.CExpression) AST.CExpression {
@@ -631,12 +887,15 @@ export obj Codegen {
   fn _generateBlockBody (mut self: ref Self, items: ref Parser.Statement[]) AST.CStatement[] {
     mut result: AST.CStatement[]
     l := items.len
+    mut mainDeclaration: (ref Parser.Statement)?
     mut declarations: (ref Parser.Statement)[]
 
     loop i := 0; i < l; i++ {
       item := items[i]
 
-      if item.isDeclaration() {
+      if item.isMainDeclaration() {
+        mainDeclaration = item
+      } elif item.isDeclaration() {
         declarations.push(item)
       }
     }
@@ -651,23 +910,15 @@ export obj Codegen {
 
     loop i := 0; i < l; i++ {
       item := items[i]
+      declarationAsStatement := item.isFunctionDeclaration()
 
-      if !item.isDeclaration() {
+      if !(item.isDeclaration() && !declarationAsStatement) {
         result.push(self._generateStatement(item))
       }
+    }
 
-      // if !hasNextItem || !items[i + 1].isDeclaration() {
-      //   self._generateStatement(item, .Alloc)
-      //   result.push(self._generateStatement(item, .Init))
-      //   continue
-      // }
-      // loop j := i; j < l && items[j].isDeclaration(); j++ {
-      //   self._generateStatement(items[j], .Alloc)
-      // }
-      // result.push(self._generateStatement(item, .Init))
-      // loop ; i + 1 < l && items[i + 1].isDeclaration(); i++ {
-      //   result.push(self._generateStatement(items[i + 1], .Init))
-      // }
+    if mainDeclaration != nil {
+      self._declareStatement(mainDeclaration)
     }
 
     return result
@@ -715,25 +966,29 @@ export obj Codegen {
       )
     }
 
-    if blockData.usedReturnVariable { // TODO: !this->state.cleanUp.empty()
-      //(*c)->append(
-      //  CodegenASTStmtIf::create(
-      //    CodegenASTExprBinary::create(
-      //      CodegenASTExprAccess::create("r"),
-      //      "==",
-      //      CodegenASTExprLiteral::create("1")
-      //    ),
-      //    initialStateCleanUp.hasCleanUp(CODEGEN_CLEANUP_FN)
-      //      ? CodegenASTStmtGoto::create(initialStateCleanUp.currentLabel())
-      //      : CodegenASTStmtReturn::create()
-      //  )
-      //);
+    if blockData.usedReturnVariable && !blockData.empty() {
+      returnTypeName := self.returnType == nil ? "" : self.returnType.name
+
+      finalResult.push(
+        AST.createIfStatement(
+          AST.createBinaryExpression(
+            AST.createIdentifier(blockData.returnVariable()),
+            "==",
+            AST.createLiteral("1"),
+          ),
+          self.blockData.hasUntil(.Fn)
+            ? AST.createGotoStatement(self.blockData.getLabel())
+            : returnTypeName == "void"
+              ? AST.createReturnStatement()
+              : AST.createReturnStatement(AST.createIdentifier(self.blockData.getValueVariable())),
+        ),
+      )
     }
 
     return finalResult
   }
 
-  fn _generateExpression (mut self: ref Self, item: ref Parser.Expression, transform := true) AST.CExpression {
+  fn _generateExpression (mut self: ref Self, item: ref Parser.Expression, allocate := true, deallocate := true) AST.CExpression {
     mut result: AST.CExpression?
 
     if (
@@ -757,7 +1012,7 @@ export obj Codegen {
       initialType := Analyzer.contextInitial(item)
       targetType := Analyzer.contextTarget(item)
 
-      return self._wrap(result, item, initialType, targetType, transform: transform)
+      return self._wrap(result, item, initialType, targetType, allocate: allocate, deallocate: deallocate)
     }
 
     throw error_NewError("Tried code generation for unknown expression '" + Parser.stringifyExpression(item) + "'")
@@ -771,6 +1026,7 @@ export obj Codegen {
       (result = self._generateBreakStatement(item)) != nil ||
       (result = self._generateContinueStatement(item)) != nil ||
       (result = self._generateExpressionStatement(item)) != nil ||
+      (result = self._generateFunctionDeclaration(item)) != nil ||
       (result = self._generateIfStatement(item)) != nil ||
       (result = self._generateLoopStatement(item)) != nil ||
       (result = self._generateReturnStatement(item)) != nil ||
@@ -817,14 +1073,36 @@ export obj Codegen {
       return AST.createLiteral(expression.value)
     } elif item.isIntegerLiteral() {
       expression := item.asIntegerLiteral()
-      rawValue := expression.value.replace("O", "").replace("o", "")
+      mut numValue: u64
 
-      if !rawValue.contains("b") && !rawValue.contains("B") && !rawValue.contains("x") && !rawValue.contains("X") {
-        numValue := rawValue.toU64()
-        return AST.createLiteral(rawValue + (numValue > 9223372036854775807 ? "U" : ""))
+      if expression.value.lower.slice(0, 2) == "0b" {
+        binary := expression.value.lower.slice(2)
+        binaryLen := binary.len
+
+        loop i := 0; i < binaryLen; i++ {
+          numValue = numValue * 2 + (binary[i] == '1' ? 1 : 0)
+        }
+      } elif expression.value.lower.slice(0, 2) == "0x" {
+        hex := expression.value.lower.slice(2)
+        hexLen := hex.len
+
+        loop i := 0; i < hexLen; i++ {
+          code := hex[i].lower.byte
+          start := code >= 97 && code <= 102 ? 87 : 48
+          numValue = numValue * 16 + (code - start)
+        }
+      } elif expression.value.lower.slice(0, 2) == "0o" {
+        octal := expression.value.lower.slice(2)
+        octalLen := octal.len
+
+        loop i := 0; i < octalLen; i++ {
+          numValue = numValue * 8 + (octal[i].byte - 48)
+        }
+      } else {
+        numValue = expression.value.toU64()
       }
 
-      return AST.createLiteral(rawValue)
+      return AST.createLiteral(numValue.str() + (numValue > 9223372036854775807 ? "U" : ""))
     } elif item.isNilLiteral() {
       expression := item.asNilLiteral()
       return AST.createIdentifier(self._("NULL"))
@@ -891,7 +1169,7 @@ export obj Codegen {
     expression := item.asAssignment()
     leftType := Analyzer.unwrap(Analyzer.contextTarget(ref expression.left), withReference: false)
     rightType := Analyzer.unwrap(Analyzer.contextTarget(ref expression.right), withReference: false)
-    left := self._generateExpression(ref expression.left, transform: false)
+    left := self._generateExpression(ref expression.left)
     mut right := self._generateExpression(ref expression.right)
 
     if expression.operator.t == .OpPlusEq && (leftType.name == "str" || rightType.name == "str") {
@@ -994,14 +1272,26 @@ export obj Codegen {
 
         loop j := 0; j < contextExtra.arguments.len; j++ {
           arg := contextExtra.arguments[j]
-          if arg.parameterIdx != i { continue }
-          variadicArgs.push(self._generateExpression(ref arg.argument.expression))
+
+          if arg.parameterIdx != i {
+            continue
+          }
+
+          variadicArgs.push(
+            self._generateExpression(ref arg.argument.expression),
+          )
         }
 
         mut variadicAllocArgs: (AST.CExpression | AST.CType)[] = [AST.createLiteral(variadicArgs.len.str())]
         variadicAllocArgs.merge(variadicArgs)
         variadicAllocType := self._type(param.t, "_alloc")
-        paramsArgs.push(AST.createCallExpression(AST.createIdentifier(variadicAllocType), variadicAllocArgs))
+
+        paramsArgs.push(
+          self._allocateExpression(
+            param.t,
+            AST.createCallExpression(AST.createIdentifier(variadicAllocType), variadicAllocArgs),
+          ),
+        )
 
         continue
       }
@@ -1050,18 +1340,38 @@ export obj Codegen {
 
     args.push(createASTPropertyAccess(cCalleeExpression, "ctx"))
 
-    if !paramsArgs.empty {
+    if paramsArgs.empty {
+      args.push(AST.createIdentifier(self._("NULL")))
+    } else {
+      tmpVar := self._tmpVar()
+      cTmpVar := AST.createIdentifier(tmpVar)
       paramsName := self._type(calleeTargetType, "_params_t")
 
-      args.push(AST.createCallExpression(AST.createIdentifier(self._("d4_safe_calloc")), [
-        AST.createUnaryExpression("&", AST.createCastExpression(
-          AST.createType(paramsName),
-          AST.createInitializerListExpression(paramsArgs),
-        )),
-        AST.createCallExpression(AST.createIdentifier("sizeof"), [
-          AST.createType(paramsName),
-        ]),
-      ]))
+      self.blockData.addSetup(
+        AST.createVariableDeclaration(AST.createType("void *"), tmpVar, AST.createIdentifier(self._("NULL"))),
+      )
+
+      args.push(
+        AST.createAssignmentExpression(
+          cTmpVar,
+          "=",
+          AST.createCallExpression(AST.createIdentifier(self._("d4_safe_calloc")), [
+            AST.createUnaryExpression("&", AST.createCastExpression(
+              AST.createType(paramsName),
+              AST.createInitializerListExpression(paramsArgs),
+            )),
+            AST.createCallExpression(AST.createIdentifier("sizeof"), [
+              AST.createType(paramsName),
+            ]),
+          ]),
+        ),
+      )
+
+      self.blockData.addTeardown(
+        AST.createExpressionStatement(
+          AST.createCallExpression(AST.createIdentifier(self._("d4_safe_free")), [cTmpVar]),
+        ),
+      )
     }
 
     return AST.createCallExpression(createASTPropertyAccess(cCalleeExpression, "func"), args)
@@ -1074,7 +1384,7 @@ export obj Codegen {
 
     expression := item.asConditional()
     alternateType := Analyzer.unwrap(Analyzer.contextTarget(ref expression.alternate), withReference: false)
-    mut alternate := self._generateExpression(ref expression.alternate, transform: false)
+    mut alternate := self._generateExpression(ref expression.alternate, allocate: false)
 
     if alternate.isAssignmentExpression() && !typeSafeForTernaryAlternate(alternateType) {
       alternate = alternate.wrap()
@@ -1082,7 +1392,7 @@ export obj Codegen {
 
     return AST.createConditionalExpression(
       self._generateExpression(ref expression.condition),
-      self._generateExpression(ref expression.consequent, transform: false),
+      self._generateExpression(ref expression.consequent, allocate: false),
       alternate,
     )
   }
@@ -1124,7 +1434,8 @@ export obj Codegen {
     contextExtra := item.contextExtra as Analyzer.IsExpressionContextExtra
     mut left := self._generateExpression(ref expression.expression)
     leftType := Analyzer.contextTarget(ref expression.expression)
-    right := AST.createIdentifier(self._typeDef(contextExtra.t))
+    typeDef := self._typeDef(contextExtra.t)
+    right := AST.createIdentifier(self._(typeDef))
 
     if Analyzer.match(contextExtra.t, leftType) {
       result := AST.createCommaExpression(left, AST.createIdentifier(self._("true")))
@@ -1142,9 +1453,10 @@ export obj Codegen {
 
     expression := item.asMap()
     targetType := Analyzer.contextTarget(item)
-    mut arguments: (AST.CExpression | AST.CType)[] = [AST.createLiteral(expression.elements.len.str())]
+    len := expression.elements.len
+    mut arguments: (AST.CExpression | AST.CType)[] = [AST.createLiteral(len.str())]
 
-    loop i := 0; i < expression.elements.len; i++ {
+    loop i := 0; i < len; i++ {
       element := expression.elements[i]
       arguments.push(self._generateExpression(ref element.key))
       arguments.push(self._generateExpression(ref element.value))
@@ -1321,6 +1633,27 @@ export obj Codegen {
     return AST.createExpressionStatement(self._generateExpression(ref statement.expression))
   }
 
+  fn _generateFunctionDeclaration (mut self: ref Codegen, item: ref Parser.Statement) AST.CStatement? {
+    if !item.isFunctionDeclaration() {
+      return nil
+    }
+
+    statement := item.asFunctionDeclaration()
+
+    if !(item.context is Analyzer.FunctionDeclarationContext) {
+      throw error_NewError("Expected FunctionDeclaration context")
+    }
+
+    context := item.context as Analyzer.FunctionDeclarationContext
+
+    return self._defineFunction(
+      statement.name,
+      statement.parameters,
+      statement.body,
+      context.selfType,
+    )
+  }
+
   fn _generateIfStatement (mut self: ref Codegen, item: ref Parser.Statement) AST.CStatement? {
     if !item.isIf() {
       return nil
@@ -1328,7 +1661,8 @@ export obj Codegen {
 
     statement := item.asIf()
     condition := self._generateExpression(ref statement.condition)
-    consequent := self._generateStatement(ref statement.consequent)
+    items := normalizeBlock(ref statement.consequent)
+    consequent := AST.createCompoundStatement(self._generateBlock(ref items))
     mut alternate: AST.CStatement?
 
     if statement.alternate != nil {
@@ -1369,7 +1703,7 @@ export obj Codegen {
 
     if statement.condition != nil {
       self.blockData.increase()
-      conditionExpression := self._generateExpression(ref statement.condition, transform: false)
+      conditionExpression := self._generateExpression(ref statement.condition)
       blockData := self.blockData.decrease()
 
       if !blockData.empty() {
@@ -1397,7 +1731,7 @@ export obj Codegen {
 
     if statement.update != nil {
       self.blockData.increase()
-      updateExpression := self._generateExpression(ref statement.update, transform: false)
+      updateExpression := self._generateExpression(ref statement.update)
       blockData := self.blockData.decrease()
 
       if !blockData.empty() {
@@ -1408,17 +1742,10 @@ export obj Codegen {
       }
     }
 
-    mut bodyItems: Parser.Statement[]
-
-    if bodyIsBlock {
-      blockStatement := statement.body.asBlock()
-      bodyItems.merge(blockStatement.body)
-    } else {
-      bodyItems.push(statement.body)
-    }
-
+    mut bodyItems := normalizeBlock(ref statement.body)
     body.merge(self._generateBlockBody(ref bodyItems))
     self.blockData.decreaseVariableIndexes()
+
     blockDataLoop := self.blockData.decrease()
     optItem: (ref Parser.Statement)? = item // TODO: delete after v1
     body = self._generateBlockTail(body, optItem, ref blockDataLoop)
@@ -1493,43 +1820,67 @@ export obj Codegen {
     }
 
     statement := item.asReturn()
+    mut cExpression: AST.CExpression?
 
-    // TODO: implement
-    // if (this->state.cleanUp.hasCleanUp(CODEGEN_CLEANUP_FN) || this->state.cleanUp.returnVarUsed) {
-    //   auto parentNotRoot = this->state.cleanUp.parent != nullptr && this->state.cleanUp.parent->type != CODEGEN_CLEANUP_ROOT;
-    //   if (parentNotRoot && this->state.cleanUp.hasCleanUp(CODEGEN_CLEANUP_FN)) {
-    //     (*c)->append(
-    //       CodegenASTExprAssign::create(
-    //         CodegenASTExprAccess::create(this->state.cleanUp.currentReturnVar()),
-    //         "=",
-    //         CodegenASTExprLiteral::create("1")
-    //       )->stmt()
-    //     );
-    //   }
-    //   if (nodeReturn.body != std::nullopt) {
-    //     (*c)->append(
-    //       CodegenASTExprAssign::create(
-    //         CodegenASTExprAccess::create(this->state.cleanUp.currentValueVar()),
-    //         "=",
-    //         this->_nodeExpr(*nodeReturn.body, this->state.returnType, node, c)
-    //       )->stmt()
-    //     );
-    //   }
-    //   auto nodeParentFunction = ASTChecker(node.parent).is<ASTNodeFnDecl>() || ASTChecker(node.parent).is<ASTNodeObjDecl>();
-    //   auto nodeIsLast = node.parent != nullptr && ASTChecker(node).isLast(this->state.fnDeclBody);
-    //   if ((!nodeParentFunction && this->state.cleanUp.empty()) || !nodeIsLast) {
-    //     (*c)->append(CodegenASTStmtGoto::create(this->state.cleanUp.currentLabel()));
-    //   }
-    // } else if (nodeReturn.body != std::nullopt) {
-    //   auto cArg = this->_nodeExpr(*nodeReturn.body, this->state.returnType, node, c);
-    //   (*c)->append(CodegenASTStmtReturn::create(cArg));
-    // } else {
-    //   (*c)->append(
-    //     ASTChecker(node).insideMain()
-    //       ? CodegenASTStmtReturn::create(CodegenASTExprLiteral::create("0"))
-    //       : CodegenASTStmtReturn::create()
-    //   );
-    // }
+    if statement.expression != nil {
+      statementExpression := statement.expression
+      expressionTargetType := Analyzer.contextTarget(ref statementExpression)
+
+      cExpression = self._functionCopy(
+        expressionTargetType,
+        self._generateExpression(ref statementExpression, allocate: true, deallocate: false),
+      )
+    }
+
+    mut result: AST.CStatement[]
+
+    if self.blockData.hasTeardownUntil(.Fn) || self.blockData.usedReturnVariable() {
+      if self.blockData.hasTeardownUntil(.Fn) {
+        result.push(
+          AST.createExpressionStatement(
+            AST.createAssignmentExpression(
+              AST.createIdentifier(self.blockData.getReturnVariable()),
+              "=",
+              AST.createLiteral("1"),
+            ),
+          ),
+        )
+      }
+
+      if cExpression != nil {
+        result.push(
+          AST.createExpressionStatement(
+            AST.createAssignmentExpression(
+              AST.createIdentifier(self.blockData.getValueVariable()),
+              "=",
+              cExpression,
+            ),
+          ),
+        )
+      }
+
+      p := item.parent()
+      atRoot := p.isDeclaration()
+
+      if (
+        item.hasNext() ||
+        (!atRoot && self.blockData.hasTeardownUntil(.Fn))
+      ) {
+        result.push(AST.createGotoStatement(self.blockData.getLabel()))
+      }
+    } elif cExpression != nil {
+      result.push(AST.createReturnStatement(cExpression))
+    } elif item.hasMainParent() {
+      result.push(AST.createReturnStatement(AST.createLiteral("0")))
+    } else {
+      result.push(AST.createReturnStatement())
+    }
+
+    if result.len == 1 {
+      return result[0]
+    } elif result.len > 1 {
+      return AST.createCompoundStatement(result)
+    }
 
     return nil
   }
@@ -1712,12 +2063,10 @@ export obj Codegen {
     }
 
     context := item.context as Analyzer.VariableDeclarationContext
-    t := AST.createType(self._type(context.varType))
-    shouldSplitDeclaration := statementHasPrecedingNonVarDecl(item)
 
     mut initializer := statement.initializer == nil
       ? self._defaultInitializerDeclaration(context.varType)
-      : self._generateExpression(ref statement.initializer, transform: false)
+      : self._generateExpression(ref statement.initializer, allocate: false, deallocate: false)
 
     variableName := self.blockData.setVariable(statement.name.name)
 
@@ -1737,16 +2086,18 @@ export obj Codegen {
       )
     }
 
-    if shouldSplitDeclaration {
+    cType := AST.createType(self._type(context.varType))
+
+    if statementHasPrecedingNonDeclaration(item) {
       self.blockData.addSetup(
-        AST.createVariableDeclaration(t, variableName),
+        AST.createVariableDeclaration(cType, variableName),
       )
 
       return AST.createExpressionStatement(
         AST.createAssignmentExpression(AST.createIdentifier(variableName), "=", initializer),
       )
     } else {
-      return AST.createVariableDeclaration(t, variableName, initializer)
+      return AST.createVariableDeclaration(cType, variableName, initializer)
     }
   }
 
@@ -1964,14 +2315,17 @@ export obj Codegen {
           it := entity.context as ref Analyzer.Type
           t := it.asFunction()
           returnType := self._type(t.returnType)
+          returnTypeName := self._typeName(t.returnType)
 
           return [
             AST.createExpressionStatement(AST.createMacroInvocation(self._("D4_FUNCTION_DECLARE"), [
               AST.createIdentifier(t.asynchronous ? "a" : "s"),
+              AST.createIdentifier(returnTypeName),
               AST.createType(returnType),
             ]), terminated: false),
             AST.createExpressionStatement(AST.createMacroInvocation(self._("D4_FUNCTION_DEFINE"), [
               AST.createIdentifier(t.asynchronous ? "a" : "s"),
+              AST.createIdentifier(returnTypeName),
               AST.createType(returnType),
             ]), terminated: false),
           ]
@@ -2234,14 +2588,6 @@ export obj Codegen {
           propertyIdx++
         }
 
-        if freeBlock.empty {
-          freeBlock.push(
-            AST.createExpressionStatement(
-              AST.createCastExpression(AST.createType("void"), AST.createIdentifier("self")),
-            ),
-          )
-        }
-
         mut eqBlock: AST.CStatement[]
 
         if propertyIdx == 0 {
@@ -2268,24 +2614,6 @@ export obj Codegen {
                 "=",
                 AST.createPropertyAccessExpression(AST.createIdentifier("self"), "_"),
               ),
-            ),
-          )
-
-          eqBlock.push(
-            AST.createExpressionStatement(
-              AST.createCastExpression(AST.createType("void"), AST.createIdentifier("self")),
-            ),
-          )
-
-          eqBlock.push(
-            AST.createExpressionStatement(
-              AST.createCastExpression(AST.createType("void"), AST.createIdentifier("rhs")),
-            ),
-          )
-
-          strBlock.push(
-            AST.createExpressionStatement(
-              AST.createCastExpression(AST.createType("void"), AST.createIdentifier("self")),
             ),
           )
         }
@@ -2604,14 +2932,6 @@ export obj Codegen {
           )
         }
 
-        if freeBlock.empty {
-          freeBlock.push(
-            AST.createExpressionStatement(
-              AST.createCastExpression(AST.createType("void"), AST.createIdentifier("self")),
-            ),
-          )
-        }
-
         return [
           AST.createExpressionStatement(AST.createMacroInvocation(self._("D4_UNION_DECLARE"), [
             AST.createIdentifier(unionName),
@@ -2702,6 +3022,19 @@ export obj Codegen {
     }
 
     throw error_NewError("Entity '" + name + "' can't be removed")
+  }
+
+  fn _str (mut self: ref Self, content: str) AST.CExpression {
+    escapedContent := content.replace("\\", "\\\\").replace("\"", "\\\"")
+
+    return AST.createCastExpression(
+      AST.createType(self._("d4_str_t")),
+      AST.createInitializerListExpression([
+        AST.createLiteral("L\"" + escapedContent + "\""),
+        AST.createLiteral(escapedContent.len.str()),
+        AST.createIdentifier(self._("true")),
+      ]),
+    )
   }
 
   fn _tm (mut self: ref Self) ref Analyzer.TypeMap {
@@ -2951,15 +3284,26 @@ export obj Codegen {
     throw error_NewError("Failed to generate type name for '" + it.name + "'")
   }
 
-  fn _wrap (mut self: ref Self, mut expression: AST.CExpression, item: ref Parser.Expression, t: ref Analyzer.Type, targetType: ref Analyzer.Type, transform := false) AST.CExpression {
-    shouldFree := typeShouldBeFreed(targetType) && expressionShouldBeFreed(item)
+  fn _wrap (mut self: ref Self, mut expression: AST.CExpression, item: ref Parser.Expression, t: ref Analyzer.Type, targetType: ref Analyzer.Type, allocate := false, deallocate := false) AST.CExpression {
+    shouldFree := deallocate && typeShouldBeFreed(targetType) && expressionShouldBeFreed(item)
+    shouldAllocateBefore := typeShouldBeAllocated(t) && expressionShouldBeAllocatedBefore(item)
 
-    if transform && !shouldFree && typeShouldBeAllocated(t) && expressionShouldBeAllocated(item) {
+    shouldAllocateAfter :=
+      (targetType.name == "any" && t.name != "any") ||
+      (targetType.isOptional() && !t.isOptional()) ||
+      (targetType.isUnion() && !t.isUnion())
+
+    shouldPreAllocate :=
+      (allocate && !shouldFree && shouldAllocateBefore) ||
+      (!allocate && !shouldFree && shouldAllocateBefore && shouldAllocateAfter)
+
+    if shouldPreAllocate {
       expression = self._allocateExpression(t, expression)
     }
 
     if targetType.name == "any" && t.name != "any" {
-      allocAnyType := self._generateAnyType(t).slice(0, -2) + "_alloc"
+      typeName := self._generateAnyType(t)
+      allocAnyType := typeName.slice(0, -2) + "_alloc"
       expression = AST.createCallExpression(AST.createIdentifier(self._(allocAnyType)), [expression])
     } elif targetType.name != "any" && t.name == "any" {
       typeName := self._generateAnyType(targetType)
@@ -2981,16 +3325,13 @@ export obj Codegen {
     } elif targetType.isUnion() && !t.isUnion() {
       allocTargetType := self._type(targetType, "_alloc")
       typeDef := self._typeDef(t)
-
-      expression = AST.createCallExpression(AST.createIdentifier(allocTargetType), [
-        AST.createIdentifier(self._(typeDef)),
-        expression,
-      ])
+      cTypeDef := AST.createIdentifier(self._(typeDef))
+      expression = AST.createCallExpression(AST.createIdentifier(allocTargetType), [cTypeDef, expression])
     } elif !targetType.isUnion() && t.isUnion() {
-      typeName := self._typeDef(targetType)
-      typeDefIdx := self.typeDefs.get(typeName)
+      typeDef := self._typeDef(targetType)
+      typeDefIdx := self.typeDefs.get(typeDef)
 
-      // TODO: throw runtime error if not possible to cast
+      // TODO: throw runtime error if not possible to access
       expression = AST.createPropertyAccessExpression(
         createASTPropertyAccess(expression, "data"),
         "v" + typeDefIdx.str(),
@@ -3005,15 +3346,9 @@ export obj Codegen {
       expression = AST.createCastExpression(AST.createType(self._type(targetType)), expression)
     }
 
-    if !transform {
-      return expression
-    }
-
-    typesMatch := Analyzer.match(t, targetType)
-
-    if shouldFree {
+    if deallocate && shouldFree {
       expression = self._functionFree(targetType, expression)
-    } elif !typesMatch && typeShouldBeAllocated(targetType) && expressionShouldBeAllocated(item) {
+    } elif allocate && expressionShouldBeAllocatedAfter(item) && shouldAllocateAfter {
       expression = self._allocateExpression(targetType, expression)
     }
 
@@ -3021,14 +3356,24 @@ export obj Codegen {
   }
 }
 
-export fn compile (analyzer: ref Analyzer.Analyzer, executablePath: str) {
-  mut generator := Codegen{analyzer: analyzer}
-  generator.init()
-  generator.generate()
-
+export fn compile (analyzer: ref Analyzer.Analyzer, executablePath: str, release := false, sanitize := false) {
+  mut generator := Codegen{analyzer: analyzer, release: release, sanitize: sanitize}
   codePath := executablePath + ".c"
+  mut caughtError: error_Error?
 
-  fs_writeFileSync(codePath, generator.stringify().toBuffer())
-  process_runSync("clang '" + codePath + "' -o '" + executablePath + "' " + generator.getFlags())
+  try {
+    generator.init()
+    generator.generate()
+
+    fs_writeFileSync(codePath, generator.stringify().toBuffer())
+    process_runSync("clang '" + codePath + "' -o '" + executablePath + "' " + generator.getFlags())
+  } catch err: error_Error {
+    caughtError = err
+  }
+
   fs_rmSync(codePath)
+
+  if caughtError != nil {
+    throw caughtError
+  }
 }
