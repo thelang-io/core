@@ -474,6 +474,117 @@ export fn TEST_Type_get () {
   EXPECT_EQ(prop5.name, "str")
 }
 
+export fn TEST_Type_getParameters () {
+  mut tm := TypeMap{}
+  tm.init()
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.createFunction(false, [], tm.get("void"))
+    parameters := t.getParameters()
+
+    EXPECT_EQ(parameters.len, 0)
+  })
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.createMethod(false, [], tm.get("void"), true, false, "self", tm.get("int"))
+    parameters := t.getParameters()
+
+    EXPECT_EQ(parameters.len, 0)
+  })
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.createFunction(false, [
+      Type.TypeParameter{name: "a", t: tm.get("int")},
+      Type.TypeParameter{name: "b", t: tm.get("str")},
+    ], tm.get("void"))
+
+    parameters := t.getParameters()
+
+    EXPECT_EQ(parameters.len, 2)
+    EXPECT_TRUE(Type.match(parameters[0].t, tm.get("int")))
+    EXPECT_TRUE(Type.match(parameters[1].t, tm.get("str")))
+  })
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.createFunction(false, [
+      Type.TypeParameter{name: "a", t: tm.createAlias("IntAlias", tm.get("int"))},
+      Type.TypeParameter{name: "b", t: tm.createAlias("StrAlias", tm.get("str"))},
+    ], tm.get("void"))
+
+    parameters := t.getParameters()
+
+    EXPECT_EQ(parameters.len, 2)
+    EXPECT_TRUE(Type.match(parameters[0].t, tm.get("int")))
+    EXPECT_TRUE(Type.match(parameters[1].t, tm.get("str")))
+  })
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.createMethod(false, [
+      Type.TypeParameter{name: "x", t: tm.get("int")},
+    ], tm.get("void"), false, false, "", tm.get("int"))
+
+    parameters := t.getParameters()
+
+    EXPECT_EQ(parameters.len, 1)
+    EXPECT_TRUE(Type.match(parameters[0].t, tm.get("int")))
+  })
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.createMethod(false, [
+      Type.TypeParameter{name: "x", t: tm.createAlias("IntAlias", tm.get("int"))},
+    ], tm.get("void"), false, false, "", tm.get("int"))
+
+    parameters := t.getParameters()
+
+    EXPECT_EQ(parameters.len, 1)
+    EXPECT_TRUE(Type.match(parameters[0].t, tm.get("int")))
+  })
+
+  EXPECT_THROW_WITH_MESSAGE(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.get("int")
+    t.getParameters()
+  }, "Tried to get parameters of non-function type")
+}
+
+export fn TEST_Type_getReturnType () {
+  mut tm := TypeMap{}
+  tm.init()
+
+  EXPECT_NO_THROW(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t1 := tm.createFunction(false, [], tm.get("int"))
+    t2 := tm.createMethod(false, [], tm.get("str"), false, false, "", tm.get("void"))
+
+    ret1 := t1.getReturnType()
+    ret2 := t2.getReturnType()
+
+    EXPECT_TRUE(Type.match(ret1, tm.get("int")))
+    EXPECT_TRUE(Type.match(ret2, tm.get("str")))
+  })
+
+  EXPECT_THROW_WITH_MESSAGE(() -> void {
+    ref tm; // TODO: remove after v1
+
+    t := tm.get("bool")
+    t.getReturnType()
+  }, "Tried to get return type of non-function type")
+}
+
 export fn TEST_Type_getThrows () {
   mut tm := TypeMap{}
   tm.init()
@@ -521,6 +632,29 @@ export fn TEST_Type_hasEnumerator () {
   EXPECT_TRUE(t.hasEnumerator("Red"))
   EXPECT_TRUE(t.hasEnumerator("Green"))
   EXPECT_FALSE(t.hasEnumerator("Purple"))
+}
+
+export fn TEST_Type_hasParameters () {
+  mut tm := TypeMap{}
+  tm.init()
+
+  t1 := tm.createFunction(false, [], tm.get("void"))
+  t2 := tm.createFunction(false, [
+    Type.TypeParameter{name: "a", t: tm.get("int")},
+  ], tm.get("void"))
+
+  t3 := tm.createMethod(false, [], tm.get("void"), false, false, "", tm.get("int"))
+  t4 := tm.createMethod(false, [
+    Type.TypeParameter{name: "x", t: tm.get("str")},
+  ], tm.get("void"), false, false, "", tm.get("int"))
+
+  t5 := tm.get("int")
+
+  EXPECT_FALSE(t1.hasParameters())
+  EXPECT_TRUE(t2.hasParameters())
+  EXPECT_FALSE(t3.hasParameters())
+  EXPECT_TRUE(t4.hasParameters())
+  EXPECT_FALSE(t5.hasParameters())
 }
 
 export fn TEST_Type_hasSelfParam () {

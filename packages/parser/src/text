@@ -401,10 +401,8 @@ export fn Statement_toText (self: t.Statement, indent := 0) str {
       result += Type_toText(statement.returnType, indent: indent + 4)
     }
 
-    if statement.body != nil {
-      result += ' '.repeat(indent + 2) + "body" + os_EOL
-      result += Statement_toText(statement.body, indent: indent + 4)
-    }
+    result += ' '.repeat(indent + 2) + "body" + os_EOL
+    result += Statement_toText(statement.body, indent: indent + 4)
   } elif self.isIf() {
     statement := self.asIf()
     result += ' '.repeat(indent) + "IfStatement(" + beginAttrs + ")" + os_EOL
@@ -505,10 +503,8 @@ export fn Statement_toText (self: t.Statement, indent := 0) str {
       result += Type_toText(statement.returnType, indent: indent + 4)
     }
 
-    if statement.body != nil {
-      result += ' '.repeat(indent + 2) + "body" + os_EOL
-      result += Statement_toText(statement.body, indent: indent + 4)
-    }
+    result += ' '.repeat(indent + 2) + "body" + os_EOL
+    result += Statement_toText(statement.body, indent: indent + 4)
   } elif self.isObjectDeclarationProperty() {
     statement := self.asObjectDeclarationProperty()
     beginAttrs += (statement.constant ? " const" : "") + (statement.mutable ? " mut" : "")

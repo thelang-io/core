@@ -5,12 +5,12 @@ main {
 }
 ===== out =====
 MainDeclaration()
-  VariableDeclaration(name=a mutable=false constant=false type=u32 context:varType=u32)
-  VariableDeclaration(name=b mutable=false constant=false context:varType=u32)
+  VariableDeclaration(name=a mutable=false constant=false type=u32 context:var:name=a context:var:type=u32 context:var:mutable=false context:var:referenced=false)
+  VariableDeclaration(name=b mutable=false constant=false context:var:name=b context:var:type=u32 context:var:mutable=false context:var:referenced=false)
     BinaryExpression(initial=u32 operator=+)
       Identifier(initial=u32 name=a)
       IntegerLiteral(initial=int target=u32 value=10)
-  VariableDeclaration(name=c mutable=false constant=false context:varType=u32)
+  VariableDeclaration(name=c mutable=false constant=false context:var:name=c context:var:type=u32 context:var:mutable=false context:var:referenced=false)
     BinaryExpression(initial=u32 operator=+)
       IntegerLiteral(initial=int target=u32 value=10)
       Identifier(initial=u32 name=a)

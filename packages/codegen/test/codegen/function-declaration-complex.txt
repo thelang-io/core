@@ -1,0 +1,217 @@
+fn test1 () int {
+  if "a" == "b" {
+    return 2
+  }
+
+  mut a := "a"
+  a2 := "a2"
+  a3 := "a3"
+
+  if a == "a" {
+    mut b := "b"
+
+    if b == "c" {
+      return 1
+    }
+
+    b = "b2"
+  }
+
+  mut c := "c"
+  c2 := "c2"
+  c3 := "c3"
+
+  if c == "a" {
+    mut d := "d"
+
+    if d == "e" {
+      return 2
+    }
+
+    d = "b2"
+  }
+
+  a = "a2"
+  return 3
+}
+
+fn test2 () int {
+  a := "a"
+
+  if a == "b" {
+    return 1
+  }
+
+  b := "a"
+  return a == b ? 2 : 0
+}
+
+fn test3 () int {
+  a := 1
+
+  if a == 2 {
+    return a
+  }
+
+  b := 2
+  return a == b ? 2 : 0
+}
+
+main {
+  test1()
+  test2()
+  test3()
+}
+===== code =====
+#include <d4/fn.h>
+#include <d4/macro.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+D4_FUNCTION_DECLARE(s, int, int32_t)
+D4_FUNCTION_DEFINE(s, int, int32_t)
+d4_fn_sFRintFE_t test1_0;
+d4_fn_sFRintFE_t test2_0;
+d4_fn_sFRintFE_t test3_0;
+int32_t test1_0_func (void *ctx, void *params) {
+  d4_str_t __THE_1 = d4_str_empty_val;
+  d4_str_t __THE_2 = d4_str_empty_val;
+  d4_str_t a_0;
+  d4_str_t a2_0;
+  d4_str_t a3_0;
+  d4_str_t __THE_3 = d4_str_empty_val;
+  d4_str_t c_0;
+  d4_str_t c2_0;
+  d4_str_t c3_0;
+  d4_str_t __THE_6 = d4_str_empty_val;
+  d4_str_t __THE_9 = d4_str_empty_val;
+  int32_t v;
+  unsigned char r = 0;
+  if (d4_str_eq(__THE_1 = d4_str_alloc(L"a"), __THE_2 = d4_str_alloc(L"b"))) {
+    {
+      r = 1;
+      v = 2;
+      goto L1;
+    }
+L1:
+    if (r == 1) goto L2;
+  }
+  a_0 = d4_str_alloc(L"a");
+  a2_0 = d4_str_alloc(L"a2");
+  a3_0 = d4_str_alloc(L"a3");
+  if (d4_str_eq(a_0, __THE_3 = d4_str_alloc(L"a"))) {
+    d4_str_t __THE_4 = d4_str_empty_val;
+    d4_str_t __THE_5 = d4_str_empty_val;
+    d4_str_t b_0 = d4_str_alloc(L"b");
+    if (d4_str_eq(b_0, __THE_4 = d4_str_alloc(L"c"))) {
+      {
+        r = 1;
+        v = 1;
+        goto L3;
+      }
+L3:
+      if (r == 1) goto L4;
+    }
+    b_0 = d4_str_realloc(b_0, __THE_5 = d4_str_alloc(L"b2"));
+    d4_str_free(__THE_5);
+L4:
+    d4_str_free(__THE_4);
+    d4_str_free(b_0);
+    if (r == 1) goto L5;
+  }
+  c_0 = d4_str_alloc(L"c");
+  c2_0 = d4_str_alloc(L"c2");
+  c3_0 = d4_str_alloc(L"c3");
+  if (d4_str_eq(c_0, __THE_6 = d4_str_alloc(L"a"))) {
+    d4_str_t __THE_7 = d4_str_empty_val;
+    d4_str_t __THE_8 = d4_str_empty_val;
+    d4_str_t d_0 = d4_str_alloc(L"d");
+    if (d4_str_eq(d_0, __THE_7 = d4_str_alloc(L"e"))) {
+      {
+        r = 1;
+        v = 2;
+        goto L6;
+      }
+L6:
+      if (r == 1) goto L7;
+    }
+    d_0 = d4_str_realloc(d_0, __THE_8 = d4_str_alloc(L"b2"));
+    d4_str_free(__THE_8);
+L7:
+    d4_str_free(__THE_7);
+    d4_str_free(d_0);
+    if (r == 1) goto L8;
+  }
+  a_0 = d4_str_realloc(a_0, __THE_9 = d4_str_alloc(L"a2"));
+  {
+    r = 1;
+    v = 3;
+    goto L9;
+  }
+L9:
+  d4_str_free(__THE_9);
+L8:
+  d4_str_free(__THE_6);
+  d4_str_free(c3_0);
+  d4_str_free(c2_0);
+  d4_str_free(c_0);
+L5:
+  d4_str_free(__THE_3);
+  d4_str_free(a3_0);
+  d4_str_free(a2_0);
+  d4_str_free(a_0);
+L2:
+  d4_str_free(__THE_2);
+  d4_str_free(__THE_1);
+  return v;
+}
+int32_t test2_0_func (void *ctx, void *params) {
+  d4_str_t __THE_1 = d4_str_empty_val;
+  d4_str_t b_0;
+  int32_t v;
+  unsigned char r = 0;
+  d4_str_t a_0 = d4_str_alloc(L"a");
+  if (d4_str_eq(a_0, __THE_1 = d4_str_alloc(L"b"))) {
+    {
+      r = 1;
+      v = 1;
+      goto L10;
+    }
+L10:
+    if (r == 1) goto L11;
+  }
+  b_0 = d4_str_alloc(L"a");
+  {
+    r = 1;
+    v = d4_str_eq(a_0, b_0) ? 2 : 0;
+    goto L12;
+  }
+L12:
+  d4_str_free(b_0);
+L11:
+  d4_str_free(__THE_1);
+  d4_str_free(a_0);
+  return v;
+}
+int32_t test3_0_func (void *ctx, void *params) {
+  int32_t b_0;
+  int32_t a_0 = 1;
+  if (a_0 == 2) {
+    return a_0;
+  }
+  b_0 = 2;
+  return a_0 == b_0 ? 2 : 0;
+}
+int main (void) {
+  test1_0 = d4_fn_sFRintFE_alloc((d4_str_t) {L"test1", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test1_0_func);
+  test2_0 = d4_fn_sFRintFE_alloc((d4_str_t) {L"test2", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test2_0_func);
+  test3_0 = d4_fn_sFRintFE_alloc((d4_str_t) {L"test3", 5, true}, NULL, NULL, NULL, (int32_t (*) (void *, void *)) test3_0_func);
+  test1_0.func(test1_0.ctx, NULL);
+  test2_0.func(test2_0.ctx, NULL);
+  test3_0.func(test3_0.ctx, NULL);
+  d4_fn_sFRintFE_free(test3_0);
+  d4_fn_sFRintFE_free(test2_0);
+  d4_fn_sFRintFE_free(test1_0);
+}
+===== output =====

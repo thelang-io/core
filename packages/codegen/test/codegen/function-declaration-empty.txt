@@ -1,0 +1,20 @@
+fn example () {
+}
+main {
+  example()
+}
+===== code =====
+#include <d4/fn.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+D4_FUNCTION_DECLARE(s, void, void)
+D4_FUNCTION_DEFINE(s, void, void)
+d4_fn_sFRvoidFE_t example_0;
+void example_0_func (void *ctx, void *params) {}
+int main (void) {
+  example_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"example", 7, true}, NULL, NULL, NULL, (void (*) (void *, void *)) example_0_func);
+  example_0.func(example_0.ctx, NULL);
+  d4_fn_sFRvoidFE_free(example_0);
+}
+===== output =====

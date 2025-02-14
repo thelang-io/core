@@ -7,13 +7,13 @@ main {
   b := d()
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=example return=int)
+FunctionDeclaration(asynchronous=false name=example return=int context:var:name=example context:var:type=() -> int context:var:mutable=false context:var:referenced=false)
   ReturnStatement()
     IntegerLiteral(initial=int value=1)
 MainDeclaration()
-  VariableDeclaration(name=d mutable=false constant=false context:varType=ref () -> int)
+  VariableDeclaration(name=d mutable=false constant=false context:var:name=d context:var:type=ref () -> int context:var:mutable=false context:var:referenced=false)
     ReferenceExpression(initial=ref () -> int)
       Identifier(initial=() -> int name=example)
-  VariableDeclaration(name=b mutable=false constant=false context:varType=int)
+  VariableDeclaration(name=b mutable=false constant=false context:var:name=b context:var:type=int context:var:mutable=false context:var:referenced=false)
     CallExpression(initial=int extra:asynchronous=false extra:returnType=int)
       Identifier(initial=ref () -> int target=() -> int name=d)

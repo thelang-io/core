@@ -1,0 +1,8 @@
+name: the/date
+version: 0.1.1
+description: Date library
+license: MIT
+main: src/main
+
+packages:
+  the/testing: 0.4.0

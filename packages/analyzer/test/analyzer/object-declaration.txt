@@ -16,15 +16,6 @@ obj Dog {
   fn method6 (mut self: ref Self, c := 10) {}
 }
 
-obj Methods {
-  fn method1 () void
-  fn method2 (self: ref Self) void
-  fn method3 (mut self: ref Self) void
-  fn method4 (a: int) void
-  fn method5 (self: ref Self, b: int...) void
-  fn method6 (mut self: ref Self, c := 10) void
-}
-
 main {
   v1 := Test{}
 
@@ -43,6 +34,4 @@ main {
   v5.method5(0, 1, 2)
   v5.method6()
   v5.method6(20)
-
-  v6 := Methods{}
 }

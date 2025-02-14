@@ -74,6 +74,7 @@ main {
 #include <d4/rune.h>
 #include <d4/string.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <wchar.h>
 D4_ARRAY_DECLARE(bool, bool)
@@ -186,21 +187,21 @@ int main (void) {
   d4_str_t __THE_43 = d4_str_empty_val;
   d4_str_t __THE_44 = d4_str_empty_val;
   d4_str_t __THE_45 = d4_str_empty_val;
-  d4_map_strMSboolME_t a01_0 = d4_map_strMSboolME_alloc(0);
-  d4_map_strMSbyteME_t a02_0 = d4_map_strMSbyteME_alloc(0);
-  d4_map_strMScharME_t a03_0 = d4_map_strMScharME_alloc(0);
-  d4_map_strMSf32ME_t a04_0 = d4_map_strMSf32ME_alloc(0);
-  d4_map_strMSf64ME_t a05_0 = d4_map_strMSf64ME_alloc(0);
-  d4_map_strMSfloatME_t a06_0 = d4_map_strMSfloatME_alloc(0);
-  d4_map_strMSi8ME_t a07_0 = d4_map_strMSi8ME_alloc(0);
-  d4_map_strMSi16ME_t a08_0 = d4_map_strMSi16ME_alloc(0);
-  d4_map_strMSi32ME_t a09_0 = d4_map_strMSi32ME_alloc(0);
-  d4_map_strMSi64ME_t a10_0 = d4_map_strMSi64ME_alloc(0);
-  d4_map_strMSintME_t a11_0 = d4_map_strMSintME_alloc(0);
-  d4_map_strMSu8ME_t a12_0 = d4_map_strMSu8ME_alloc(0);
-  d4_map_strMSu16ME_t a13_0 = d4_map_strMSu16ME_alloc(0);
-  d4_map_strMSu32ME_t a14_0 = d4_map_strMSu32ME_alloc(0);
-  d4_map_strMSu64ME_t a15_0 = d4_map_strMSu64ME_alloc(0);
+  d4_map_strMSboolME_t a01_0 = (d4_map_strMSboolME_t) {NULL, 0, 0};
+  d4_map_strMSbyteME_t a02_0 = (d4_map_strMSbyteME_t) {NULL, 0, 0};
+  d4_map_strMScharME_t a03_0 = (d4_map_strMScharME_t) {NULL, 0, 0};
+  d4_map_strMSf32ME_t a04_0 = (d4_map_strMSf32ME_t) {NULL, 0, 0};
+  d4_map_strMSf64ME_t a05_0 = (d4_map_strMSf64ME_t) {NULL, 0, 0};
+  d4_map_strMSfloatME_t a06_0 = (d4_map_strMSfloatME_t) {NULL, 0, 0};
+  d4_map_strMSi8ME_t a07_0 = (d4_map_strMSi8ME_t) {NULL, 0, 0};
+  d4_map_strMSi16ME_t a08_0 = (d4_map_strMSi16ME_t) {NULL, 0, 0};
+  d4_map_strMSi32ME_t a09_0 = (d4_map_strMSi32ME_t) {NULL, 0, 0};
+  d4_map_strMSi64ME_t a10_0 = (d4_map_strMSi64ME_t) {NULL, 0, 0};
+  d4_map_strMSintME_t a11_0 = (d4_map_strMSintME_t) {NULL, 0, 0};
+  d4_map_strMSu8ME_t a12_0 = (d4_map_strMSu8ME_t) {NULL, 0, 0};
+  d4_map_strMSu16ME_t a13_0 = (d4_map_strMSu16ME_t) {NULL, 0, 0};
+  d4_map_strMSu32ME_t a14_0 = (d4_map_strMSu32ME_t) {NULL, 0, 0};
+  d4_map_strMSu64ME_t a15_0 = (d4_map_strMSu64ME_t) {NULL, 0, 0};
   d4_map_strMSboolME_t b01_0 = d4_map_strMSboolME_alloc(0);
   d4_map_strMSbyteME_t b02_0 = d4_map_strMSbyteME_alloc(0);
   d4_map_strMScharME_t b03_0 = d4_map_strMScharME_alloc(0);
@@ -217,7 +218,7 @@ int main (void) {
   d4_map_strMSu32ME_t b14_0 = d4_map_strMSu32ME_alloc(0);
   d4_map_strMSu64ME_t b15_0 = d4_map_strMSu64ME_alloc(0);
   d4_map_strMSboolME_t c01_0 = d4_map_strMSboolME_alloc(1, __THE_1 = d4_str_alloc(L"key"), true);
-  d4_map_strMSbyteME_t c02_0 = d4_map_strMSbyteME_alloc(1, __THE_2 = d4_str_alloc(L"key"), 0x0F);
+  d4_map_strMSbyteME_t c02_0 = d4_map_strMSbyteME_alloc(1, __THE_2 = d4_str_alloc(L"key"), 15);
   d4_map_strMSruneME_t c03_0 = d4_map_strMSruneME_alloc(1, __THE_3 = d4_str_alloc(L"key"), L'a');
   d4_map_strMSf32ME_t c04_0 = d4_map_strMSf32ME_alloc(1, __THE_4 = d4_str_alloc(L"key"), (float) 6.32);
   d4_map_strMSf64ME_t c05_0 = d4_map_strMSf64ME_alloc(1, __THE_5 = d4_str_alloc(L"key"), (double) 3.14);
@@ -232,7 +233,7 @@ int main (void) {
   d4_map_strMSu32ME_t c14_0 = d4_map_strMSu32ME_alloc(1, __THE_14 = d4_str_alloc(L"key"), (uint32_t) 3);
   d4_map_strMSu64ME_t c15_0 = d4_map_strMSu64ME_alloc(1, __THE_15 = d4_str_alloc(L"key"), (uint64_t) 4);
   d4_map_strMSboolME_t d01_0 = d4_map_strMSboolME_alloc(2, __THE_16 = d4_str_alloc(L"key1"), true, __THE_17 = d4_str_alloc(L"key2"), false);
-  d4_map_strMSbyteME_t d02_0 = d4_map_strMSbyteME_alloc(2, __THE_18 = d4_str_alloc(L"key1"), 0x0F, __THE_19 = d4_str_alloc(L"key2"), 0x00);
+  d4_map_strMSbyteME_t d02_0 = d4_map_strMSbyteME_alloc(2, __THE_18 = d4_str_alloc(L"key1"), 15, __THE_19 = d4_str_alloc(L"key2"), 0);
   d4_map_strMSruneME_t d03_0 = d4_map_strMSruneME_alloc(2, __THE_20 = d4_str_alloc(L"key1"), L'a', __THE_21 = d4_str_alloc(L"key2"), L'z');
   d4_map_strMSf32ME_t d04_0 = d4_map_strMSf32ME_alloc(2, __THE_22 = d4_str_alloc(L"key1"), (float) 6.32, __THE_23 = d4_str_alloc(L"key2"), (float) 6.32);
   d4_map_strMSf64ME_t d05_0 = d4_map_strMSf64ME_alloc(2, __THE_24 = d4_str_alloc(L"key1"), (double) 3.14, __THE_25 = d4_str_alloc(L"key2"), (double) 3.14);

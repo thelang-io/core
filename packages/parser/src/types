@@ -326,6 +326,28 @@ export obj Statement {
     return false
   }
 
+  fn hasMainParent (self: ref Self) bool {
+    mut it := self
+
+    loop it.hasParent() {
+      p := it.parent()
+
+      if p.isMainDeclaration() {
+        return true
+      } elif (
+        p.isExpression() ||
+        p.isFunctionDeclaration() ||
+        p.isObjectDeclarationMethod()
+      ) {
+        return false
+      }
+
+      it = p
+    }
+
+    return false
+  }
+
   fn hasNext (self: ref Self) bool {
     return self._next != nil
   }
@@ -681,7 +703,7 @@ export obj FunctionDeclaration {
   name: Identifier
   parameters: FunctionParameter[]
   returnType: Type?
-  body: Statement?
+  body: Statement
   asynchronous: bool
 }
 
@@ -728,7 +750,7 @@ export obj ObjectDeclarationMethod {
   name: Identifier
   parameters: FunctionParameter[]
   returnType: Type?
-  body: Statement?
+  body: Statement
   asynchronous: bool
 }
 

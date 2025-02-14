@@ -1,10 +1,10 @@
 const a := [] as u8[]?
 const b := [10] as u8[]?
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=u8[]?)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=u8[]? context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=u8[]? as=u8[]? extra:from=u8[])
     ArrayExpression(initial=u8[])
-VariableDeclaration(name=b mutable=false constant=true context:varType=u8[]?)
+VariableDeclaration(name=b mutable=false constant=true context:var:name=b context:var:type=u8[]? context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=u8[]? as=u8[]? extra:from=u8[])
     ArrayExpression(initial=u8[])
       IntegerLiteral(initial=int target=u8 value=10)

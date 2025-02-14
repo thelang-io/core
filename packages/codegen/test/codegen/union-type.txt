@@ -31,9 +31,7 @@ D4_UNION_DEFINE(floatUSint, {
 }, {
   if (self.type == TYPE_int) return self.data.v1 == rhs.data.v1;
   if (self.type == TYPE_float) return self.data.v2 == rhs.data.v2;
-}, {
-  (void) self;
-}, {
+}, {}, {
   if (self.type == TYPE_int) return d4_int_str(self.data.v1);
   if (self.type == TYPE_float) return d4_float_str(self.data.v2);
 })
@@ -53,8 +51,8 @@ D4_UNION_DEFINE(runeUSstr, {
   if (self.type == TYPE_str) return d4_str_copy(self.data.v4);
 })
 int main (void) {
-  d4_union_floatUSintUE_t var1_0 = d4_union_floatUSintUE_alloc(-1);
-  d4_union_runeUSstrUE_t var2_0 = d4_union_runeUSstrUE_alloc(-1);
+  d4_union_floatUSintUE_t var1_0 = (d4_union_floatUSintUE_t) {-1, {0}};
+  d4_union_runeUSstrUE_t var2_0 = (d4_union_runeUSstrUE_t) {-1, {0}};
   d4_union_runeUSstrUE_free(var2_0);
 }
 ===== output =====

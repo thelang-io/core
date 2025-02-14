@@ -1,7 +1,3 @@
-fn test1 () void
-fn test2 (i: int) int
-async fn test3 (mut i: int, o := 10, p: u8 = 20, j: int...) int
-
 fn test4 () {}
 fn test5 (i: int) int { return i }
 async fn test6 (mut i: int, o := 10, p: u8 = 20, j: int...) int {
@@ -9,29 +5,19 @@ async fn test6 (mut i: int, o := 10, p: u8 = 20, j: int...) int {
   return k
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=test1 return=void)
-FunctionDeclaration(asynchronous=false name=test2 return=int)
-  FunctionParameter(name=i type=int mutable=false variadic=false)
-FunctionDeclaration(asynchronous=true name=test3 return=int)
-  FunctionParameter(name=i type=int mutable=true variadic=false)
-  FunctionParameter(name=o mutable=false variadic=false)
-    IntegerLiteral(initial=int value=10)
-  FunctionParameter(name=p type=u8 mutable=false variadic=false)
-    IntegerLiteral(initial=int target=u8 value=20)
-  FunctionParameter(name=j type=int mutable=false variadic=true)
-FunctionDeclaration(asynchronous=false name=test4)
-FunctionDeclaration(asynchronous=false name=test5 return=int)
+FunctionDeclaration(asynchronous=false name=test4 context:var:name=test4 context:var:type=() -> void context:var:mutable=false context:var:referenced=false)
+FunctionDeclaration(asynchronous=false name=test5 return=int context:var:name=test5 context:var:type=(i: int) -> int context:var:mutable=false context:var:referenced=false)
   FunctionParameter(name=i type=int mutable=false variadic=false)
   ReturnStatement()
     Identifier(initial=int name=i)
-FunctionDeclaration(asynchronous=true name=test6 return=int)
+FunctionDeclaration(asynchronous=true name=test6 return=int context:var:name=test6 context:var:type=async (mut i: int, o: int, p: u8, j: int...) -> int context:var:mutable=false context:var:referenced=false)
   FunctionParameter(name=i type=int mutable=true variadic=false)
   FunctionParameter(name=o mutable=false variadic=false)
     IntegerLiteral(initial=int value=10)
   FunctionParameter(name=p type=u8 mutable=false variadic=false)
     IntegerLiteral(initial=int target=u8 value=20)
   FunctionParameter(name=j type=int mutable=false variadic=true)
-  VariableDeclaration(name=k mutable=false constant=false context:varType=int)
+  VariableDeclaration(name=k mutable=false constant=false context:var:name=k context:var:type=int context:var:mutable=false context:var:referenced=false)
     BinaryExpression(initial=int operator=-)
       Identifier(initial=int name=i)
       ElementAccessExpression(initial=ref int target=int extra:selfType=int[])

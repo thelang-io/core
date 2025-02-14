@@ -1,9 +1,9 @@
 mut a := true
 const b := a = false
 ===== out =====
-VariableDeclaration(name=a mutable=true constant=false context:varType=bool)
+VariableDeclaration(name=a mutable=true constant=false context:var:name=a context:var:type=bool context:var:mutable=true context:var:referenced=false)
   BooleanLiteral(initial=bool value=true)
-VariableDeclaration(name=b mutable=false constant=true context:varType=bool)
+VariableDeclaration(name=b mutable=false constant=true context:var:name=b context:var:type=bool context:var:mutable=false context:var:referenced=false)
   AssignmentExpression(initial=bool operator==)
     Identifier(initial=bool name=a)
     BooleanLiteral(initial=bool value=false)

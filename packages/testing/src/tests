@@ -3,7 +3,7 @@
  * Licensed under the MIT License
  */
 
-import TEST_FAILED from "./matchers"
+import TEST_CWD, TEST_FAILED from "./matchers"
 import Test from "./test"
 
 export obj Tests {
@@ -20,7 +20,9 @@ export obj Tests {
     loop i := 0; i < args.len; i++ {
       arg := args[i]
 
-      if arg.slice(0, 9) == "--filter=" {
+      if arg.slice(0, 6) == "--cwd=" {
+        TEST_CWD = fs_realpathSync(arg.slice(6))
+      } elif arg.slice(0, 9) == "--filter=" {
         filters = arg.slice(9).split(",")
       }
     }
@@ -74,7 +76,14 @@ export obj Tests {
 
       print("[ RUN      ]", test.name, to: "stderr")
       timeStart := date_now()
-      test.body()
+
+      try {
+        test.body()
+      } catch err: error_Error {
+        print(err.stack.replace(TEST_CWD, "."), to: "stderr")
+        TEST_FAILED = true
+      }
+
       timeDelta := date_now() - timeStart
       testStatus := TEST_FAILED ? "[  FAILED  ]" : "[       OK ]"
       print(testStatus, test.name, "(" + timeDelta.str() + " ms)", to: "stderr")

@@ -2,7 +2,7 @@ export const a := 10
 export enum Color { Red, Green, Blue, }
 ===== out =====
 ExportDeclaration()
-  VariableDeclaration(name=a mutable=false constant=true context:varType=int)
+  VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
     IntegerLiteral(initial=int value=10)
 ExportDeclaration()
   EnumDeclaration(name=Color)

@@ -59,19 +59,15 @@ export fn TEST_Statement_hasAsyncParent () {
   mut f2 := parse("fn test () { return }")
   interconnect(ref f2)
   functionDeclaration2 := f2.program.body[0].asFunctionDeclaration()
-  if functionDeclaration2.body != nil {
-    functionDeclarationBody2 := functionDeclaration2.body.asBlock()
-    EXPECT_FALSE(functionDeclarationBody2.body[0].hasAsyncParent())
-  }
+  functionDeclarationBody2 := functionDeclaration2.body.asBlock()
+  EXPECT_FALSE(functionDeclarationBody2.body[0].hasAsyncParent())
 
   mut f3 := parse("obj Test { fn test () { return } }")
   interconnect(ref f3)
   objectDeclaration3 := f3.program.body[0].asObjectDeclaration()
   methodDeclaration3 := objectDeclaration3.body[0].asObjectDeclarationMethod()
-  if methodDeclaration3.body != nil {
-    methodDeclarationBody3 := methodDeclaration3.body.asBlock()
-    EXPECT_FALSE(methodDeclarationBody3.body[0].hasAsyncParent())
-  }
+  methodDeclarationBody3 := methodDeclaration3.body.asBlock()
+  EXPECT_FALSE(methodDeclarationBody3.body[0].hasAsyncParent())
 
   mut f4 := parse("main { () -> void { return } }")
   interconnect(ref f4)
@@ -85,19 +81,15 @@ export fn TEST_Statement_hasAsyncParent () {
   mut f5 := parse("async fn test () { return }")
   interconnect(ref f5)
   functionDeclaration5 := f5.program.body[0].asFunctionDeclaration()
-  if functionDeclaration5.body != nil {
-    functionDeclarationBody5 := functionDeclaration5.body.asBlock()
-    EXPECT_TRUE(functionDeclarationBody5.body[0].hasAsyncParent())
-  }
+  functionDeclarationBody5 := functionDeclaration5.body.asBlock()
+  EXPECT_TRUE(functionDeclarationBody5.body[0].hasAsyncParent())
 
   mut f6 := parse("obj Test { async fn test () { return } }")
   interconnect(ref f6)
   objectDeclaration6 := f6.program.body[0].asObjectDeclaration()
   methodDeclaration6 := objectDeclaration6.body[0].asObjectDeclarationMethod()
-  if methodDeclaration6.body != nil {
-    methodDeclarationBody6 := methodDeclaration6.body.asBlock()
-    EXPECT_TRUE(methodDeclarationBody6.body[0].hasAsyncParent())
-  }
+  methodDeclarationBody6 := methodDeclaration6.body.asBlock()
+  EXPECT_TRUE(methodDeclarationBody6.body[0].hasAsyncParent())
 
   mut f7 := parse("main { async () -> void { return } }")
   interconnect(ref f7)
@@ -125,10 +117,8 @@ export fn TEST_Statement_hasLoopParent () {
   loopStatement3 := f3.program.body[0].asLoop()
   loopBodyStatement3 := loopStatement3.body.asBlock()
   functionDeclaration3 := loopBodyStatement3.body[0].asFunctionDeclaration()
-  if functionDeclaration3.body != nil {
-    functionDeclarationBody3 := functionDeclaration3.body.asBlock()
-    EXPECT_FALSE(functionDeclarationBody3.body[0].hasLoopParent())
-  }
+  functionDeclarationBody3 := functionDeclaration3.body.asBlock()
+  EXPECT_FALSE(functionDeclarationBody3.body[0].hasLoopParent())
 
   mut f4 := parse("loop { obj Test { fn test () { break } } }")
   interconnect(ref f4)
@@ -136,10 +126,8 @@ export fn TEST_Statement_hasLoopParent () {
   loopBodyStatement4 := loopStatement4.body.asBlock()
   objectDeclaration4 := loopBodyStatement4.body[0].asObjectDeclaration()
   methodDeclaration4 := objectDeclaration4.body[0].asObjectDeclarationMethod()
-  if methodDeclaration4.body != nil {
-    methodDeclarationBody4 := methodDeclaration4.body.asBlock()
-    EXPECT_FALSE(methodDeclarationBody4.body[0].hasLoopParent())
-  }
+  methodDeclarationBody4 := methodDeclaration4.body.asBlock()
+  EXPECT_FALSE(methodDeclarationBody4.body[0].hasLoopParent())
 
   mut f5 := parse("loop { main { break } }")
   interconnect(ref f5)
@@ -159,11 +147,41 @@ export fn TEST_Statement_hasLoopParent () {
   EXPECT_FALSE(mainClosure6.body[0].hasLoopParent())
 }
 
+export fn TEST_Statement_hasMainParent () {
+  mut f1 := parse("main { return }")
+  interconnect(ref f1)
+  mainDeclaration1 := f1.program.body[0].asMainDeclaration()
+  mainDeclarationBody1 := mainDeclaration1.body.asBlock()
+  EXPECT_TRUE(mainDeclarationBody1.body[0].hasMainParent())
+
+  mut f2 := parse("fn test () { return }")
+  interconnect(ref f2)
+  functionDeclaration2 := f2.program.body[0].asFunctionDeclaration()
+  functionDeclarationBody2 := functionDeclaration2.body.asBlock()
+  EXPECT_FALSE(functionDeclarationBody2.body[0].hasMainParent())
+
+  mut f3 := parse("obj Test { fn test () { return } }")
+  interconnect(ref f3)
+  objectDeclaration3 := f3.program.body[0].asObjectDeclaration()
+  methodDeclaration3 := objectDeclaration3.body[0].asObjectDeclarationMethod()
+  methodDeclarationBody3 := methodDeclaration3.body.asBlock()
+  EXPECT_FALSE(methodDeclarationBody3.body[0].hasMainParent())
+
+  mut f4 := parse("main { () -> void { return } }")
+  interconnect(ref f4)
+  mainDeclaration4 := f4.program.body[0].asMainDeclaration()
+  mainDeclarationBody4 := mainDeclaration4.body.asBlock()
+  mainExpression4 := mainDeclarationBody4.body[0].asExpression()
+  mainExpressionBody4 := mainExpression4.expression.asClosure()
+  mainClosure4 := mainExpressionBody4.body.asBlock()
+  EXPECT_FALSE(mainClosure4.body[0].hasMainParent())
+}
+
 export fn TEST_Statement_isDeclaration () {
   statement1 := Statement.create(t.EnumDeclaration{name: Expression.dummyIdentifier()}, 0, 0)
   statement2 := Statement.create(t.ExportDeclaration{statement: Statement.dummy()}, 0, 0)
   statement3 := Statement.create(t.ExportNamedDeclaration{expression: Expression.dummy()}, 0, 0)
-  statement4 := Statement.create(t.FunctionDeclaration{name: Expression.dummyIdentifier()}, 0, 0)
+  statement4 := Statement.create(t.FunctionDeclaration{name: Expression.dummyIdentifier(), body: Statement.dummy()}, 0, 0)
   statement5 := Statement.create(t.ImportDeclaration{source: Expression.dummy()}, 0, 0)
   statement6 := Statement.create(t.MainDeclaration{body: Statement.dummy()}, 0, 0)
   statement7 := Statement.create(t.ObjectDeclaration{name: Expression.dummyIdentifier()}, 0, 0)

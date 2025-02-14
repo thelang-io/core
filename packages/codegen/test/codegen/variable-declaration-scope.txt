@@ -1,0 +1,23 @@
+main {
+  var := 0
+
+  if "1" == "2" {
+    var := "0"
+  }
+}
+===== code =====
+#include <d4/macro.h>
+#include <d4/string.h>
+#include <stdint.h>
+int main (void) {
+  d4_str_t __THE_1 = d4_str_empty_val;
+  d4_str_t __THE_2 = d4_str_empty_val;
+  int32_t var_0 = 0;
+  if (d4_str_eq(__THE_1 = d4_str_alloc(L"1"), __THE_2 = d4_str_alloc(L"2"))) {
+    d4_str_t var_1 = d4_str_alloc(L"0");
+    d4_str_free(var_1);
+  }
+  d4_str_free(__THE_2);
+  d4_str_free(__THE_1);
+}
+===== output =====

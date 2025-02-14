@@ -1,0 +1,8 @@
+/*!
+ * Copyright (c) Aaron Delasy
+ * Licensed under the MIT License
+ */
+
+import format from "./date"
+
+export format

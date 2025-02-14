@@ -1,4 +1,4 @@
 const a: u8 = 10
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true type=u8 context:varType=u8)
+VariableDeclaration(name=a mutable=false constant=true type=u8 context:var:name=a context:var:type=u8 context:var:mutable=false context:var:referenced=false)
   IntegerLiteral(initial=int target=u8 value=10)

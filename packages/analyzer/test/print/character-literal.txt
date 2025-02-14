@@ -1,5 +1,5 @@
 const a := 'a' as int
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=int)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=int as=int extra:from=rune)
     CharacterLiteral(initial=rune value=a)

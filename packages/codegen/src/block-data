@@ -4,6 +4,7 @@
  */
 
 import * as AST from "the/c"
+import * as Analyzer from "the/analyzer"
 
 export enum BlockDataType {
   Block,
@@ -14,6 +15,9 @@ export enum BlockDataType {
 export obj BlockDataVariable {
   name: str
   id: int
+  t: ref Analyzer.Type
+  function: bool
+  referenced: bool
 
   fn fullName (self: ref Self) str {
     return self.name + "_" + self.id.str()
@@ -41,8 +45,20 @@ export obj BlockDataContext {
     return "c" + self.continueVariableId.str()
   }
 
+  fn returnVariable (self: ref Self) str {
+    return "r"
+  }
+
+  fn valueVariable (self: ref Self) str {
+    return "v"
+  }
+
   fn empty (self: ref Self) bool {
     return self.setup.empty && self.teardown.empty
+  }
+
+  fn hasTeardown (self: ref Self) bool {
+    return !self.teardown.empty
   }
 
   fn merge (mut self: ref Self, setup: AST.CStatement[], teardown: AST.CStatement[]) {
@@ -53,6 +69,7 @@ export obj BlockDataContext {
 
 export obj BlockData {
   mut blocks: BlockDataContext[]
+  mut functions: BlockDataVariable[]
   mut lastBreakVariable: int
   mut lastContinueVariable: int
   mut lastLabel: int
@@ -71,8 +88,16 @@ export obj BlockData {
     return self.blocks.empty ? true : self.blocks.last.empty()
   }
 
+  fn currentHasTeardown (self: ref Self) bool {
+    return self.blocks.empty ? true : self.blocks.last.hasTeardown()
+  }
+
   fn currentMerge (mut self: ref Self, setup: AST.CStatement[], teardown: AST.CStatement[]) {
     self.blocks.last.merge(setup, teardown)
+  }
+
+  fn currentMergeVariables (mut self: ref Self, variables: BlockDataVariable[]) {
+    self.blocks.last.variables.merge(variables)
   }
 
   fn decrease (mut self: ref Self) BlockDataContext {
@@ -123,7 +148,7 @@ export obj BlockData {
       block.usedReturnVariable = true
     })
 
-    return "r"
+    return self.blocks.last.returnVariable()
   }
 
   fn getValueVariable (mut self: ref Self) str {
@@ -131,7 +156,7 @@ export obj BlockData {
       block.usedValueVariable = true
     })
 
-    return "v"
+    return self.blocks.last.valueVariable()
   }
 
   fn getVariable (mut self: ref Self, name: str) str {
@@ -150,11 +175,52 @@ export obj BlockData {
     throw error_NewError("Variable with name '" + name + "' was not found")
   }
 
+  fn getVariables (mut self: ref Self, variables: (ref Analyzer.Var)[]) BlockDataVariable[] {
+    mut names: str[]
+
+    loop i := 0; i < variables.len; i++ {
+      variable := variables[i]
+      names.push(variable.name)
+    }
+
+    mut result: BlockDataVariable[]
+
+    loop i := self.blocks.len - 1; i >= 0; i-- {
+      block := self.blocks[i]
+
+      loop j := block.variables.len - 1; j >= 0; j-- {
+        variable := block.variables[j]
+
+        if names.contains(variable.name) && !variable.function {
+          result.push(variable)
+        }
+      }
+    }
+
+    return result
+  }
+
   fn hasUntil (self: ref Self, t := BlockDataType.Block) bool {
     loop i := self.blocks.len - 1; i >= 0; i-- {
       block := self.blocks[i]
 
       if !block.empty() {
+        return true
+      }
+
+      if block.t == t {
+        break
+      }
+    }
+
+    return false
+  }
+
+  fn hasTeardownUntil (self: ref Self, t := BlockDataType.Block) bool {
+    loop i := self.blocks.len - 1; i >= 0; i-- {
+      block := self.blocks[i]
+
+      if block.hasTeardown() {
         return true
       }
 
@@ -195,7 +261,31 @@ export obj BlockData {
     }
   }
 
-  fn setVariable (mut self: ref Self, name: str) str {
+  fn setFunction (mut self: ref Self, name: str, t: ref Analyzer.Type) str {
+    mut id := 0
+
+    loop i := self.functions.len - 1; i >= 0; i-- {
+      function := self.functions[i]
+
+      if function.name == name {
+        id = function.id + 1
+        break
+      }
+    }
+
+    self.functions.push(BlockDataVariable{name: name, id: id, t: t})
+
+    self.blocks.last.variables.push(BlockDataVariable{
+      name: name,
+      id: id,
+      t: t,
+      function: true,
+    })
+
+    return self.functions.last.fullName()
+  }
+
+  fn setVariable (mut self: ref Self, name: str, t: ref Analyzer.Type, referenced := false) str {
     mut id := 0
 
     loop i := self.blocks.len - 1; i >= 0; i-- {
@@ -218,6 +308,8 @@ export obj BlockData {
     self.blocks.last.variables.push(BlockDataVariable{
       name: name,
       id: id,
+      t: t,
+      referenced: referenced,
     })
 
     return self.blocks.last.variables.last.fullName()
@@ -229,5 +321,13 @@ export obj BlockData {
 
   fn usedContinueVariable (self: ref Self) bool {
     return self.blocks.last.usedContinueVariable
+  }
+
+  fn usedReturnVariable (self: ref Self) bool {
+    return self.blocks.last.usedReturnVariable
+  }
+
+  fn usedValueVariable (self: ref Self) bool {
+    return self.blocks.last.usedValueVariable
   }
 }

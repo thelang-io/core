@@ -7,15 +7,15 @@ main {
   b := cond(a = 10) ? a : 20
 }
 ===== out =====
-FunctionDeclaration(asynchronous=false name=cond return=bool)
+FunctionDeclaration(asynchronous=false name=cond return=bool context:var:name=cond context:var:type=(n: int) -> bool context:var:mutable=false context:var:referenced=false)
   FunctionParameter(name=n type=int mutable=false variadic=false)
   ReturnStatement()
     BinaryExpression(initial=bool operator=>)
       Identifier(initial=int name=n)
       IntegerLiteral(initial=int value=10)
 MainDeclaration()
-  VariableDeclaration(name=a mutable=true constant=false type=bool | int context:varType=bool | int)
-  VariableDeclaration(name=b mutable=false constant=false context:varType=int)
+  VariableDeclaration(name=a mutable=true constant=false type=bool | int context:var:name=a context:var:type=bool | int context:var:mutable=true context:var:referenced=false)
+  VariableDeclaration(name=b mutable=false constant=false context:var:name=b context:var:type=int context:var:mutable=false context:var:referenced=false)
     ConditionalExpression(initial=int)
       CallExpression(initial=bool extra:asynchronous=false extra:returnType=bool)
         Identifier(initial=(n: int) -> bool name=cond)

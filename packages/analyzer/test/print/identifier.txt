@@ -1,8 +1,8 @@
 const a := 10
 const b := a as int | str
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=int)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
   IntegerLiteral(initial=int value=10)
-VariableDeclaration(name=b mutable=false constant=true context:varType=int | str)
+VariableDeclaration(name=b mutable=false constant=true context:var:name=b context:var:type=int | str context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=int | str as=int | str extra:from=int)
     Identifier(initial=int name=a)

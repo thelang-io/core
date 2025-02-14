@@ -39,6 +39,203 @@ export fn TEST_VarMap_add () {
   EXPECT_EQ(var10.scope, 1)
 }
 
+export fn TEST_VarMap_addReturn () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  ref1 := vm.add("test1", tm.get("int"), false)
+  EXPECT_EQ(ref1.name, "test1")
+  EXPECT_TRUE(Type.match(ref1.t, tm.get("int")))
+
+  mut ref2 := vm.add("test2", tm.get("str"), true)
+  ref2.referenced = true
+  var2 := vm.get("test2")
+  EXPECT_TRUE(var2.referenced)
+
+  ref3 := vm.add("test3", tm.get("bool"), false)
+  ref3Original := vm.get("test3")
+  EXPECT_TRUE(ref3 == ref3Original)
+
+  vm.increase()
+
+  ref4 := vm.add("test4", tm.get("int"), true)
+  ref5 := vm.add("test5", tm.get("str"), false)
+  ref4Original := vm.get("test4")
+  ref5Original := vm.get("test5")
+
+  EXPECT_EQ(ref4.scope, 1)
+  EXPECT_EQ(ref5.scope, 1)
+  EXPECT_TRUE(ref4Original == ref4)
+  EXPECT_TRUE(ref5Original == ref5)
+
+  vm.decrease()
+
+  EXPECT_EQ(ref1.scope, 0)
+  EXPECT_EQ(ref2.scope, 0)
+  EXPECT_EQ(ref3.scope, 0)
+  EXPECT_EQ(ref4.scope, 1)
+  EXPECT_EQ(ref5.scope, 1)
+}
+
+export fn TEST_VarMap_at () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  vm.add("test1", tm.get("int"), false)
+  vm.add("test2", tm.get("str"), true)
+
+  var1 := vm.at(0)
+  var2 := vm.at(1)
+
+  EXPECT_EQ(var1.name, "test1")
+  EXPECT_TRUE(Type.match(var1.t, tm.get("int")))
+  EXPECT_FALSE(var1.mutable)
+
+  EXPECT_EQ(var2.name, "test2")
+  EXPECT_TRUE(Type.match(var2.t, tm.get("str")))
+  EXPECT_TRUE(var2.mutable)
+}
+
+export fn TEST_VarMap_atPersistAfterDecrease () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  vm.increase()
+
+  vm.add("test1", tm.get("int"), false)
+  vm.add("test2", tm.get("str"), true)
+
+  vm.decrease()
+
+  var1 := vm.at(0)
+  var2 := vm.at(1)
+
+  EXPECT_EQ(var1.name, "test1")
+  EXPECT_TRUE(Type.match(var1.t, tm.get("int")))
+  EXPECT_FALSE(var1.mutable)
+
+  EXPECT_EQ(var2.name, "test2")
+  EXPECT_TRUE(Type.match(var2.t, tm.get("str")))
+  EXPECT_TRUE(var2.mutable)
+}
+
+export fn TEST_VarMap_collect () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  outerVar := vm.add("outer", tm.get("int"), false)
+  vm.increase()
+  innerVar := vm.add("inner", tm.get("str"), true)
+
+  vm.startCollection()
+  vm.collect(outerVar)
+
+  EXPECT_TRUE(outerVar.referenced)
+  vm.collect(innerVar)
+  EXPECT_FALSE(innerVar.referenced)
+
+  anotherInnerVar := vm.add("outer", tm.get("str"), true)
+  vm.collect(anotherInnerVar)
+  EXPECT_FALSE(anotherInnerVar.referenced)
+
+  vars := vm.endCollection()
+  EXPECT_EQ(vars.len, 1)
+
+  v0 := vars[0]
+  EXPECT_EQ(v0.name, "outer")
+  EXPECT_TRUE(Type.match(v0.t, tm.get("int")))
+}
+
+export fn TEST_VarMap_collectDuplicate () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  outerVar := vm.add("test", tm.get("int"), false)
+
+  vm.increase()
+  vm.startCollection()
+  vm.collect(outerVar)
+  EXPECT_TRUE(outerVar.referenced)
+  vm.collect(outerVar)
+
+  vars := vm.endCollection()
+  EXPECT_EQ(vars.len, 1)
+
+  v0 := vars[0]
+  EXPECT_EQ(v0.name, "test")
+}
+
+export fn TEST_VarMap_endCollectionDuplicates () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  vm.add("test", tm.get("int"), false)
+  vm.increase()
+  vm.add("test", tm.get("str"), true)
+
+  vm.startCollection()
+  vm.get("test")
+
+  vars := vm.endCollection()
+  EXPECT_EQ(vars.len, 0)
+}
+
+export fn TEST_VarMap_endCollectionNested () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  vm.add("var1", tm.get("int"), false)
+  vm.increase()
+  vm.startCollection()
+
+  vm.add("var2", tm.get("str"), true)
+  vm.increase()
+  vm.startCollection()
+  vm.add("var3", tm.get("bool"), false)
+
+  vm.get("var1")
+  vm.get("var2")
+  vm.get("var3")
+
+  innerVars := vm.endCollection()
+  EXPECT_EQ(innerVars.len, 2)
+
+  outerVars := vm.endCollection()
+  EXPECT_EQ(outerVars.len, 1)
+}
+
+export fn TEST_VarMap_endCollectionScope () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  vm.add("outer", tm.get("int"), false)
+  vm.increase()
+  vm.add("inner", tm.get("str"), true)
+
+  vm.startCollection()
+  vm.increase()
+
+  outerVar := vm.get("outer")
+  EXPECT_TRUE(outerVar.referenced)
+
+  innerVar := vm.get("inner")
+  EXPECT_FALSE(innerVar.referenced)
+
+  vars := vm.endCollection()
+  EXPECT_EQ(vars.len, 1)
+
+  v0 := vars[0]
+  EXPECT_EQ(v0.name, "outer")
+}
+
 export fn TEST_VarMap_get () {
   mut vm := VarMap{}
   mut tm := TypeMap{}
@@ -92,7 +289,7 @@ export fn TEST_VarMap_has () {
   EXPECT_TRUE(vm.has("test2"))
 }
 
-export fn TEST_VarMap_increaseDecrease () {
+export fn TEST_VarMap_increase_decrease () {
   mut vm := VarMap{}
   mut tm := TypeMap{}
   tm.init()
@@ -114,4 +311,31 @@ export fn TEST_VarMap_increaseDecrease () {
   vm.decrease()
   var5 := vm.get("test")
   EXPECT_EQ(var5.scope, 0)
+}
+
+export fn TEST_VarMap_startCollection_endCollection () {
+  mut vm := VarMap{}
+  mut tm := TypeMap{}
+  tm.init()
+
+  vm.add("test1", tm.get("int"), false)
+  vm.increase()
+  vm.add("test2", tm.get("str"), true)
+
+  vm.increase()
+  vm.startCollection()
+  vm.add("test3", tm.get("bool"), false)
+
+  vm.get("test1")
+  vm.get("test2")
+  vm.get("test3")
+
+  vars := vm.endCollection()
+  EXPECT_EQ(vars.len, 2)
+
+  v0 := vars[0]
+  v1 := vars[1]
+
+  EXPECT_EQ(v0.name, "test1")
+  EXPECT_EQ(v1.name, "test2")
 }

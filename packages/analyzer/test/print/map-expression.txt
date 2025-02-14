@@ -2,14 +2,14 @@ const a: str[str] = {}
 const b := {"key": "val"}
 const c := {"key1": "val1", "key2": "val2"}
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true type=str[str] context:varType=str[str])
+VariableDeclaration(name=a mutable=false constant=true type=str[str] context:var:name=a context:var:type=str[str] context:var:mutable=false context:var:referenced=false)
   MapExpression(initial=str[str])
-VariableDeclaration(name=b mutable=false constant=true context:varType=str[str])
+VariableDeclaration(name=b mutable=false constant=true context:var:name=b context:var:type=str[str] context:var:mutable=false context:var:referenced=false)
   MapExpression(initial=str[str])
     MapExpressionElement()
       StringLiteral(initial=str value=key)
       StringLiteral(initial=str value=val)
-VariableDeclaration(name=c mutable=false constant=true context:varType=str[str])
+VariableDeclaration(name=c mutable=false constant=true context:var:name=c context:var:type=str[str] context:var:mutable=false context:var:referenced=false)
   MapExpression(initial=str[str])
     MapExpressionElement()
       StringLiteral(initial=str value=key1)

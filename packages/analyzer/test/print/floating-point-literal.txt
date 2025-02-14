@@ -1,5 +1,5 @@
 const a := 1.23 as float?
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=float?)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=float? context:var:mutable=false context:var:referenced=false)
   AsExpression(initial=float? as=float? extra:from=float)
     FloatingPointLiteral(initial=float value=1.23)

@@ -1,0 +1,72 @@
+/*!
+ * Copyright (c) Aaron Delasy
+ * Licensed under the MIT License
+ */
+
+import format from "../src/date"
+import numberPad from "../src/utils"
+
+export fn TEST_format () {
+  daysMax := [
+    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+    31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+  ]
+
+  mut day := 0
+  mut month := 0
+  mut year := 1970
+
+  // check dates of first three years
+  loop i := 0; i < 1096; i++ {
+    timestamp: u64 = i * 86400
+    datetime := year.str() + "-" + numberPad(month + 1) + "-" + numberPad(day + 1)
+
+    EXPECT_EQ(format(timestamp), datetime + " 00:00:00")
+
+    daysMaxIndex := (year - 1970) * 12 + month
+    day++
+
+    if day == daysMax[daysMaxIndex] {
+      day = 0
+      month++
+    }
+
+    if month == 12 {
+      month = 0
+      year++
+    }
+  }
+
+  // check time
+  loop i := 0; i < 24; i++ {
+    loop j := 0; j < 60; j++ {
+      loop k := 0; k < 60; k++ {
+        timestamp: u64 = i * 3600 + j * 60 + k
+        datetime := numberPad(i) + ":" + numberPad(j) + ":" + numberPad(k)
+
+        EXPECT_EQ(format(timestamp), "1970-01-01 " + datetime)
+      }
+    }
+  }
+
+  // Test edge cases of time
+  EXPECT_EQ(format(86399), "1970-01-01 23:59:59")
+  EXPECT_EQ(format(86400), "1970-01-02 00:00:00")
+  EXPECT_EQ(format(31535999), "1970-12-31 23:59:59")
+
+  // Test leap year divisible by 400
+  EXPECT_EQ(format(946684800), "2000-01-01 00:00:00")
+  EXPECT_EQ(format(951782400), "2000-02-29 00:00:00")
+
+  // Test year divisible by 100 but not 400
+  EXPECT_EQ(format(4107456000), "2100-02-28 00:00:00")
+  EXPECT_EQ(format(4107542400), "2100-03-01 00:00:00")
+
+  // Test some month/year transitions
+  EXPECT_EQ(format(1577836800), "2020-01-01 00:00:00")
+  EXPECT_EQ(format(1583020800), "2020-03-01 00:00:00")
+
+  // Test a larger timestamp
+  EXPECT_EQ(format(32503680000), "3000-01-01 00:00:00")
+}

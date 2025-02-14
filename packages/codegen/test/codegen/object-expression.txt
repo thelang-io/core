@@ -43,9 +43,7 @@ D4_OBJECT_DEFINE(Point, Point, {
   result.y = self.y;
 }, {
   return self.x == rhs.x && self.y == rhs.y;
-}, {
-  (void) self;
-}, {
+}, {}, {
   result = d4_obj_str_append(result, d4_str_alloc(L"x"), d4_float_str(self.x));
   result = d4_obj_str_append(result, d4_str_alloc(L"y"), d4_float_str(self.y));
 }, const double x, const double y)

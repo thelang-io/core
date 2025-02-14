@@ -1,9 +1,0 @@
-main {
-  10()
-}
-===== err =====
-E1031.txt:2:3: AnalyzeError: E1031 - Type `int` has no call signature
-1 | main {
-2 |   10()
-  |   ~~
-3 | }

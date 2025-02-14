@@ -1,6 +1,6 @@
 const a := true ? 10 : 20
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=int)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
   ConditionalExpression(initial=int)
     BooleanLiteral(initial=bool value=true)
     IntegerLiteral(initial=int value=10)

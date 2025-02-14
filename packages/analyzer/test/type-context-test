@@ -8,21 +8,26 @@ import * as Context from "../src/context"
 import * as Type from "../src/type"
 import TypeMap from "../src/type-map"
 
+mut GLOBAL_TM := TypeMap{}
+mut GLOBAL_TM_INITIALIZED := false
+
 obj TypeContextTestData {
   mut expr: Parser.Expression
   mut tm: TypeMap
 }
 
 fn beforeEach () TypeContextTestData {
-  mut tm := TypeMap{}
-  tm.init()
+  if !GLOBAL_TM_INITIALIZED {
+    GLOBAL_TM.init()
+    GLOBAL_TM_INITIALIZED = true
+  }
 
   f := Parser.parse("test")
   statement := f.program.body[0].asExpression()
 
   return TypeContextTestData{
     expr: statement.expression,
-    tm: tm,
+    tm: GLOBAL_TM,
   }
 }
 

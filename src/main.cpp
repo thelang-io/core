@@ -16,10 +16,14 @@
 
 /** @created_at: 2018-05-08 09:55 */
 
+#include <filesystem>
 #include <iostream>
 #include "Codegen.hpp"
+#include "utils.hpp"
 
 int main (int argc, char *argv[]) {
+  auto cwd = std::filesystem::current_path().string();
+
   try {
     if (argc == 1) {
       throw Error("REPL is not supported");
@@ -90,6 +94,8 @@ int main (int argc, char *argv[]) {
     auto reader = Reader(*fileName);
     auto lexer = Lexer(&reader);
 
+    cwd = std::filesystem::path(reader.path).parent_path().string();
+
     if (isLex) {
       while (true) {
         auto [_, tok] = lexer.next();
@@ -135,7 +141,8 @@ int main (int argc, char *argv[]) {
     Codegen::compile(output, result, arch, platform);
     return EXIT_SUCCESS;
   } catch (const Error &err) {
-    std::cerr << "Error: " << err.what() << std::endl;
+    auto message = std::string(err.what());
+    std::cerr << "Error: " << str_replace_all(message, cwd, ".") << std::endl;
     return EXIT_FAILURE;
   }
 }

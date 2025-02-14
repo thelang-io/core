@@ -11,6 +11,10 @@ export fn TEST_AST_type () {
   type3 := AST.createType("int[]")
   type5 := AST.createType("int", constant: true)
   type6 := AST.createType("int *", constant: true)
+  type7 := AST.createType("int", reference: true)
+  type8 := AST.createType("int *", reference: true)
+  type9 := AST.createType("int", constant: true, reference: true)
+  type10 := AST.createType("int *", constant: true, reference: true)
 
   EXPECT_EQ(type1.stringify(declaration: true), "int ")
   EXPECT_EQ(type1.stringify(definition: true), "int")
@@ -18,15 +22,26 @@ export fn TEST_AST_type () {
   EXPECT_EQ(type2.stringify(definition: true), "int *")
   EXPECT_EQ(type3.stringify(declaration: true), "int[] ")
   EXPECT_EQ(type3.stringify(definition: true), "int[]")
+
   EXPECT_EQ(type5.stringify(declaration: true), "const int ")
   EXPECT_EQ(type5.stringify(definition: true), "const int")
   EXPECT_EQ(type6.stringify(declaration: true), "const int *")
   EXPECT_EQ(type6.stringify(definition: true), "const int *")
 
+  EXPECT_EQ(type7.stringify(declaration: true), "int *")
+  EXPECT_EQ(type7.stringify(definition: true), "int *")
+  EXPECT_EQ(type8.stringify(declaration: true), "int **")
+  EXPECT_EQ(type8.stringify(definition: true), "int **")
+
+  EXPECT_EQ(type9.stringify(declaration: true), "const int *")
+  EXPECT_EQ(type9.stringify(definition: true), "const int *")
+  EXPECT_EQ(type10.stringify(declaration: true), "const int **")
+  EXPECT_EQ(type10.stringify(definition: true), "const int **")
+
   EXPECT_THROW_WITH_MESSAGE(() -> void {
     type4 := AST.createType("int")
     type4.stringify()
-  }, "Unable to stringify specified type")
+  }, "You need to specify either declaration or definition")
 }
 
 export fn TEST_AST_expressionStatementMethod () {
@@ -83,6 +98,11 @@ export fn TEST_AST_statementDefinition () {
     statement7 := AST.createBreakStatement()
     statement7.definition()
   }, "Unable to generate definition for specified statement")
+
+  EXPECT_THROW_WITH_MESSAGE(() -> void {
+    statement8 := AST.createStructureDeclaration(nil, AST.createCompoundStatement([]))
+    statement8.definition()
+  }, "Structure name is required for definition")
 }
 
 export fn TEST_AST_statementTerminated () {
@@ -91,6 +111,13 @@ export fn TEST_AST_statementTerminated () {
   statement2 := AST.createVariableDeclaration(AST.createType("int"), "test", terminated: false)
   statement3 := AST.createVariableDeclaration(AST.createType("int"), "test", AST.createLiteral("1"), terminated: false)
 
+  statement4 := AST.createStructureDeclaration("Object", AST.createCompoundStatement([]), terminated: false)
+
+  statement5 := AST.createStructureDeclaration("Object", AST.createCompoundStatement([
+    AST.createStructureMemberDeclaration(AST.createType("int"), "a"),
+    AST.createStructureMemberDeclaration(AST.createType("int *"), "b")
+  ]), terminated: false)
+
   EXPECT_EQ(statement1.stringify(), "TEST()" + os_EOL)
   EXPECT_EQ(statement1.stringify(2), "  TEST()" + os_EOL)
 
@@ -98,6 +125,12 @@ export fn TEST_AST_statementTerminated () {
   EXPECT_EQ(statement2.stringify(2), "  int test" + os_EOL)
   EXPECT_EQ(statement3.stringify(), "int test = 1" + os_EOL)
   EXPECT_EQ(statement3.stringify(2), "  int test = 1" + os_EOL)
+
+  EXPECT_EQ(statement4.stringify(), "struct Object {}" + os_EOL)
+  EXPECT_EQ(statement4.stringify(2), "  struct Object {}" + os_EOL)
+
+  EXPECT_EQ(statement5.stringify(), "struct Object {" + os_EOL + "  int a;" + os_EOL + "  int *b;" + os_EOL + "}" + os_EOL)
+  EXPECT_EQ(statement5.stringify(2), "  struct Object {" + os_EOL + "  int a;" + os_EOL + "  int *b;" + os_EOL + "}" + os_EOL)
 }
 
 export fn TEST_AST_identifier () {
@@ -804,6 +837,13 @@ export fn TEST_AST_structureDeclaration () {
     AST.createStructureMemberDeclaration(AST.createType("int *"), "b")
   ]))
 
+  statement4 := AST.createStructureDeclaration(nil, AST.createCompoundStatement([]))
+
+  statement5 := AST.createStructureDeclaration(nil, AST.createCompoundStatement([
+    AST.createStructureMemberDeclaration(AST.createType("int"), "a"),
+    AST.createStructureMemberDeclaration(AST.createType("int *"), "b")
+  ]))
+
   EXPECT_EQ(statement1.stringify(), "struct Object {};" + os_EOL)
   EXPECT_EQ(statement1.stringify(2), "  struct Object {};" + os_EOL)
 
@@ -817,6 +857,17 @@ export fn TEST_AST_structureDeclaration () {
   EXPECT_EQ(
     statement3.stringify(),
     "struct Object {" + os_EOL +
+    "  int a;" + os_EOL +
+    "  int *b;" + os_EOL +
+    "};" + os_EOL
+  )
+
+  EXPECT_EQ(statement4.stringify(), "struct {};" + os_EOL)
+  EXPECT_EQ(statement4.stringify(2), "  struct {};" + os_EOL)
+
+  EXPECT_EQ(
+    statement5.stringify(),
+    "struct {" + os_EOL +
     "  int a;" + os_EOL +
     "  int *b;" + os_EOL +
     "};" + os_EOL
@@ -852,10 +903,17 @@ export fn TEST_AST_typedefDeclaration () {
   statement1 := AST.createTypedefDeclaration(AST.createType("int"), "name1")
   statement2 := AST.createTypedefDeclaration(AST.createType("int *"), "name2")
 
+  statement3 := AST.createTypedefDeclaration(
+    AST.createStructureDeclaration(nil, AST.createCompoundStatement([]), terminated: false),
+    "name3"
+  )
+
   EXPECT_EQ(statement1.stringify(), "typedef int name1;" + os_EOL)
   EXPECT_EQ(statement1.stringify(2), "  typedef int name1;" + os_EOL)
   EXPECT_EQ(statement2.stringify(), "typedef int *name2;" + os_EOL)
   EXPECT_EQ(statement2.stringify(2), "  typedef int *name2;" + os_EOL)
+  EXPECT_EQ(statement3.stringify(), "typedef struct {} name3;" + os_EOL)
+  EXPECT_EQ(statement3.stringify(2), "  typedef struct {} name3;" + os_EOL)
 }
 
 export fn TEST_AST_variableDeclaration () {

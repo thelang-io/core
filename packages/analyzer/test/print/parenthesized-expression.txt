@@ -1,5 +1,5 @@
 const a := (10)
 ===== out =====
-VariableDeclaration(name=a mutable=false constant=true context:varType=int)
+VariableDeclaration(name=a mutable=false constant=true context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=false)
   ParenthesizedExpression(initial=int)
     IntegerLiteral(initial=int value=10)

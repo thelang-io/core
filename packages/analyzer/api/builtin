@@ -190,7 +190,7 @@ export obj str {
   /* Whether string has characters. */
   empty: bool
   /* Number of characters. */
-  len: int
+  len: usize
   /* Representation of string with characters lowercased. */
   lower: Self
   /* Representation of string with first character lowercased. */
@@ -213,6 +213,13 @@ export obj str {
    * @param search - Substring to check if exists.
    */
   fn contains (self: ref Self, search: Self) bool
+
+  /**
+   * Checks whether string ends with provided substring.
+   *
+   * @param search - Substring to search for.
+   */
+  fn endsWith (self: ref Self, search: Self) bool
 
   /**
    * Searches for substring and returns its position, otherwise `-1` is returned.
@@ -251,7 +258,7 @@ export obj str {
    *   - If value is greater than string length then string length is used.
    *   - If value positioned before or equals `start` then nothing is extracted.
    */
-  fn slice (self: ref Self, start := 0, end := self.len) Self
+  fn slice (self: ref Self, start: usize = 0, end := self.len) Self
 
   /**
    * Splits string into array of string delimited with `delimiter`.
@@ -259,6 +266,13 @@ export obj str {
    * @param delimiter - Delimiter to split with.
    */
   fn split (self: ref Self, delimiter := "") Self[]
+
+  /**
+   * Checks whether string starts with provided substring.
+   *
+   * @param search - Substring to search for.
+   */
+  fn startsWith (self: ref Self, search: Self) bool
 
   /* Converts a string to `float` representation. */
   fn toFloat (self: ref Self) float
@@ -368,7 +382,7 @@ export obj Array {
   /* Reference to last element. If empty will throw an error. */
   last: ref ArrayElement
   /* Number of elements. */
-  len: int
+  len: usize
 
   /**
    * Accesses element by index and returns its reference.
@@ -456,7 +470,7 @@ export obj Array {
    *   - If value is greater than array length then array length is used.
    *   - If value positioned before or equals `start` then nothing is extracted.
    */
-  fn slice (self: ref Self, start := 0, end := self.len) Self
+  fn slice (self: ref Self, start: usize = 0, end := self.len) Self
 
   /**
    * Sorts the elements of the array in place.
@@ -493,7 +507,7 @@ export obj Map {
   /* Array of keys in the order they were set. */
   keys: MapKey[]
   /* Number of elements. */
-  len: int
+  len: usize
   /* Array of values in the order keys were set. */
   values: MapValue[]
 

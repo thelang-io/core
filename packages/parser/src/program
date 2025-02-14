@@ -27,9 +27,7 @@ export fn Statement_traverse (statement: t.Statement, cb: (it: t.Statement) -> v
     Statement_traverse(body.statement, cb)
   } elif statement.isFunctionDeclaration() {
     body := statement.asFunctionDeclaration()
-    if body.body != nil {
-      Statement_traverse(body.body, cb)
-    }
+    Statement_traverse(body.body, cb)
   } elif statement.isIf() {
     body := statement.asIf()
     Statement_traverse(body.consequent, cb)
@@ -53,9 +51,7 @@ export fn Statement_traverse (statement: t.Statement, cb: (it: t.Statement) -> v
     }
   } elif statement.isObjectDeclarationMethod() {
     body := statement.asObjectDeclarationMethod()
-    if body.body != nil {
-      Statement_traverse(body.body, cb)
-    }
+    Statement_traverse(body.body, cb)
   } elif statement.isTry() {
     body := statement.asTry()
     Statement_traverse(body.body, cb)

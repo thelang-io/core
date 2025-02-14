@@ -44,6 +44,7 @@ export const BUILTIN_ENTITIES := {
     "d4_any_str",
   ],
 
+  "d4Arc": ["D4_ARC_FORWARD_DECLARE", "D4_ARC_DECLARE", "D4_ARC_DEFINE"],
   "d4Array": ["D4_ARRAY_DECLARE", "D4_ARRAY_DEFINE"],
   "d4Bool": ["d4_bool_str"],
   "d4Byte": ["d4_byte_str"],

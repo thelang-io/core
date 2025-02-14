@@ -1,0 +1,1348 @@
+fn test1 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == 5 {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test2 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    print("2 start", i)
+    if i == 5 {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test3 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    v2 := "test1"
+    print("3 start", i)
+    if i == 5 { return }
+    print("3 end", i)
+  }
+}
+
+fn test4 () {
+  v1 := "test1"
+
+  loop i := 0; i < 10; i++ {
+    print("4 start", i)
+    if i == 5 { return }
+    print("4 end", i)
+  }
+}
+
+fn test5 () {
+  loop i := 0; i < 10; i++ {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == 5 {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test6 () {
+  loop i := 0; i < 10; i++ {
+    print("2 start", i)
+    if i == 5 {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test7 () {
+  loop i := 0; i < 10; i++ {
+    v2 := "test1"
+    print("3 start", i)
+    if i == 5 { return }
+    print("3 end", i)
+  }
+}
+
+fn test8 () {
+  loop i := 0; i < 10; i++ {
+    print("4 start", i)
+    if i == 5 { return }
+    print("4 end", i)
+  }
+}
+
+fn test9 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == "11111" {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test10 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("2 start", i)
+    if i == "11111" {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test11 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test1"
+    print("3 start", i)
+    if i == "11111" { return }
+    print("3 end", i)
+  }
+}
+
+fn test12 () {
+  v1 := "test1"
+
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("4 start", i)
+    if i == "11111" { return }
+    print("4 end", i)
+  }
+}
+
+fn test13 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test2"
+    v3 := "test3"
+    print("1 start", i)
+    v4 := "test4"
+    if i == "11111" {
+      v5 := "test5"
+      return
+    }
+    v6 := "test6"
+    print("1 end", i)
+    v7 := "test7"
+  }
+}
+
+fn test14 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("2 start", i)
+    if i == "11111" {
+      v2 := "test1"
+      return
+    }
+    print("2 end", i)
+  }
+}
+
+fn test15 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    v2 := "test1"
+    print("3 start", i)
+    if i == "11111" { return }
+    print("3 end", i)
+  }
+}
+
+fn test16 () {
+  loop i := "1"; i != "1111111111"; i += "1" {
+    print("4 start", i)
+    if i == "11111" { return }
+    print("4 end", i)
+  }
+}
+
+main {
+  test1()
+  test2()
+  test3()
+  test4()
+  test5()
+  test6()
+  test7()
+  test8()
+  test9()
+  test10()
+  test11()
+  test12()
+  test13()
+  test14()
+  test15()
+  test16()
+}
+===== code =====
+#include <d4/any.h>
+#include <d4/fn.h>
+#include <d4/globals.h>
+#include <d4/macro.h>
+#include <d4/number.h>
+#include <d4/safe.h>
+#include <d4/string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#define TYPE_str 1
+#define TYPE_int 2
+D4_FUNCTION_DECLARE(s, void, void)
+D4_ANY_DECLARE(str, d4_str_t)
+D4_ANY_DECLARE(int, int32_t)
+D4_FUNCTION_DEFINE(s, void, void)
+D4_ANY_DEFINE(TYPE_str, str, d4_str_t, d4_str_copy(val), d4_str_eq(lhs_val, rhs_val), d4_str_free(val), d4_str_copy(val))
+D4_ANY_DEFINE(TYPE_int, int, int32_t, val, lhs_val == rhs_val, (void) val, d4_int_str(val))
+d4_fn_sFRvoidFE_t test1_0;
+d4_fn_sFRvoidFE_t test2_0;
+d4_fn_sFRvoidFE_t test3_0;
+d4_fn_sFRvoidFE_t test4_0;
+d4_fn_sFRvoidFE_t test5_0;
+d4_fn_sFRvoidFE_t test6_0;
+d4_fn_sFRvoidFE_t test7_0;
+d4_fn_sFRvoidFE_t test8_0;
+d4_fn_sFRvoidFE_t test9_0;
+d4_fn_sFRvoidFE_t test10_0;
+d4_fn_sFRvoidFE_t test11_0;
+d4_fn_sFRvoidFE_t test12_0;
+d4_fn_sFRvoidFE_t test13_0;
+d4_fn_sFRvoidFE_t test14_0;
+d4_fn_sFRvoidFE_t test15_0;
+d4_fn_sFRvoidFE_t test16_0;
+void test1_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_5 = NULL;
+      d4_str_t v4_0;
+      d4_str_t v6_0;
+      d4_str_t __THE_6 = d4_str_empty_val;
+      d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_10 = NULL;
+      d4_str_t v7_0;
+      d4_str_t v2_0 = d4_str_alloc(L"test2");
+      d4_str_t v3_0 = d4_str_alloc(L"test3");
+      d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"1 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      v4_0 = d4_str_alloc(L"test4");
+      if (i_0 == 5) {
+        d4_str_t v5_0 = d4_str_alloc(L"test5");
+        {
+          r = 1;
+          goto L1;
+        }
+L1:
+        d4_str_free(v5_0);
+        if (r == 1) goto L2;
+      }
+      v6_0 = d4_str_alloc(L"test6");
+      d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"1 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      v7_0 = d4_str_alloc(L"test7");
+      d4_str_free(v7_0);
+      d4_safe_free(__THE_10);
+      d4_arr_any_free(__THE_9);
+      d4_any_free(__THE_8);
+      d4_any_free(__THE_7);
+      d4_str_free(__THE_6);
+      d4_str_free(v6_0);
+L2:
+      d4_str_free(v4_0);
+      d4_safe_free(__THE_5);
+      d4_arr_any_free(__THE_4);
+      d4_any_free(__THE_3);
+      d4_any_free(__THE_2);
+      d4_str_free(__THE_1);
+      d4_str_free(v3_0);
+      d4_str_free(v2_0);
+      if (r == 1) goto L3;
+    }
+L3:
+    if (r == 1) goto L4;
+  }
+L4:
+  d4_str_free(v1_0);
+}
+void test2_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_5 = NULL;
+      d4_str_t __THE_6 = d4_str_empty_val;
+      d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_10 = NULL;
+      d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"2 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (i_0 == 5) {
+        d4_str_t v2_0 = d4_str_alloc(L"test1");
+        {
+          r = 1;
+          goto L5;
+        }
+L5:
+        d4_str_free(v2_0);
+        if (r == 1) goto L6;
+      }
+      d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"2 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_10);
+      d4_arr_any_free(__THE_9);
+      d4_any_free(__THE_8);
+      d4_any_free(__THE_7);
+      d4_str_free(__THE_6);
+L6:
+      d4_safe_free(__THE_5);
+      d4_arr_any_free(__THE_4);
+      d4_any_free(__THE_3);
+      d4_any_free(__THE_2);
+      d4_str_free(__THE_1);
+      if (r == 1) goto L7;
+    }
+L7:
+    if (r == 1) goto L8;
+  }
+L8:
+  d4_str_free(v1_0);
+}
+void test3_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_5 = NULL;
+      d4_str_t __THE_6 = d4_str_empty_val;
+      d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_10 = NULL;
+      d4_str_t v2_0 = d4_str_alloc(L"test1");
+      d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"3 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (i_0 == 5) {
+        {
+          r = 1;
+          goto L9;
+        }
+L9:
+        if (r == 1) goto L10;
+      }
+      d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"3 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_10);
+      d4_arr_any_free(__THE_9);
+      d4_any_free(__THE_8);
+      d4_any_free(__THE_7);
+      d4_str_free(__THE_6);
+L10:
+      d4_safe_free(__THE_5);
+      d4_arr_any_free(__THE_4);
+      d4_any_free(__THE_3);
+      d4_any_free(__THE_2);
+      d4_str_free(__THE_1);
+      d4_str_free(v2_0);
+      if (r == 1) goto L11;
+    }
+L11:
+    if (r == 1) goto L12;
+  }
+L12:
+  d4_str_free(v1_0);
+}
+void test4_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_5 = NULL;
+      d4_str_t __THE_6 = d4_str_empty_val;
+      d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_10 = NULL;
+      d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"4 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (i_0 == 5) {
+        {
+          r = 1;
+          goto L13;
+        }
+L13:
+        if (r == 1) goto L14;
+      }
+      d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"4 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_10);
+      d4_arr_any_free(__THE_9);
+      d4_any_free(__THE_8);
+      d4_any_free(__THE_7);
+      d4_str_free(__THE_6);
+L14:
+      d4_safe_free(__THE_5);
+      d4_arr_any_free(__THE_4);
+      d4_any_free(__THE_3);
+      d4_any_free(__THE_2);
+      d4_str_free(__THE_1);
+      if (r == 1) goto L15;
+    }
+L15:
+    if (r == 1) goto L16;
+  }
+L16:
+  d4_str_free(v1_0);
+}
+void test5_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+    d4_str_t __THE_1 = d4_str_empty_val;
+    d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_5 = NULL;
+    d4_str_t v4_0;
+    d4_str_t v6_0;
+    d4_str_t __THE_6 = d4_str_empty_val;
+    d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_10 = NULL;
+    d4_str_t v7_0;
+    d4_str_t v2_0 = d4_str_alloc(L"test2");
+    d4_str_t v3_0 = d4_str_alloc(L"test3");
+    d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"1 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    v4_0 = d4_str_alloc(L"test4");
+    if (i_0 == 5) {
+      d4_str_t v5_0 = d4_str_alloc(L"test5");
+      {
+        r = 1;
+        goto L17;
+      }
+L17:
+      d4_str_free(v5_0);
+      if (r == 1) goto L18;
+    }
+    v6_0 = d4_str_alloc(L"test6");
+    d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"1 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    v7_0 = d4_str_alloc(L"test7");
+    d4_str_free(v7_0);
+    d4_safe_free(__THE_10);
+    d4_arr_any_free(__THE_9);
+    d4_any_free(__THE_8);
+    d4_any_free(__THE_7);
+    d4_str_free(__THE_6);
+    d4_str_free(v6_0);
+L18:
+    d4_str_free(v4_0);
+    d4_safe_free(__THE_5);
+    d4_arr_any_free(__THE_4);
+    d4_any_free(__THE_3);
+    d4_any_free(__THE_2);
+    d4_str_free(__THE_1);
+    d4_str_free(v3_0);
+    d4_str_free(v2_0);
+    if (r == 1) return;
+  }
+}
+void test6_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+    d4_str_t __THE_1 = d4_str_empty_val;
+    d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_5 = NULL;
+    d4_str_t __THE_6 = d4_str_empty_val;
+    d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_10 = NULL;
+    d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"2 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    if (i_0 == 5) {
+      d4_str_t v2_0 = d4_str_alloc(L"test1");
+      {
+        r = 1;
+        goto L19;
+      }
+L19:
+      d4_str_free(v2_0);
+      if (r == 1) goto L20;
+    }
+    d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"2 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_10);
+    d4_arr_any_free(__THE_9);
+    d4_any_free(__THE_8);
+    d4_any_free(__THE_7);
+    d4_str_free(__THE_6);
+L20:
+    d4_safe_free(__THE_5);
+    d4_arr_any_free(__THE_4);
+    d4_any_free(__THE_3);
+    d4_any_free(__THE_2);
+    d4_str_free(__THE_1);
+    if (r == 1) return;
+  }
+}
+void test7_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+    d4_str_t __THE_1 = d4_str_empty_val;
+    d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_5 = NULL;
+    d4_str_t __THE_6 = d4_str_empty_val;
+    d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_10 = NULL;
+    d4_str_t v2_0 = d4_str_alloc(L"test1");
+    d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"3 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    if (i_0 == 5) {
+      {
+        r = 1;
+        goto L21;
+      }
+L21:
+      if (r == 1) goto L22;
+    }
+    d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"3 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_10);
+    d4_arr_any_free(__THE_9);
+    d4_any_free(__THE_8);
+    d4_any_free(__THE_7);
+    d4_str_free(__THE_6);
+L22:
+    d4_safe_free(__THE_5);
+    d4_arr_any_free(__THE_4);
+    d4_any_free(__THE_3);
+    d4_any_free(__THE_2);
+    d4_str_free(__THE_1);
+    d4_str_free(v2_0);
+    if (r == 1) return;
+  }
+}
+void test8_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  for (int32_t i_0 = 0; i_0 < 10; i_0++) {
+    d4_str_t __THE_1 = d4_str_empty_val;
+    d4_any_t __THE_2 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_3 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_4 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_5 = NULL;
+    d4_str_t __THE_6 = d4_str_empty_val;
+    d4_any_t __THE_7 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_any_t __THE_8 = {-1, NULL, NULL, NULL, NULL, NULL};
+    d4_arr_any_t __THE_9 = (d4_arr_any_t) {NULL, 0};
+    void *__THE_10 = NULL;
+    d4_print.func(d4_print.ctx, __THE_5 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_4 = d4_arr_any_alloc(2, __THE_2 = d4_any_str_alloc(__THE_1 = d4_str_alloc(L"4 start")), __THE_3 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    if (i_0 == 5) {
+      {
+        r = 1;
+        goto L23;
+      }
+L23:
+      if (r == 1) goto L24;
+    }
+    d4_print.func(d4_print.ctx, __THE_10 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_9 = d4_arr_any_alloc(2, __THE_7 = d4_any_str_alloc(__THE_6 = d4_str_alloc(L"4 end")), __THE_8 = d4_any_int_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+    d4_safe_free(__THE_10);
+    d4_arr_any_free(__THE_9);
+    d4_any_free(__THE_8);
+    d4_any_free(__THE_7);
+    d4_str_free(__THE_6);
+L24:
+    d4_safe_free(__THE_5);
+    d4_arr_any_free(__THE_4);
+    d4_any_free(__THE_3);
+    d4_any_free(__THE_2);
+    d4_str_free(__THE_1);
+    if (r == 1) return;
+  }
+}
+void test9_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t v4_0;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t v6_0;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      d4_str_t v7_0;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L25;
+      }
+      d4_str_t v2_0 = d4_str_alloc(L"test2");
+      d4_str_t v3_0 = d4_str_alloc(L"test3");
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"1 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      v4_0 = d4_str_alloc(L"test4");
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        d4_str_t v5_0 = d4_str_alloc(L"test5");
+        {
+          r = 1;
+          goto L26;
+        }
+L26:
+        d4_str_free(v5_0);
+        if (b1 == 1) goto L27;
+        if (r == 1) goto L27;
+      }
+      v6_0 = d4_str_alloc(L"test6");
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"1 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      v7_0 = d4_str_alloc(L"test7");
+      d4_str_free(v7_0);
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+      d4_str_free(v6_0);
+L27:
+      d4_str_free(__THE_9);
+      d4_str_free(v4_0);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      d4_str_free(v3_0);
+      d4_str_free(v2_0);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L25:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L28;
+    }
+L28:
+    d4_str_free(i_0);
+    if (r == 1) goto L29;
+  }
+L29:
+  d4_str_free(v1_0);
+}
+void test10_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L30;
+      }
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"2 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        d4_str_t v2_0 = d4_str_alloc(L"test1");
+        {
+          r = 1;
+          goto L31;
+        }
+L31:
+        d4_str_free(v2_0);
+        if (b1 == 1) goto L32;
+        if (r == 1) goto L32;
+      }
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"2 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+L32:
+      d4_str_free(__THE_9);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L30:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L33;
+    }
+L33:
+    d4_str_free(i_0);
+    if (r == 1) goto L34;
+  }
+L34:
+  d4_str_free(v1_0);
+}
+void test11_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L35;
+      }
+      d4_str_t v2_0 = d4_str_alloc(L"test1");
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"3 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        {
+          r = 1;
+          goto L36;
+        }
+L36:
+        if (b1 == 1) goto L37;
+        if (r == 1) goto L37;
+      }
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"3 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+L37:
+      d4_str_free(__THE_9);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      d4_str_free(v2_0);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L35:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L38;
+    }
+L38:
+    d4_str_free(i_0);
+    if (r == 1) goto L39;
+  }
+L39:
+  d4_str_free(v1_0);
+}
+void test12_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  d4_str_t v1_0 = d4_str_alloc(L"test1");
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L40;
+      }
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"4 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        {
+          r = 1;
+          goto L41;
+        }
+L41:
+        if (b1 == 1) goto L42;
+        if (r == 1) goto L42;
+      }
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"4 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+L42:
+      d4_str_free(__THE_9);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L40:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L43;
+    }
+L43:
+    d4_str_free(i_0);
+    if (r == 1) goto L44;
+  }
+L44:
+  d4_str_free(v1_0);
+}
+void test13_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t v4_0;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t v6_0;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      d4_str_t v7_0;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L45;
+      }
+      d4_str_t v2_0 = d4_str_alloc(L"test2");
+      d4_str_t v3_0 = d4_str_alloc(L"test3");
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"1 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      v4_0 = d4_str_alloc(L"test4");
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        d4_str_t v5_0 = d4_str_alloc(L"test5");
+        {
+          r = 1;
+          goto L46;
+        }
+L46:
+        d4_str_free(v5_0);
+        if (b1 == 1) goto L47;
+        if (r == 1) goto L47;
+      }
+      v6_0 = d4_str_alloc(L"test6");
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"1 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      v7_0 = d4_str_alloc(L"test7");
+      d4_str_free(v7_0);
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+      d4_str_free(v6_0);
+L47:
+      d4_str_free(__THE_9);
+      d4_str_free(v4_0);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      d4_str_free(v3_0);
+      d4_str_free(v2_0);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L45:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L48;
+    }
+L48:
+    d4_str_free(i_0);
+    if (r == 1) return;
+  }
+}
+void test14_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L49;
+      }
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"2 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        d4_str_t v2_0 = d4_str_alloc(L"test1");
+        {
+          r = 1;
+          goto L50;
+        }
+L50:
+        d4_str_free(v2_0);
+        if (b1 == 1) goto L51;
+        if (r == 1) goto L51;
+      }
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"2 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+L51:
+      d4_str_free(__THE_9);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L49:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L52;
+    }
+L52:
+    d4_str_free(i_0);
+    if (r == 1) return;
+  }
+}
+void test15_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L53;
+      }
+      d4_str_t v2_0 = d4_str_alloc(L"test1");
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"3 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        {
+          r = 1;
+          goto L54;
+        }
+L54:
+        if (b1 == 1) goto L55;
+        if (r == 1) goto L55;
+      }
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"3 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+L55:
+      d4_str_free(__THE_9);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      d4_str_free(v2_0);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L53:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L56;
+    }
+L56:
+    d4_str_free(i_0);
+    if (r == 1) return;
+  }
+}
+void test16_0_func (void *ctx, void *params) {
+  unsigned char r = 0;
+  {
+    d4_str_t i_0 = d4_str_alloc(L"1");
+    while (1) {
+      unsigned char b1 = 0;
+      d4_str_t __THE_1 = d4_str_empty_val;
+      d4_str_t __THE_2 = d4_str_empty_val;
+      d4_str_t __THE_3 = d4_str_empty_val;
+      d4_str_t __THE_4 = d4_str_empty_val;
+      d4_any_t __THE_5 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_6 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_7 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_8 = NULL;
+      d4_str_t __THE_9 = d4_str_empty_val;
+      d4_str_t __THE_10 = d4_str_empty_val;
+      d4_any_t __THE_11 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_any_t __THE_12 = {-1, NULL, NULL, NULL, NULL, NULL};
+      d4_arr_any_t __THE_13 = (d4_arr_any_t) {NULL, 0};
+      void *__THE_14 = NULL;
+      if (!(!d4_str_eq(i_0, __THE_1 = d4_str_alloc(L"1111111111")))) {
+        b1 = 1;
+        goto L57;
+      }
+      d4_print.func(d4_print.ctx, __THE_8 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_7 = d4_arr_any_alloc(2, __THE_5 = d4_any_str_alloc(__THE_4 = d4_str_alloc(L"4 start")), __THE_6 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      if (d4_str_eq(i_0, __THE_9 = d4_str_alloc(L"11111"))) {
+        {
+          r = 1;
+          goto L58;
+        }
+L58:
+        if (b1 == 1) goto L59;
+        if (r == 1) goto L59;
+      }
+      d4_print.func(d4_print.ctx, __THE_14 = d4_safe_calloc(&(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t) {__THE_13 = d4_arr_any_alloc(2, __THE_11 = d4_any_str_alloc(__THE_10 = d4_str_alloc(L"4 end")), __THE_12 = d4_any_str_alloc(i_0)), 0, d4_str_empty_val, 0, d4_str_empty_val, 0, d4_str_empty_val}, sizeof(d4_fn_sFP4arr_anyFP1strFP1strFP1strFRvoidFE_params_t)));
+      d4_safe_free(__THE_14);
+      d4_arr_any_free(__THE_13);
+      d4_any_free(__THE_12);
+      d4_any_free(__THE_11);
+      d4_str_free(__THE_10);
+L59:
+      d4_str_free(__THE_9);
+      d4_safe_free(__THE_8);
+      d4_arr_any_free(__THE_7);
+      d4_any_free(__THE_6);
+      d4_any_free(__THE_5);
+      d4_str_free(__THE_4);
+      i_0 = d4_str_realloc(i_0, __THE_3 = d4_str_concat(i_0, __THE_2 = d4_str_alloc(L"1")));
+      d4_str_free(__THE_3);
+      d4_str_free(__THE_2);
+L57:
+      d4_str_free(__THE_1);
+      if (b1 == 1) break;
+      if (r == 1) goto L60;
+    }
+L60:
+    d4_str_free(i_0);
+    if (r == 1) return;
+  }
+}
+int main (void) {
+  test1_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test1", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test1_0_func);
+  test2_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test2", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test2_0_func);
+  test3_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test3", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test3_0_func);
+  test4_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test4", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test4_0_func);
+  test5_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test5", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test5_0_func);
+  test6_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test6", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test6_0_func);
+  test7_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test7", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test7_0_func);
+  test8_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test8", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test8_0_func);
+  test9_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test9", 5, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test9_0_func);
+  test10_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test10", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test10_0_func);
+  test11_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test11", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test11_0_func);
+  test12_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test12", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test12_0_func);
+  test13_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test13", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test13_0_func);
+  test14_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test14", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test14_0_func);
+  test15_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test15", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test15_0_func);
+  test16_0 = d4_fn_sFRvoidFE_alloc((d4_str_t) {L"test16", 6, true}, NULL, NULL, NULL, (void (*) (void *, void *)) test16_0_func);
+  test1_0.func(test1_0.ctx, NULL);
+  test2_0.func(test2_0.ctx, NULL);
+  test3_0.func(test3_0.ctx, NULL);
+  test4_0.func(test4_0.ctx, NULL);
+  test5_0.func(test5_0.ctx, NULL);
+  test6_0.func(test6_0.ctx, NULL);
+  test7_0.func(test7_0.ctx, NULL);
+  test8_0.func(test8_0.ctx, NULL);
+  test9_0.func(test9_0.ctx, NULL);
+  test10_0.func(test10_0.ctx, NULL);
+  test11_0.func(test11_0.ctx, NULL);
+  test12_0.func(test12_0.ctx, NULL);
+  test13_0.func(test13_0.ctx, NULL);
+  test14_0.func(test14_0.ctx, NULL);
+  test15_0.func(test15_0.ctx, NULL);
+  test16_0.func(test16_0.ctx, NULL);
+  d4_fn_sFRvoidFE_free(test16_0);
+  d4_fn_sFRvoidFE_free(test15_0);
+  d4_fn_sFRvoidFE_free(test14_0);
+  d4_fn_sFRvoidFE_free(test13_0);
+  d4_fn_sFRvoidFE_free(test12_0);
+  d4_fn_sFRvoidFE_free(test11_0);
+  d4_fn_sFRvoidFE_free(test10_0);
+  d4_fn_sFRvoidFE_free(test9_0);
+  d4_fn_sFRvoidFE_free(test8_0);
+  d4_fn_sFRvoidFE_free(test7_0);
+  d4_fn_sFRvoidFE_free(test6_0);
+  d4_fn_sFRvoidFE_free(test5_0);
+  d4_fn_sFRvoidFE_free(test4_0);
+  d4_fn_sFRvoidFE_free(test3_0);
+  d4_fn_sFRvoidFE_free(test2_0);
+  d4_fn_sFRvoidFE_free(test1_0);
+}
+===== output =====
+1 start 0
+1 end 0
+1 start 1
+1 end 1
+1 start 2
+1 end 2
+1 start 3
+1 end 3
+1 start 4
+1 end 4
+1 start 5
+2 start 0
+2 end 0
+2 start 1
+2 end 1
+2 start 2
+2 end 2
+2 start 3
+2 end 3
+2 start 4
+2 end 4
+2 start 5
+3 start 0
+3 end 0
+3 start 1
+3 end 1
+3 start 2
+3 end 2
+3 start 3
+3 end 3
+3 start 4
+3 end 4
+3 start 5
+4 start 0
+4 end 0
+4 start 1
+4 end 1
+4 start 2
+4 end 2
+4 start 3
+4 end 3
+4 start 4
+4 end 4
+4 start 5
+1 start 0
+1 end 0
+1 start 1
+1 end 1
+1 start 2
+1 end 2
+1 start 3
+1 end 3
+1 start 4
+1 end 4
+1 start 5
+2 start 0
+2 end 0
+2 start 1
+2 end 1
+2 start 2
+2 end 2
+2 start 3
+2 end 3
+2 start 4
+2 end 4
+2 start 5
+3 start 0
+3 end 0
+3 start 1
+3 end 1
+3 start 2
+3 end 2
+3 start 3
+3 end 3
+3 start 4
+3 end 4
+3 start 5
+4 start 0
+4 end 0
+4 start 1
+4 end 1
+4 start 2
+4 end 2
+4 start 3
+4 end 3
+4 start 4
+4 end 4
+4 start 5
+1 start 1
+1 end 1
+1 start 11
+1 end 11
+1 start 111
+1 end 111
+1 start 1111
+1 end 1111
+1 start 11111
+2 start 1
+2 end 1
+2 start 11
+2 end 11
+2 start 111
+2 end 111
+2 start 1111
+2 end 1111
+2 start 11111
+3 start 1
+3 end 1
+3 start 11
+3 end 11
+3 start 111
+3 end 111
+3 start 1111
+3 end 1111
+3 start 11111
+4 start 1
+4 end 1
+4 start 11
+4 end 11
+4 start 111
+4 end 111
+4 start 1111
+4 end 1111
+4 start 11111
+1 start 1
+1 end 1
+1 start 11
+1 end 11
+1 start 111
+1 end 111
+1 start 1111
+1 end 1111
+1 start 11111
+2 start 1
+2 end 1
+2 start 11
+2 end 11
+2 start 111
+2 end 111
+2 start 1111
+2 end 1111
+2 start 11111
+3 start 1
+3 end 1
+3 start 11
+3 end 11
+3 start 111
+3 end 111
+3 start 1111
+3 end 1111
+3 start 11111
+4 start 1
+4 end 1
+4 start 11
+4 end 11
+4 start 111
+4 end 111
+4 start 1111
+4 end 1111
+4 start 11111

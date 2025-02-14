@@ -329,12 +329,12 @@ export fn E0167 (after: str) str {
 }
 
 export fn E0168 () str {
-  return "E0168 - Expected function declaration body"
+  return "E0168 - Expected function definition"
 }
 
-export fn E0169 () str {
-  return "E0169 - Expected function declaration return type"
-}
+// export fn E0169 () str {
+//   return "E0169 - Expected function declaration return type"
+// }
 
 export fn E0170 () str {
   return "E0170 - Expected object declaration body property or method"

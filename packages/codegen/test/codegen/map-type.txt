@@ -7,6 +7,7 @@ main {
 #include <d4/map.h>
 #include <d4/number.h>
 #include <d4/string.h>
+#include <stddef.h>
 #include <stdint.h>
 D4_ARRAY_DECLARE(int, int32_t)
 D4_MAP_DECLARE(int, int32_t, int, int32_t)
@@ -15,8 +16,8 @@ D4_ARRAY_DEFINE(int, int32_t, int32_t, element, lhs_element == rhs_element, (voi
 D4_MAP_DEFINE(int, int32_t, int32_t, key, lhs_key == rhs_key, (void) key, d4_int_str(key), d4_int_str(key), int, int32_t, int32_t, val, lhs_val == rhs_val, (void) val, d4_int_str(val))
 D4_MAP_DEFINE(str, d4_str_t, d4_str_t, d4_str_copy(key), d4_str_eq(lhs_key, rhs_key), d4_str_free(key), d4_str_copy(key), d4_str_quoted_escape(key), str, d4_str_t, d4_str_t, d4_str_copy(val), d4_str_eq(lhs_val, rhs_val), d4_str_free(val), d4_str_quoted_escape(val))
 int main (void) {
-  d4_map_intMSintME_t var1_0 = d4_map_intMSintME_alloc(0);
-  d4_map_strMSstrME_t var2_0 = d4_map_strMSstrME_alloc(0);
+  d4_map_intMSintME_t var1_0 = (d4_map_intMSintME_t) {NULL, 0, 0};
+  d4_map_strMSstrME_t var2_0 = (d4_map_strMSstrME_t) {NULL, 0, 0};
   d4_map_strMSstrME_free(var2_0);
   d4_map_intMSintME_free(var1_0);
 }

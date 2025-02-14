@@ -1,0 +1,23 @@
+main {
+  a := 10
+
+  fn c (b: int) int {
+    return a + b
+  }
+
+  c(20)
+}
+===== out =====
+MainDeclaration()
+  VariableDeclaration(name=a mutable=false constant=false context:var:name=a context:var:type=int context:var:mutable=false context:var:referenced=true)
+    IntegerLiteral(initial=int value=10)
+  FunctionDeclaration(asynchronous=false name=c return=int context:var:name=c context:var:type=(b: int) -> int context:var:mutable=false context:var:referenced=false context:variables=[a])
+    FunctionParameter(name=b type=int mutable=false variadic=false)
+    ReturnStatement()
+      BinaryExpression(initial=int operator=+)
+        Identifier(initial=int name=a)
+        Identifier(initial=int name=b)
+  CallExpression(initial=int extra:asynchronous=false extra:returnType=int)
+    Identifier(initial=(b: int) -> int name=c)
+    CallExpressionArgument(extra:parameterIdx=0)
+      IntegerLiteral(initial=int value=20)

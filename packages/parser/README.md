@@ -617,6 +617,19 @@ Whether statement is placed inside loop statement.
 statement.hasLoopParent()
 ```
 
+### `Statement.hasMainParent () bool`
+Check whether statement is placed inside main declaration.
+
+**Return value**
+
+Whether statement is placed inside a main declaration.
+
+**Examples**
+
+```the
+statement.hasMainParent()
+```
+
 ### `Statement.hasNext () bool`
 Check if statement has next sibling. Make sure to `interconnect` references.
 
